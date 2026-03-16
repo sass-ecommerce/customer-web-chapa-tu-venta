@@ -7,7 +7,9 @@ export function middleware(req: NextRequest) {
   // Trata el dominio raíz y www como landing page
   const isRootDomain = host === ROOT_DOMAIN || host === `www.${ROOT_DOMAIN}`;
   if (!host.endsWith(ROOT_DOMAIN) || isRootDomain) {
-    return NextResponse.next();
+    const url = req.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.rewrite(url);
   }
 
   const tenant = host.replace(`.${ROOT_DOMAIN}`, "");
