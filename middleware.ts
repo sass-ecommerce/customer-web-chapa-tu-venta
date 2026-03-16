@@ -4,8 +4,9 @@ export function middleware(req: NextRequest) {
   const host = req.headers.get("host") ?? "";
   const ROOT_DOMAIN = process.env.ROOT_DOMAIN ?? "localhost:3000";
 
-  // Solo actúa si hay subdominio (producción)
-  if (!host.endsWith(ROOT_DOMAIN) || host === ROOT_DOMAIN) {
+  // Trata el dominio raíz y www como landing page
+  const isRootDomain = host === ROOT_DOMAIN || host === `www.${ROOT_DOMAIN}`;
+  if (!host.endsWith(ROOT_DOMAIN) || isRootDomain) {
     return NextResponse.next();
   }
 
