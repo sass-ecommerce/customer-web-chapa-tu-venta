@@ -15,7 +15,7 @@ export default async function TenantLayout({
   if (!config) notFound();
   return (
     <>
-      <Navbar />
+      <Navbar tenant={tenant} />
       {children}
       <Footer />
     </>

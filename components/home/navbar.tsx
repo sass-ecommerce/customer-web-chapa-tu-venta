@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, ShoppingCart, Bell, ChevronDown, Menu, X } from "lucide-react";
 
-export function Navbar() {
+export function Navbar({ tenant }: { tenant: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const cartCount = 3;
 
@@ -16,17 +16,27 @@ export function Navbar() {
           <span className="font-medium">📱 Descargar App</span>
           <div className="hidden md:flex items-center gap-6">
             {["Mitra", "Sobre Nosotros", "Atención", "Promo"].map((label) => (
-              <a key={label} href="#" className="hover:text-gray-900 transition-colors">
+              <a
+                key={label}
+                href="#"
+                className="hover:text-gray-900 transition-colors"
+              >
                 {label}
               </a>
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <a href="#" className="hover:text-gray-900 transition-colors">
+            <Link
+              href={`/${tenant}/register`}
+              className="hover:text-gray-900 transition-colors"
+            >
               Registrarse
-            </a>
+            </Link>
             <span className="text-gray-300">|</span>
-            <a href="#" className="hover:text-gray-900 transition-colors">
+            <a
+              href={`/${tenant}/login`}
+              className="hover:text-gray-900 transition-colors"
+            >
               Iniciar sesión
             </a>
           </div>
@@ -38,7 +48,10 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-1.5 shrink-0">
+            <Link
+              href={`/${tenant}`}
+              className="flex items-center gap-1.5 shrink-0"
+            >
               <span className="text-xl">🛍️</span>
               <span className="text-sm font-bold tracking-tight text-gray-900">
                 ChapaTuVenta
@@ -80,7 +93,11 @@ export function Navbar() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Menú"
               >
-                {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+                {isMenuOpen ? (
+                  <X className="size-5" />
+                ) : (
+                  <Menu className="size-5" />
+                )}
               </button>
             </div>
           </div>
@@ -111,9 +128,12 @@ export function Navbar() {
               </a>
             ))}
             <div className="flex gap-4 pt-1 border-t border-gray-100">
-              <a href="#" className="text-sm font-semibold text-brand-accent">
+              <Link
+                href={`/${tenant}/register`}
+                className="text-sm font-semibold text-brand-accent"
+              >
                 Registrarse
-              </a>
+              </Link>
               <a href="#" className="text-sm font-medium text-gray-600">
                 Iniciar sesión
               </a>

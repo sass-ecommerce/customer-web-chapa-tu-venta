@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
+  if (process.env.DISABLE_SUBDOMAIN_REWRITE === "true") return NextResponse.next();
+
   const host = req.headers.get("host") ?? "";
   const ROOT_DOMAIN = process.env.ROOT_DOMAIN ?? "localhost:3000";
 

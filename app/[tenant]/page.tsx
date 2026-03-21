@@ -22,13 +22,15 @@ export default async function TenantHomePage({
 }: {
   params: Promise<{ tenant: string }>;
 }) {
-  await params;
+  const { tenant } = await params;
   return (
-    <main>
-      <Hero />
-      <BenefitsBar />
-      <FeaturedProducts />
-      <OffersSection />
-    </main>
+    <>
+      <main>
+        <Hero tenant={tenant} />
+        <BenefitsBar />
+        <FeaturedProducts />
+        <OffersSection />
+      </main>
+    </>
   );
 }

@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const dots = [false, true, false];
 
-export function Hero() {
+export function Hero({ tenant }: { tenant: string }) {
   return (
     /* top-[100px] = top bar (36px h-9) + main navbar (64px h-16) */
     <section className="pt-[100px] bg-[#F5F6F7] pb-4">
@@ -26,8 +27,8 @@ export function Hero() {
                 <Button className="bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold rounded-full border-0 px-7">
                   Comprar ahora
                 </Button>
-                <Button variant="outline" className="rounded-full px-7 font-semibold">
-                  Ver catálogo
+                <Button variant="outline" className="rounded-full px-7 font-semibold" asChild>
+                  <Link href={`/${tenant}/catalog`}>Ver catálogo</Link>
                 </Button>
               </div>
             </div>
