@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { tenantHref } from "@/lib/tenant-href";
 
 const dots = [false, true, false];
 
@@ -28,7 +29,7 @@ export function Hero({ tenant }: { tenant: string }) {
                   Comprar ahora
                 </Button>
                 <Button variant="outline" className="rounded-full px-7 font-semibold" asChild>
-                  <Link href={`/${tenant}/catalog`}>Ver catálogo</Link>
+                  <Link href={tenantHref(tenant, "/catalog")}>Ver catálogo</Link>
                 </Button>
               </div>
             </div>

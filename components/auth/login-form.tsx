@@ -13,6 +13,7 @@ import CognitoErrorDialog, {
   type CognitoErrorInfo,
 } from "@/components/auth/cognito-error-dialog";
 import { useAuth } from "@/lib/auth-context";
+import { tenantHref } from "@/lib/tenant-href";
 
 export default function LoginForm({ tenant }: { tenant: string }) {
   const router = useRouter();
@@ -106,7 +107,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
                   Contraseña
                 </label>
                 <Link
-                  href={`/${tenant}/forgot-password`}
+                  href={tenantHref(tenant, "/forgot-password")}
                   className="text-xs text-brand-accent hover:underline underline-offset-2"
                 >
                   ¿Olvidaste tu contraseña?
@@ -167,7 +168,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
       <p className="text-center text-sm text-gray-500">
         ¿No tienes cuenta?{" "}
         <Link
-          href={`/${tenant}/register`}
+          href={tenantHref(tenant, "/register")}
           className="text-brand-accent font-semibold hover:underline underline-offset-2"
         >
           Crear cuenta

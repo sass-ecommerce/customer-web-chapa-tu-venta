@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { tenantHref } from "@/lib/tenant-href";
 
 type Product = {
   id: number;
@@ -55,7 +56,7 @@ function ProductCard({ product, tenant }: { product: Product; tenant: string }) 
   return (
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300">
       {/* Image */}
-      <Link href={`/${tenant}/products/${product.id}`} className="block">
+      <Link href={tenantHref(tenant, `/products/${product.id}`)} className="block">
       <div className="relative aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
         <span className="text-5xl select-none group-hover:scale-110 transition-transform duration-300">
           {product.image}

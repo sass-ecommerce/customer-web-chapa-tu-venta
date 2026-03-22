@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, ShoppingCart, Bell, ChevronDown, Menu, X, User, Package, Settings, LogOut, Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { tenantHref } from "@/lib/tenant-href";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -74,11 +75,11 @@ export function Navbar({ tenant }: { tenant: string }) {
                 </DropdownMenu>
               ) : (
                 <>
-                  <Link href={`/${tenant}/register`} className="hover:text-gray-900 transition-colors">
+                  <Link href={tenantHref(tenant, "/register")} className="hover:text-gray-900 transition-colors">
                     Registrarse
                   </Link>
                   <span className="text-gray-300">|</span>
-                  <Link href={`/${tenant}/login`} className="hover:text-gray-900 transition-colors">
+                  <Link href={tenantHref(tenant, "/login")} className="hover:text-gray-900 transition-colors">
                     Iniciar sesión
                   </Link>
                 </>
@@ -94,7 +95,7 @@ export function Navbar({ tenant }: { tenant: string }) {
           <div className="flex items-center gap-4 h-16">
             {/* Logo */}
             <Link
-              href={`/${tenant}`}
+              href={tenantHref(tenant, "/")}
               className="flex items-center gap-1.5 shrink-0"
             >
               <span className="text-xl">🛍️</span>
@@ -203,14 +204,14 @@ export function Navbar({ tenant }: { tenant: string }) {
                 ) : (
                   <div className="flex gap-4">
                     <Link
-                      href={`/${tenant}/register`}
+                      href={tenantHref(tenant, "/register")}
                       className="text-sm font-semibold text-brand-accent"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Registrarse
                     </Link>
                     <Link
-                      href={`/${tenant}/login`}
+                      href={tenantHref(tenant, "/login")}
                       className="text-sm font-medium text-gray-600"
                       onClick={() => setIsMenuOpen(false)}
                     >

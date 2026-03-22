@@ -3,6 +3,7 @@
 import { useMemo, useReducer, useCallback } from "react";
 import Link from "next/link";
 import { mockProducts } from "@/lib/mock-products";
+import { tenantHref } from "@/lib/tenant-href";
 import type { SortOption } from "@/lib/mock-products";
 import { FilterSidebar, FilterDrawer } from "./filter-sidebar";
 import { SortBar } from "./sort-bar";
@@ -183,7 +184,7 @@ export function CatalogView({ tenant }: { tenant: string }) {
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-4">
             <Link
-              href={`/${tenant}`}
+              href={tenantHref(tenant, "/")}
               className="hover:text-brand-accent transition-colors"
             >
               Home

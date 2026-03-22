@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { tenantHref } from "@/lib/tenant-href";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { signUp, confirmSignUp } from "aws-amplify/auth";
@@ -306,7 +307,7 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
       <p className="text-center text-sm text-gray-500">
         ¿Ya tienes cuenta?{" "}
         <Link
-          href={`/${tenant}/login`}
+          href={tenantHref(tenant, "/login")}
           className="text-brand-accent font-semibold hover:underline underline-offset-2"
         >
           Iniciar sesión

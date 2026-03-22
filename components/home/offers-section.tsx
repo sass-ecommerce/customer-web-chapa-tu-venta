@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { tenantHref } from "@/lib/tenant-href";
 
 // Fixed at module load time — stable across renders
 const OFFER_END_DATE = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
@@ -50,7 +51,7 @@ function FlashCard({ product, tenant }: { product: (typeof offerProducts)[0]; te
 
   return (
     <Link
-      href={`/${tenant}/products/${product.id}`}
+      href={tenantHref(tenant, `/products/${product.id}`)}
       className="shrink-0 snap-start w-44 bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer group block"
     >
       {/* Image */}

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { tenantHref } from "@/lib/tenant-href";
 
 const BADGE_STYLES: Record<string, string> = {
   OFERTA: "bg-brand-accent text-white border-transparent",
@@ -40,7 +41,7 @@ function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md
 function RelatedCard({ product, tenant }: { product: MockProduct; tenant: string }) {
   return (
     <Link
-      href={`/${tenant}/products/${product.id}`}
+      href={tenantHref(tenant, `/products/${product.id}`)}
       className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 block"
     >
       <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
@@ -78,11 +79,11 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-6 font-body">
-        <Link href={`/${tenant}`} className="hover:text-brand-accent transition-colors">
+        <Link href={tenantHref(tenant, "/")} className="hover:text-brand-accent transition-colors">
           Inicio
         </Link>
         <ChevronRight className="size-3 text-gray-300" />
-        <Link href={`/${tenant}/catalog`} className="hover:text-brand-accent transition-colors">
+        <Link href={tenantHref(tenant, "/catalog")} className="hover:text-brand-accent transition-colors">
           {product.category}
         </Link>
         <ChevronRight className="size-3 text-gray-300" />

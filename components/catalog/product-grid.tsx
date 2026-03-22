@@ -6,6 +6,7 @@ import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { MockProduct } from "@/lib/mock-products";
+import { tenantHref } from "@/lib/tenant-href";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -56,7 +57,7 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
   return (
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
       {/* Image */}
-      <Link href={`/${tenant}/products/${product.id}`} className="block">
+      <Link href={tenantHref(tenant, `/products/${product.id}`)} className="block">
         <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center">
           <span className="text-5xl group-hover:scale-110 transition-transform duration-300 select-none">
             {product.image}
@@ -77,7 +78,7 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
       </Link>
 
       {/* Info */}
-      <Link href={`/${tenant}/products/${product.id}`} className="block p-4 space-y-2.5">
+      <Link href={tenantHref(tenant, `/products/${product.id}`)} className="block p-4 space-y-2.5">
         <div>
           <p className="text-xs text-gray-400 uppercase tracking-wide mb-0.5">
             {product.category}
@@ -119,7 +120,7 @@ function ProductCardList({ product, tenant }: { product: MockProduct; tenant: st
 
   return (
     <Link
-      href={`/${tenant}/products/${product.id}`}
+      href={tenantHref(tenant, `/products/${product.id}`)}
       className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 flex items-stretch"
     >
       {/* Image */}
