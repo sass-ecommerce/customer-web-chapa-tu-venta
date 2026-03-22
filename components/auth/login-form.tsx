@@ -29,7 +29,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
         await signIn({ username: value.email, password: value.password });
         await refreshUser();
         const next = searchParams.get("next");
-        router.push(next ?? `/${tenant}`);
+        router.push(next ?? tenantHref(tenant, "/"));
       } catch (err: unknown) {
         setErrorInfo(parseCognitoError(err));
       }
