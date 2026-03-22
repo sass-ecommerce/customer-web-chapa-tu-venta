@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -48,12 +49,13 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, tenant }: { product: Product; tenant: string }) {
   const [wished, setWished] = useState(false);
 
   return (
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300">
       {/* Image */}
+      <Link href={`/${tenant}/products/${product.id}`} className="block">
       <div className="relative aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
         <span className="text-5xl select-none group-hover:scale-110 transition-transform duration-300">
           {product.image}
@@ -91,11 +93,12 @@ function ProductCard({ product }: { product: Product }) {
           )}
         </div>
       </div>
+      </Link>
     </div>
   );
 }
 
-export function FeaturedProducts() {
+export function FeaturedProducts({ tenant }: { tenant: string }) {
   const [activeTab, setActiveTab] = useState("best");
   const activeProducts = tabs.find((t) => t.id === activeTab)?.products ?? [];
 
@@ -126,7 +129,7 @@ export function FeaturedProducts() {
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
           {activeProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} tenant={tenant} />
           ))}
         </div>
 

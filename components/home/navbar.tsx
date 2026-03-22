@@ -2,10 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, ShoppingCart, Bell, ChevronDown, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, Bell, ChevronDown, Menu, X, User, Package, Settings, LogOut, Heart } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Navbar({ tenant }: { tenant: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isLoading, logOut } = useAuth();
   const cartCount = 3;
 
   return (
@@ -26,19 +36,54 @@ export function Navbar({ tenant }: { tenant: string }) {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              href={`/${tenant}/register`}
-              className="hover:text-gray-900 transition-colors"
-            >
-              Registrarse
-            </Link>
-            <span className="text-gray-300">|</span>
-            <a
-              href={`/${tenant}/login`}
-              className="hover:text-gray-900 transition-colors"
-            >
-              Iniciar sesión
-            </a>
+            {!isLoading && (
+              user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-1.5 hover:text-gray-900 transition-colors focus:outline-none">
+                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-brand-accent text-white">
+                        <User size={12} />
+                      </span>
+                      <span className="font-medium truncate max-w-[120px]">
+                        {user.signInDetails?.loginId ?? user.username}
+                      </span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-52">
+                    <DropdownMenuLabel className="text-xs font-normal text-gray-500 truncate px-2 py-1.5">
+                      {user.signInDetails?.loginId ?? user.username}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <User size={14} /> Mi perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Package size={14} /> Mis pedidos
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Heart size={14} /> Favoritos
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Settings size={14} /> Configuración
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem variant="destructive" onClick={() => logOut()}>
+                      <LogOut size={14} /> Cerrar sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <>
+                  <Link href={`/${tenant}/register`} className="hover:text-gray-900 transition-colors">
+                    Registrarse
+                  </Link>
+                  <span className="text-gray-300">|</span>
+                  <Link href={`/${tenant}/login`} className="hover:text-gray-900 transition-colors">
+                    Iniciar sesión
+                  </Link>
+                </>
+              )
+            )}
           </div>
         </div>
       </div>
@@ -127,16 +172,53 @@ export function Navbar({ tenant }: { tenant: string }) {
                 {label}
               </a>
             ))}
-            <div className="flex gap-4 pt-1 border-t border-gray-100">
-              <Link
-                href={`/${tenant}/register`}
-                className="text-sm font-semibold text-brand-accent"
-              >
-                Registrarse
-              </Link>
-              <a href="#" className="text-sm font-medium text-gray-600">
-                Iniciar sesión
-              </a>
+            <div className="pt-1 border-t border-gray-100">
+              {!isLoading && (
+                user ? (
+                  <div className="space-y-0.5">
+                    <p className="text-xs text-gray-400 px-1 pb-1 truncate">
+                      {user.signInDetails?.loginId ?? user.username}
+                    </p>
+                    {[
+                      { icon: <User size={14} />, label: "Mi perfil" },
+                      { icon: <Package size={14} />, label: "Mis pedidos" },
+                      { icon: <Heart size={14} />, label: "Favoritos" },
+                      { icon: <Settings size={14} />, label: "Configuración" },
+                    ].map(({ icon, label }) => (
+                      <button
+                        key={label}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-2 w-full text-sm text-gray-700 hover:text-brand-accent py-1.5 px-1 transition-colors"
+                      >
+                        {icon} {label}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => { logOut(); setIsMenuOpen(false); }}
+                      className="flex items-center gap-2 w-full text-sm text-red-500 hover:text-red-600 py-1.5 px-1 transition-colors"
+                    >
+                      <LogOut size={14} /> Cerrar sesión
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-4">
+                    <Link
+                      href={`/${tenant}/register`}
+                      className="text-sm font-semibold text-brand-accent"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Registrarse
+                    </Link>
+                    <Link
+                      href={`/${tenant}/login`}
+                      className="text-sm font-medium text-gray-600"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Iniciar sesión
+                    </Link>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>

@@ -22,10 +22,10 @@ export default async function TenantCatalogPage({
 }: {
   params: Promise<{ tenant: string }>;
 }) {
-  await params;
+  const { tenant } = await params;
   return (
     <main className="pt-[100px]">
-      <CatalogView />
+      <CatalogView tenant={tenant} />
     </main>
   );
 }

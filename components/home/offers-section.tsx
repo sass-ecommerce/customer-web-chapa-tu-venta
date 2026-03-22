@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Fixed at module load time — stable across renders
@@ -44,11 +45,14 @@ function useCountdown(targetDate: Date): TimeLeft | null {
 
 const TOTAL_STOCK = 10;
 
-function FlashCard({ product }: { product: (typeof offerProducts)[0] }) {
+function FlashCard({ product, tenant }: { product: (typeof offerProducts)[0]; tenant: string }) {
   const [wished, setWished] = useState(false);
 
   return (
-    <div className="shrink-0 snap-start w-44 bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
+    <Link
+      href={`/${tenant}/products/${product.id}`}
+      className="shrink-0 snap-start w-44 bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer group block"
+    >
       {/* Image */}
       <div className="relative aspect-square bg-gray-100 flex items-center justify-center">
         <span className="text-5xl select-none group-hover:scale-110 transition-transform duration-300">
@@ -96,11 +100,11 @@ function FlashCard({ product }: { product: (typeof offerProducts)[0] }) {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
-export function OffersSection() {
+export function OffersSection({ tenant }: { tenant: string }) {
   const timeLeft = useCountdown(OFFER_END_DATE);
   const fmt = (v: number | null) =>
     v === null ? "--" : String(v).padStart(2, "0");
@@ -145,7 +149,7 @@ export function OffersSection() {
           style={{ scrollbarWidth: "none" }}
         >
           {offerProducts.map((product) => (
-            <FlashCard key={product.id} product={product} />
+            <FlashCard key={product.id} product={product} tenant={tenant} />
           ))}
         </div>
       </div>

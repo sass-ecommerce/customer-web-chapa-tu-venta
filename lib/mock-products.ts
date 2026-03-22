@@ -324,3 +324,7 @@ export type SortOption =
   | "price-desc"
   | "newest"
   | "rating";
+
+export function getProductById(id: number): MockProduct | undefined {
+  return mockProducts.find((p) => p.id === id);
+}

@@ -28,8 +28,8 @@ export default async function TenantHomePage({
       <main>
         <Hero tenant={tenant} />
         <BenefitsBar />
-        <FeaturedProducts />
-        <OffersSection />
+        <FeaturedProducts tenant={tenant} />
+        <OffersSection tenant={tenant} />
       </main>
     </>
   );

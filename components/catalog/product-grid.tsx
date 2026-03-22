@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -49,32 +50,34 @@ function ProductBadge({ badge, discount }: { badge?: string; discount?: number }
   );
 }
 
-function ProductCardGrid({ product }: { product: MockProduct }) {
+function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: string }) {
   const [wished, setWished] = useState(false);
 
   return (
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
       {/* Image */}
-      <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center">
-        <span className="text-5xl group-hover:scale-110 transition-transform duration-300 select-none">
-          {product.image}
-        </span>
-        <ProductBadge badge={product.badge} discount={product.discount} />
-        <button
-          className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full border border-gray-200 flex items-center justify-center shadow-sm"
-          onClick={() => setWished(!wished)}
-          aria-label="Agregar a favoritos"
-        >
-          <Heart
-            className="size-4"
-            fill={wished ? "#EF4444" : "none"}
-            stroke={wished ? "#EF4444" : "currentColor"}
-          />
-        </button>
-      </div>
+      <Link href={`/${tenant}/products/${product.id}`} className="block">
+        <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center">
+          <span className="text-5xl group-hover:scale-110 transition-transform duration-300 select-none">
+            {product.image}
+          </span>
+          <ProductBadge badge={product.badge} discount={product.discount} />
+          <button
+            className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full border border-gray-200 flex items-center justify-center shadow-sm"
+            onClick={(e) => { e.preventDefault(); setWished(!wished); }}
+            aria-label="Agregar a favoritos"
+          >
+            <Heart
+              className="size-4"
+              fill={wished ? "#EF4444" : "none"}
+              stroke={wished ? "#EF4444" : "currentColor"}
+            />
+          </button>
+        </div>
+      </Link>
 
       {/* Info */}
-      <div className="p-4 space-y-2.5">
+      <Link href={`/${tenant}/products/${product.id}`} className="block p-4 space-y-2.5">
         <div>
           <p className="text-xs text-gray-400 uppercase tracking-wide mb-0.5">
             {product.category}
@@ -101,20 +104,24 @@ function ProductCardGrid({ product }: { product: MockProduct }) {
             size="icon-sm"
             className="rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white border-0"
             aria-label="Agregar al carrito"
+            onClick={(e) => e.preventDefault()}
           >
             <ShoppingCart className="size-3.5" />
           </Button>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }
 
-function ProductCardList({ product }: { product: MockProduct }) {
+function ProductCardList({ product, tenant }: { product: MockProduct; tenant: string }) {
   const [wished, setWished] = useState(false);
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 flex items-stretch">
+    <Link
+      href={`/${tenant}/products/${product.id}`}
+      className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 flex items-stretch"
+    >
       {/* Image */}
       <div className="relative w-28 sm:w-36 shrink-0 bg-gray-50 flex items-center justify-center overflow-hidden">
         <span className="text-4xl group-hover:scale-110 transition-transform duration-300 select-none">
@@ -142,7 +149,7 @@ function ProductCardList({ product }: { product: MockProduct }) {
       {/* Price + action */}
       <div className="flex flex-col items-end justify-between p-4 shrink-0">
         <button
-          onClick={() => setWished(!wished)}
+          onClick={(e) => { e.preventDefault(); setWished(!wished); }}
           className="text-gray-300 hover:text-brand-accent transition-colors"
           aria-label="Agregar a favoritos"
         >
@@ -166,13 +173,14 @@ function ProductCardList({ product }: { product: MockProduct }) {
           <Button
             size="sm"
             className="bg-brand-accent hover:bg-brand-accent-hover text-white border-0 text-xs"
+            onClick={(e) => e.preventDefault()}
           >
             <ShoppingCart className="size-3" />
             <span className="hidden sm:inline ml-1">Agregar</span>
           </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -180,6 +188,7 @@ type ProductGridProps = {
   products: MockProduct[];
   viewMode: "grid" | "list";
   page: number;
+  tenant: string;
   onLoadMore: () => void;
   onClearFilters: () => void;
 };
@@ -188,6 +197,7 @@ export function ProductGrid({
   products,
   viewMode,
   page,
+  tenant,
   onLoadMore,
   onClearFilters,
 }: ProductGridProps) {
@@ -221,13 +231,13 @@ export function ProductGrid({
       {viewMode === "grid" ? (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {visible.map((product) => (
-            <ProductCardGrid key={product.id} product={product} />
+            <ProductCardGrid key={product.id} product={product} tenant={tenant} />
           ))}
         </div>
       ) : (
         <div className="flex flex-col gap-3">
           {visible.map((product) => (
-            <ProductCardList key={product.id} product={product} />
+            <ProductCardList key={product.id} product={product} tenant={tenant} />
           ))}
         </div>
       )}

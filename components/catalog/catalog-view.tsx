@@ -81,7 +81,11 @@ function reducer(state: FilterState, action: Action): FilterState {
     case "LOAD_MORE":
       return { ...state, page: state.page + 1 };
     case "CLEAR_ALL":
-      return { ...initialState, sortBy: state.sortBy, viewMode: state.viewMode };
+      return {
+        ...initialState,
+        sortBy: state.sortBy,
+        viewMode: state.viewMode,
+      };
     case "REMOVE_CATEGORY":
       return {
         ...state,
@@ -103,7 +107,7 @@ function reducer(state: FilterState, action: Action): FilterState {
   }
 }
 
-export function CatalogView() {
+export function CatalogView({ tenant }: { tenant: string }) {
   const [filters, dispatch] = useReducer(reducer, initialState);
 
   const filteredProducts = useMemo(() => {
@@ -116,7 +120,7 @@ export function CatalogView() {
 
     // Price filter
     result = result.filter(
-      (p) => p.price >= filters.priceMin && p.price <= filters.priceMax
+      (p) => p.price >= filters.priceMin && p.price <= filters.priceMax,
     );
 
     // Rating filter
@@ -140,7 +144,7 @@ export function CatalogView() {
       case "newest":
         result.sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
         break;
       case "rating":
@@ -155,19 +159,19 @@ export function CatalogView() {
 
   const handleCategoryChange = useCallback(
     (cat: string) => dispatch({ type: "TOGGLE_CATEGORY", category: cat }),
-    []
+    [],
   );
   const handlePriceChange = useCallback(
     (min: number, max: number) => dispatch({ type: "SET_PRICE", min, max }),
-    []
+    [],
   );
   const handleRatingChange = useCallback(
     (rating: number) => dispatch({ type: "SET_RATING", rating }),
-    []
+    [],
   );
   const handleTagChange = useCallback(
     (tag: string) => dispatch({ type: "TOGGLE_TAG", tag }),
-    []
+    [],
   );
   const handleClearAll = useCallback(() => dispatch({ type: "CLEAR_ALL" }), []);
 
@@ -178,7 +182,10 @@ export function CatalogView() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-            <Link href="/" className="hover:text-brand-accent transition-colors">
+            <Link
+              href={`/${tenant}`}
+              className="hover:text-brand-accent transition-colors"
+            >
               Home
             </Link>
             <span>/</span>
@@ -234,6 +241,7 @@ export function CatalogView() {
               products={filteredProducts}
               viewMode={filters.viewMode}
               page={filters.page}
+              tenant={tenant}
               onLoadMore={() => dispatch({ type: "LOAD_MORE" })}
               onClearFilters={handleClearAll}
             />
