@@ -50,6 +50,22 @@ All UI components follow consistent conventions:
 npx shadcn@latest add <component-name>
 ```
 
+### Tenant navigation
+
+**Always use `tenantHref(tenant, path)`** from `@/lib/tenant-href` when building links or `router.push` calls inside tenant routes — never hardcode `/${tenant}/...` directly. This function handles subdomain-based routing in production (where the tenant is inferred from the subdomain) vs. path-based routing in development.
+
+```tsx
+import { tenantHref } from "@/lib/tenant-href";
+
+// ✅ Correct
+<Link href={tenantHref(tenant, "/catalog")} />
+router.push(tenantHref(tenant, "/checkout"));
+
+// ❌ Wrong
+<Link href={`/${tenant}/catalog`} />
+router.push(`/${tenant}/checkout`);
+```
+
 ### Path Aliases
 
 `@/*` maps to the repository root (configured in `tsconfig.json`).
