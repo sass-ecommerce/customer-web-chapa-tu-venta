@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Heart } from "lucide-react";
+import { Check, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { MockProduct } from "@/lib/mock-products";
 import { tenantHref } from "@/lib/tenant-href";
+import { useCartStore } from "@/lib/cart-store";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -53,6 +54,16 @@ function ProductBadge({ badge, discount }: { badge?: string; discount?: number }
 
 function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: string }) {
   const [wished, setWished] = useState(false);
+  const [added, setAdded] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
 
   return (
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
@@ -93,21 +104,30 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-1.5">
             <span className="text-lg font-bold text-gray-900">
-              ${product.price.toFixed(2)}
+              S/ {product.price.toFixed(2)}
             </span>
             {product.originalPrice && (
               <span className="text-xs text-gray-400 line-through">
-                ${product.originalPrice.toFixed(2)}
+                S/ {product.originalPrice.toFixed(2)}
               </span>
             )}
           </div>
           <Button
             size="icon-sm"
-            className="rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white border-0"
+            className={cn(
+              "rounded-xl text-white border-0 transition-colors duration-300",
+              added
+                ? "bg-green-500 hover:bg-green-500"
+                : "bg-brand-accent hover:bg-brand-accent-hover"
+            )}
             aria-label="Agregar al carrito"
-            onClick={(e) => e.preventDefault()}
+            onClick={handleAddToCart}
           >
-            <ShoppingCart className="size-3.5" />
+            {added ? (
+              <Check className="size-3.5" />
+            ) : (
+              <ShoppingCart className="size-3.5" />
+            )}
           </Button>
         </div>
       </Link>
@@ -117,6 +137,16 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
 
 function ProductCardList({ product, tenant }: { product: MockProduct; tenant: string }) {
   const [wished, setWished] = useState(false);
+  const [added, setAdded] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
 
   return (
     <Link
@@ -163,21 +193,32 @@ function ProductCardList({ product, tenant }: { product: MockProduct; tenant: st
         <div className="flex flex-col items-end gap-2">
           <div className="text-right">
             <p className="text-base font-bold text-gray-900">
-              ${product.price.toFixed(2)}
+              S/ {product.price.toFixed(2)}
             </p>
             {product.originalPrice && (
               <p className="text-xs text-gray-400 line-through">
-                ${product.originalPrice.toFixed(2)}
+                S/ {product.originalPrice.toFixed(2)}
               </p>
             )}
           </div>
           <Button
             size="sm"
-            className="bg-brand-accent hover:bg-brand-accent-hover text-white border-0 text-xs"
-            onClick={(e) => e.preventDefault()}
+            className={cn(
+              "text-white border-0 text-xs transition-colors duration-300",
+              added
+                ? "bg-green-500 hover:bg-green-500"
+                : "bg-brand-accent hover:bg-brand-accent-hover"
+            )}
+            onClick={handleAddToCart}
           >
-            <ShoppingCart className="size-3" />
-            <span className="hidden sm:inline ml-1">Agregar</span>
+            {added ? (
+              <Check className="size-3" />
+            ) : (
+              <ShoppingCart className="size-3" />
+            )}
+            <span className="hidden sm:inline ml-1">
+              {added ? "Agregado" : "Agregar"}
+            </span>
           </Button>
         </div>
       </div>

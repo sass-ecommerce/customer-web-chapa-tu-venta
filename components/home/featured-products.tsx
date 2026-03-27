@@ -85,11 +85,11 @@ function ProductCard({ product, tenant }: { product: Product; tenant: string }) 
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-sm font-bold text-gray-900">
-            ${product.price.toFixed(2)}
+            S/ {product.price.toFixed(2)}
           </span>
           {product.originalPrice && (
             <span className="text-xs text-gray-400 line-through">
-              ${product.originalPrice.toFixed(2)}
+              S/ {product.originalPrice.toFixed(2)}
             </span>
           )}
         </div>

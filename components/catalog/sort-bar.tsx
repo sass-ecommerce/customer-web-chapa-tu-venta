@@ -193,7 +193,7 @@ export function SortBar({
           )}
           {(filters.priceMin > 0 || filters.priceMax < 1000) && (
             <ActiveChip
-              label={`$${filters.priceMin} – $${filters.priceMax}`}
+              label={`S/ ${filters.priceMin} – S/ ${filters.priceMax}`}
               onRemove={onRemovePrice}
             />
           )}

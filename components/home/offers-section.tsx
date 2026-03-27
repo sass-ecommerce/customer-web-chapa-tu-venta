@@ -82,10 +82,10 @@ function FlashCard({ product, tenant }: { product: (typeof offerProducts)[0]; te
         </p>
         <div>
           <span className="text-sm font-bold text-gray-900">
-            ${product.price.toFixed(2)}
+            S/ {product.price.toFixed(2)}
           </span>
           <span className="text-xs text-brand-accent line-through ml-1.5">
-            ${product.originalPrice.toFixed(2)}
+            S/ {product.originalPrice.toFixed(2)}
           </span>
         </div>
         {/* Progress bar */}

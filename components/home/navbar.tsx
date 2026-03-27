@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, ShoppingCart, Bell, ChevronDown, Menu, X, User, Package, Settings, LogOut, Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { useCartStore } from "@/lib/cart-store";
 import { tenantHref } from "@/lib/tenant-href";
 import {
   DropdownMenu,
@@ -17,7 +18,8 @@ import {
 export function Navbar({ tenant }: { tenant: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isLoading, logOut } = useAuth();
-  const cartCount = 3;
+  const totalCount = useCartStore((s) => s.items.reduce((sum, i) => sum + i.quantity, 0));
+  const openSheet = useCartStore((s) => s.openSheet);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -122,11 +124,15 @@ export function Navbar({ tenant }: { tenant: string }) {
 
             {/* Right icons */}
             <div className="flex items-center gap-1 ml-auto md:ml-0">
-              <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <button
+                onClick={openSheet}
+                className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Abrir carrito"
+              >
                 <ShoppingCart className="size-5" />
-                {cartCount > 0 && (
+                {totalCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-brand-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">
-                    {cartCount}
+                    {totalCount > 9 ? "9+" : totalCount}
                   </span>
                 )}
               </button>

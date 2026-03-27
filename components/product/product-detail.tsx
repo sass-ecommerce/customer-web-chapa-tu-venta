@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Heart, Minus, Plus, ChevronRight } from "lucide-react";
+import { Check, Heart, Minus, Plus, ShoppingCart, ChevronRight } from "lucide-react";
 import { mockProducts, type MockProduct } from "@/lib/mock-products";
+import { useCartStore } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -52,9 +53,9 @@ function RelatedCard({ product, tenant }: { product: MockProduct; tenant: string
       <div className="p-3 space-y-1">
         <p className="text-xs text-gray-800 font-medium line-clamp-2 leading-snug">{product.name}</p>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-sm font-bold text-gray-900">${product.price.toFixed(2)}</span>
+          <span className="text-sm font-bold text-gray-900">S/ {product.price.toFixed(2)}</span>
           {product.originalPrice && (
-            <span className="text-xs text-gray-400 line-through">${product.originalPrice.toFixed(2)}</span>
+            <span className="text-xs text-gray-400 line-through">S/ {product.originalPrice.toFixed(2)}</span>
           )}
         </div>
       </div>
@@ -66,6 +67,16 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("Descripción");
+  const [added, setAdded] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
+  const openSheet = useCartStore((s) => s.openSheet);
+
+  const handleAddToCart = () => {
+    addItem(product, quantity);
+    setQuantity(1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
 
   const related = mockProducts
     .filter((p) => p.category === product.category && p.id !== product.id)
@@ -117,10 +128,10 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
           </div>
 
           <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-brand-dark">${product.price.toFixed(2)}</span>
+            <span className="text-3xl font-bold text-brand-dark">S/ {product.price.toFixed(2)}</span>
             {product.originalPrice && (
               <>
-                <span className="text-lg text-gray-400 line-through">${product.originalPrice.toFixed(2)}</span>
+                <span className="text-lg text-gray-400 line-through">S/ {product.originalPrice.toFixed(2)}</span>
                 <span className="text-sm font-semibold text-brand-accent">-{discountPct}%</span>
               </>
             )}
@@ -156,8 +167,26 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <Button className="flex-1 bg-brand-accent hover:bg-brand-accent/90 text-white font-semibold">
-              Agregar al carrito
+            <Button
+              onClick={handleAddToCart}
+              className={cn(
+                "flex-1 text-white font-semibold gap-2 transition-colors duration-300",
+                added
+                  ? "bg-green-500 hover:bg-green-500"
+                  : "bg-brand-accent hover:bg-brand-accent/90"
+              )}
+            >
+              {added ? (
+                <>
+                  <Check className="size-4" />
+                  Agregado al carrito
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="size-4" />
+                  Agregar al carrito
+                </>
+              )}
             </Button>
             <Button
               variant="outline"
@@ -175,6 +204,15 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
               {wishlisted ? "Guardado" : "Guardar"}
             </Button>
           </div>
+
+          {added && (
+            <button
+              onClick={openSheet}
+              className="text-xs text-brand-accent hover:underline font-medium mt-1"
+            >
+              Ver carrito →
+            </button>
+          )}
         </div>
       </div>
 
@@ -211,8 +249,8 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
               <tbody>
                 {[
                   ["Categoría", product.category],
-                  ["Precio", `$${product.price.toFixed(2)}`],
-                  ...(product.originalPrice ? [["Precio original", `$${product.originalPrice.toFixed(2)}`]] : []),
+                  ["Precio", `S/ ${product.price.toFixed(2)}`],
+                  ...(product.originalPrice ? [["Precio original", `S/ ${product.originalPrice.toFixed(2)}`]] : []),
                   ["Valoración", `${product.rating} / 5`],
                   ["Reseñas", product.reviewCount.toString()],
                   ["Disponibilidad", "En stock"],
