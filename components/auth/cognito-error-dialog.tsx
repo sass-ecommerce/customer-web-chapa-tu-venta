@@ -64,6 +64,12 @@ export function parseCognitoError(err: unknown): CognitoErrorInfo {
         description: "El código de verificación ha expirado. Vuelve al registro para solicitar uno nuevo.",
         action: "Entendido",
       };
+    case "UserNotFoundException":
+      return {
+        title: "Correo no registrado",
+        description: "No encontramos una cuenta con ese correo. Verifica que sea correcto o crea una cuenta nueva.",
+        action: "Reintentar",
+      };
     case "TooManyRequestsException":
     case "LimitExceededException":
       return {
