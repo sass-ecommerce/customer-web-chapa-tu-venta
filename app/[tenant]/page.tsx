@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/home/hero";
-import { BenefitsBar } from "@/components/home/benefits-bar";
+import { PromoBanner } from "@/components/home/promo-banner";
+import { UspBar } from "@/components/home/usp-bar";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { OffersSection } from "@/components/home/offers-section";
-import { getTenantConfig } from "@/lib/tenants";
+import { LatestArrivals } from "@/components/home/latest-arrivals";
+import { getTenantConfig, getTenantBenefits, DEFAULT_BENEFITS } from "@/lib/tenants";
 
 export async function generateMetadata({
   params,
@@ -23,13 +25,20 @@ export default async function TenantHomePage({
   params: Promise<{ tenant: string }>;
 }) {
   const { tenant } = await params;
+  const config = getTenantConfig(tenant);
+  const benefits = config ? getTenantBenefits(config) : DEFAULT_BENEFITS;
+
   return (
     <>
       <main>
-        <Hero tenant={tenant} />
-        <BenefitsBar />
+        <Hero tenant={tenant} hero={config?.hero} />
+        {config?.promoBanner && (
+          <PromoBanner banner={config.promoBanner} tenant={tenant} />
+        )}
+        <UspBar benefits={benefits} />
         <FeaturedProducts tenant={tenant} />
         <OffersSection tenant={tenant} />
+        <LatestArrivals tenant={tenant} />
       </main>
     </>
   );

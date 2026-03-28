@@ -45,10 +45,12 @@ function RelatedCard({ product, tenant }: { product: MockProduct; tenant: string
       href={tenantHref(tenant, `/products/${product.id}`)}
       className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 block"
     >
-      <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
-        <span className="text-4xl select-none group-hover:scale-110 transition-transform duration-300">
-          {product.image}
-        </span>
+      <div className="aspect-square bg-gray-100 overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+        />
       </div>
       <div className="p-3 space-y-1">
         <p className="text-xs text-gray-800 font-medium line-clamp-2 leading-snug">{product.name}</p>
@@ -104,8 +106,12 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
       {/* Hero */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Image */}
-        <div className="bg-gray-50 rounded-2xl aspect-square flex items-center justify-center border border-gray-100">
-          <span className="text-[120px] select-none">{product.image}</span>
+        <div className="bg-gray-50 rounded-2xl aspect-square overflow-hidden border border-gray-100">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Info */}

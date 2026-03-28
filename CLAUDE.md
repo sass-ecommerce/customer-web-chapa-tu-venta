@@ -69,3 +69,35 @@ router.push(`/${tenant}/checkout`);
 ### Path Aliases
 
 `@/*` maps to the repository root (configured in `tsconfig.json`).
+
+## SaaS Multi-tenant Component Philosophy
+
+This project is the **customer-facing storefront of a SaaS platform**. Any tenant (store) can use this codebase — from a store with 5 products to one with 5,000. Every component must be designed with this in mind.
+
+### Rules for new components
+
+- **Tenant-agnostic by default** — components must not hardcode content, copy, or data specific to one store. Text, images, and configuration must come from props or `TenantConfig`.
+- **Graceful with sparse data** — a component must look and work correctly even if the tenant has few products, no reviews, or incomplete config. Avoid layouts that break or look empty with little content.
+- **Configurable via `TenantConfig`** — any content that may differ between tenants (banners, benefits, colors, labels) must be defined in `lib/tenants.ts` and passed as props. Use `getTenantConfig(slug)` to read it.
+- **No hardcoded mock data in tenant pages** — mock/placeholder data belongs in `lib/mock-*.ts` files, never inlined in page or layout components.
+- **Always pass `tenant` prop for navigation** — any component that renders links must receive `tenant: string` and use `tenantHref(tenant, path)`.
+
+### What "tenant-oriented" means in practice
+
+```tsx
+// ✅ Correct — content comes from TenantConfig, works for any store
+export function PromoBanner({ banner, tenant }: { banner: PromoBanner; tenant: string }) { ... }
+
+// ❌ Wrong — hardcoded for one store, useless for others
+export function PromoBanner() {
+  return <div>Demo Store — Gran Venta de Verano</div>;
+}
+```
+
+```tsx
+// ✅ Correct — renders nothing when tenant has no banner configured
+{config?.promoBanner && <PromoBanner banner={config.promoBanner} tenant={tenant} />}
+
+// ❌ Wrong — crashes or looks broken when data is missing
+<PromoBanner banner={undefined} tenant={tenant} />
+```

@@ -69,10 +69,12 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
       {/* Image */}
       <Link href={tenantHref(tenant, `/products/${product.id}`)} className="block">
-        <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center">
-          <span className="text-5xl group-hover:scale-110 transition-transform duration-300 select-none">
-            {product.image}
-          </span>
+        <div className="relative overflow-hidden bg-gray-50 aspect-square">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          />
           <ProductBadge badge={product.badge} discount={product.discount} />
           <button
             className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full border border-gray-200 flex items-center justify-center shadow-sm"
@@ -154,10 +156,12 @@ function ProductCardList({ product, tenant }: { product: MockProduct; tenant: st
       className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 flex items-stretch"
     >
       {/* Image */}
-      <div className="relative w-28 sm:w-36 shrink-0 bg-gray-50 flex items-center justify-center overflow-hidden">
-        <span className="text-4xl group-hover:scale-110 transition-transform duration-300 select-none">
-          {product.image}
-        </span>
+      <div className="relative w-28 sm:w-36 shrink-0 bg-gray-50 overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+        />
         <ProductBadge badge={product.badge} discount={product.discount} />
       </div>
 

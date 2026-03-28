@@ -2,7 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, ShoppingCart, Bell, ChevronDown, Menu, X, User, Package, Settings, LogOut, Heart } from "lucide-react";
+import {
+  Search,
+  ShoppingCart,
+  Bell,
+  ChevronDown,
+  Menu,
+  X,
+  User,
+  Package,
+  Settings,
+  LogOut,
+  Heart,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useCartStore } from "@/lib/cart-store";
 import { tenantHref } from "@/lib/tenant-href";
@@ -18,7 +30,9 @@ import {
 export function Navbar({ tenant }: { tenant: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isLoading, logOut } = useAuth();
-  const totalCount = useCartStore((s) => s.items.reduce((sum, i) => sum + i.quantity, 0));
+  const totalCount = useCartStore((s) =>
+    s.items.reduce((sum, i) => sum + i.quantity, 0),
+  );
   const openSheet = useCartStore((s) => s.openSheet);
 
   return (
@@ -39,8 +53,8 @@ export function Navbar({ tenant }: { tenant: string }) {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            {!isLoading && (
-              user ? (
+            {!isLoading &&
+              (user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-1.5 hover:text-gray-900 transition-colors focus:outline-none">
@@ -70,23 +84,31 @@ export function Navbar({ tenant }: { tenant: string }) {
                       <Settings size={14} /> Configuración
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive" onClick={() => logOut()}>
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => logOut()}
+                    >
                       <LogOut size={14} /> Cerrar sesión
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <>
-                  <Link href={tenantHref(tenant, "/register")} className="hover:text-gray-900 transition-colors">
+                  <Link
+                    href={tenantHref(tenant, "/register")}
+                    className="hover:text-gray-900 transition-colors"
+                  >
                     Registrarse
                   </Link>
                   <span className="text-gray-300">|</span>
-                  <Link href={tenantHref(tenant, "/login")} className="hover:text-gray-900 transition-colors">
+                  <Link
+                    href={tenantHref(tenant, "/login")}
+                    className="hover:text-gray-900 transition-colors"
+                  >
                     Iniciar sesión
                   </Link>
                 </>
-              )
-            )}
+              ))}
           </div>
         </div>
       </div>
@@ -180,8 +202,8 @@ export function Navbar({ tenant }: { tenant: string }) {
               </a>
             ))}
             <div className="pt-1 border-t border-gray-100">
-              {!isLoading && (
-                user ? (
+              {!isLoading &&
+                (user ? (
                   <div className="space-y-0.5">
                     <p className="text-xs text-gray-400 px-1 pb-1 truncate">
                       {user.signInDetails?.loginId ?? user.username}
@@ -201,7 +223,10 @@ export function Navbar({ tenant }: { tenant: string }) {
                       </button>
                     ))}
                     <button
-                      onClick={() => { logOut(); setIsMenuOpen(false); }}
+                      onClick={() => {
+                        logOut();
+                        setIsMenuOpen(false);
+                      }}
                       className="flex items-center gap-2 w-full text-sm text-red-500 hover:text-red-600 py-1.5 px-1 transition-colors"
                     >
                       <LogOut size={14} /> Cerrar sesión
@@ -224,8 +249,7 @@ export function Navbar({ tenant }: { tenant: string }) {
                       Iniciar sesión
                     </Link>
                   </div>
-                )
-              )}
+                ))}
             </div>
           </div>
         </div>

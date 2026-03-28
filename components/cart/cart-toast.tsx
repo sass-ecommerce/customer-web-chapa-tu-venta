@@ -20,7 +20,13 @@ export function CartToast() {
           : "opacity-0 translate-y-3 pointer-events-none"
       )}
     >
-      <span className="text-lg select-none">{lastAdded?.image}</span>
+      {lastAdded?.image && (
+        <img
+          src={lastAdded.image}
+          alt={lastAdded.name}
+          className="w-8 h-8 rounded-lg object-cover shrink-0"
+        />
+      )}
       <span className="max-w-[140px] truncate text-white/90 text-xs">
         {lastAdded?.name}
       </span>

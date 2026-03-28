@@ -87,8 +87,12 @@ export function CartSheet() {
             items.map((item) => (
               <div key={item.product.id} className="flex items-center gap-3">
                 {/* Image */}
-                <div className="w-14 h-14 rounded-xl bg-gray-50 flex items-center justify-center shrink-0 text-2xl select-none">
-                  {item.product.image}
+                <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden shrink-0">
+                  <img
+                    src={item.product.image}
+                    alt={item.product.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
 
                 {/* Info */}
