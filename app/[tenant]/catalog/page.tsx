@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CatalogView } from "@/components/catalog/catalog-view";
-import { getTenantConfig } from "@/lib/tenants";
+import { getTenantConfig } from "@/lib/config/tenants";
 
 export async function generateMetadata({
   params,
@@ -19,13 +19,16 @@ export async function generateMetadata({
 
 export default async function TenantCatalogPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ tenant: string }>;
+  searchParams: Promise<{ q?: string }>;
 }) {
   const { tenant } = await params;
+  const { q } = await searchParams;
   return (
     <main className="pt-[100px]">
-      <CatalogView tenant={tenant} />
+      <CatalogView tenant={tenant} search={q ?? ""} />
     </main>
   );
 }

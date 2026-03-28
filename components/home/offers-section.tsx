@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import { tenantHref } from "@/lib/tenant-href";
-import { getProductsByBadge, type MockProduct } from "@/lib/mock-products";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import { getProductsByBadge, type MockProduct } from "@/lib/mocks/mock-products";
 
 // Fixed at module load time — stable across renders
 const OFFER_END_DATE = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);

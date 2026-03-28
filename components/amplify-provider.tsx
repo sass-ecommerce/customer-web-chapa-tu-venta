@@ -1,6 +1,6 @@
 'use client';
-import { configureAmplify } from '@/lib/amplify-config';
-import { AuthProvider } from '@/lib/auth-context';
+import { configureAmplify } from '@/lib/config/amplify-config';
+import { AuthProvider } from '@/lib/auth/auth-context';
 configureAmplify();
 
 export default function AmplifyProvider({ children }: { children: React.ReactNode }) {

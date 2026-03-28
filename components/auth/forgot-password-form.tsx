@@ -12,7 +12,7 @@ import CognitoErrorDialog, {
   parseCognitoError,
   type CognitoErrorInfo,
 } from "@/components/auth/cognito-error-dialog";
-import { tenantHref } from "@/lib/tenant-href";
+import { tenantHref } from "@/lib/utils/tenant-href";
 
 export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
   const router = useRouter();

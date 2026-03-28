@@ -3,13 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, Heart, Minus, Plus, ShoppingCart, ChevronRight } from "lucide-react";
-import { mockProducts, type MockProduct } from "@/lib/mock-products";
-import { useCartStore } from "@/lib/cart-store";
+import { mockProducts, type MockProduct } from "@/lib/mocks/mock-products";
+import { useCartStore } from "@/lib/stores/cart-store";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { tenantHref } from "@/lib/tenant-href";
+import { cn } from "@/lib/utils/utils";
+import { tenantHref } from "@/lib/utils/tenant-href";
 
 const BADGE_STYLES: Record<string, string> = {
   OFERTA: "bg-brand-accent text-white border-transparent",

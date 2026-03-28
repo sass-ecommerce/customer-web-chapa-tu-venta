@@ -2,9 +2,9 @@
 
 import { useMemo, useReducer, useCallback } from "react";
 import Link from "next/link";
-import { mockProducts } from "@/lib/mock-products";
-import { tenantHref } from "@/lib/tenant-href";
-import type { SortOption } from "@/lib/mock-products";
+import { mockProducts } from "@/lib/mocks/mock-products";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import type { SortOption } from "@/lib/mocks/mock-products";
 import { FilterSidebar, FilterDrawer } from "./filter-sidebar";
 import { SortBar } from "./sort-bar";
 import { ProductGrid } from "./product-grid";
@@ -108,11 +108,23 @@ function reducer(state: FilterState, action: Action): FilterState {
   }
 }
 
-export function CatalogView({ tenant }: { tenant: string }) {
+export function CatalogView({
+  tenant,
+  search = "",
+}: {
+  tenant: string;
+  search?: string;
+}) {
   const [filters, dispatch] = useReducer(reducer, initialState);
 
   const filteredProducts = useMemo(() => {
     let result = [...mockProducts];
+
+    // Search filter
+    const q = search.trim().toLowerCase();
+    if (q) {
+      result = result.filter((p) => p.name.toLowerCase().includes(q));
+    }
 
     // Category filter
     if (filters.categories.length > 0) {
@@ -156,7 +168,7 @@ export function CatalogView({ tenant }: { tenant: string }) {
     }
 
     return result;
-  }, [filters]);
+  }, [filters, search]);
 
   const handleCategoryChange = useCallback(
     (cat: string) => dispatch({ type: "TOGGLE_CATEGORY", category: cat }),

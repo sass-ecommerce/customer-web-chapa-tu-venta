@@ -131,4 +131,3 @@ export function getTenantConfig(slug: string): TenantConfig | null {
 export function getTenantBenefits(config: TenantConfig): Benefit[] {
   return config.benefits ?? DEFAULT_BENEFITS;
 }
-

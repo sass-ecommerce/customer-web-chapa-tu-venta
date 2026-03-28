@@ -15,14 +15,14 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import { useCartStore } from "@/lib/cart-store";
-import { useCheckoutStore } from "@/lib/checkout-store";
-import { tenantHref } from "@/lib/tenant-href";
-import { LIMA_DISTRICTS } from "@/lib/lima-districts";
+import { useCartStore } from "@/lib/stores/cart-store";
+import { useCheckoutStore } from "@/lib/stores/checkout-store";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import { LIMA_DISTRICTS } from "@/lib/mocks/lima-districts";
 import { OrderSummary } from "./order-summary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 /* ─── Types ─── */
 

@@ -2,10 +2,10 @@
 
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
-import { useCartStore } from "@/lib/cart-store";
-import { tenantHref } from "@/lib/tenant-href";
+import { useCartStore } from "@/lib/stores/cart-store";
+import { tenantHref } from "@/lib/utils/tenant-href";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 export function CartSheet() {
   const router = useRouter();

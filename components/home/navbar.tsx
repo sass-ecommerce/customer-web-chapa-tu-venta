@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Search,
   ShoppingCart,
@@ -15,9 +16,10 @@ import {
   LogOut,
   Heart,
 } from "lucide-react";
-import { useAuth } from "@/lib/auth-context";
-import { useCartStore } from "@/lib/cart-store";
-import { tenantHref } from "@/lib/tenant-href";
+import { useAuth } from "@/lib/auth/auth-context";
+import { useCartStore } from "@/lib/stores/cart-store";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import { mockProducts } from "@/lib/mocks/mock-products";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,11 +31,41 @@ import {
 
 export function Navbar({ tenant }: { tenant: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const { user, isLoading, logOut } = useAuth();
   const totalCount = useCartStore((s) =>
     s.items.reduce((sum, i) => sum + i.quantity, 0),
   );
   const openSheet = useCartStore((s) => s.openSheet);
+
+  const searchResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return mockProducts
+      .filter((p) => p.name.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [query]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleSearchSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    setIsSearchOpen(false);
+    router.push(tenantHref(tenant, `/catalog?q=${encodeURIComponent(q)}`));
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -130,18 +162,72 @@ export function Navbar({ tenant }: { tenant: string }) {
             </Link>
 
             {/* Search bar */}
-            <div className="hidden md:flex flex-1 items-center rounded-lg border border-gray-200 overflow-hidden">
-              <button className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-xs font-medium whitespace-nowrap hover:bg-gray-100 transition-colors shrink-0">
-                Todas las Categorías
-                <ChevronDown className="size-3.5" />
-              </button>
-              <input
-                placeholder="Buscar productos, marcas y más..."
-                className="flex-1 px-4 py-2.5 text-sm outline-none bg-white min-w-0"
-              />
-              <button className="px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-hover text-white transition-colors shrink-0">
-                <Search className="size-4" />
-              </button>
+            <div ref={searchRef} className="hidden md:flex flex-1 relative">
+              <form
+                onSubmit={handleSearchSubmit}
+                className="flex flex-1 items-center rounded-lg border border-gray-200 overflow-hidden"
+              >
+                <button
+                  type="button"
+                  className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-xs font-medium whitespace-nowrap hover:bg-gray-100 transition-colors shrink-0"
+                >
+                  Todas las Categorías
+                  <ChevronDown className="size-3.5" />
+                </button>
+                <input
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setIsSearchOpen(true);
+                  }}
+                  onFocus={() => setIsSearchOpen(true)}
+                  placeholder="Buscar productos, marcas y más..."
+                  className="flex-1 px-4 py-2.5 text-sm outline-none bg-white min-w-0"
+                />
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-hover text-white transition-colors shrink-0"
+                >
+                  <Search className="size-4" />
+                </button>
+              </form>
+              {isSearchOpen && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                  {searchResults.map((p) => (
+                    <Link
+                      key={p.id}
+                      href={tenantHref(tenant, `/products/${p.id}`)}
+                      onClick={() => {
+                        setIsSearchOpen(false);
+                        setQuery("");
+                      }}
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+                    >
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className="w-9 h-9 rounded object-cover shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-800 truncate">
+                          {p.name}
+                        </p>
+                        <p className="text-xs text-gray-400">{p.category}</p>
+                      </div>
+                      <span className="text-sm font-semibold text-brand-accent shrink-0">
+                        ${p.price}
+                      </span>
+                    </Link>
+                  ))}
+                  <Link
+                    href={tenantHref(tenant, `/catalog?q=${encodeURIComponent(query.trim())}`)}
+                    onClick={() => setIsSearchOpen(false)}
+                    className="block w-full px-4 py-2.5 text-xs text-center text-brand-accent hover:bg-gray-50 border-t border-gray-100 transition-colors"
+                  >
+                    Ver todos los resultados para &ldquo;{query}&rdquo;
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Right icons */}
@@ -182,15 +268,23 @@ export function Navbar({ tenant }: { tenant: string }) {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-b border-gray-100 animate-in slide-in-from-top-2 duration-200">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-3">
-            <div className="flex items-center rounded-lg border border-gray-200 overflow-hidden">
+            <form
+              onSubmit={(e) => {
+                handleSearchSubmit(e);
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center rounded-lg border border-gray-200 overflow-hidden"
+            >
               <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar productos..."
                 className="flex-1 px-4 py-2.5 text-sm outline-none"
               />
-              <button className="px-4 py-2.5 bg-brand-accent text-white">
+              <button type="submit" className="px-4 py-2.5 bg-brand-accent text-white">
                 <Search className="size-4" />
               </button>
-            </div>
+            </form>
             {["Mitra", "Sobre Nosotros", "Atención", "Promo"].map((label) => (
               <a
                 key={label}

@@ -5,8 +5,8 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { CATEGORIES, TAGS } from "@/lib/mock-products";
+import { cn } from "@/lib/utils/utils";
+import { CATEGORIES, TAGS } from "@/lib/mocks/mock-products";
 import type { FilterState } from "./catalog-view";
 
 type FilterSidebarProps = {

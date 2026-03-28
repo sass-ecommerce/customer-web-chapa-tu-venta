@@ -3,13 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { tenantHref } from "@/lib/tenant-href";
+import { cn } from "@/lib/utils/utils";
+import { tenantHref } from "@/lib/utils/tenant-href";
 import {
   mockProducts,
   getProductsByBadge,
   type MockProduct,
-} from "@/lib/mock-products";
+} from "@/lib/mocks/mock-products";
 
 const tabs = [
   {

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { tenantHref } from "@/lib/tenant-href";
-import { getLatestProducts } from "@/lib/mock-products";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import { getLatestProducts } from "@/lib/mocks/mock-products";
 
 const latestProducts = getLatestProducts(6);
 

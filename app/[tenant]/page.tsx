@@ -5,7 +5,7 @@ import { UspBar } from "@/components/home/usp-bar";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { OffersSection } from "@/components/home/offers-section";
 import { LatestArrivals } from "@/components/home/latest-arrivals";
-import { getTenantConfig, getTenantBenefits, DEFAULT_BENEFITS } from "@/lib/tenants";
+import { getTenantConfig, getTenantBenefits, DEFAULT_BENEFITS } from "@/lib/config/tenants";
 
 export async function generateMetadata({
   params,

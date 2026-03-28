@@ -66,6 +66,23 @@ router.push(tenantHref(tenant, "/checkout"));
 router.push(`/${tenant}/checkout`);
 ```
 
+### State Management
+
+**Always use Zustand** for any shared or cross-component state — never `useState` for state that needs to be accessed by more than one component, and never React Context for application state.
+
+- All stores live in `lib/stores/` and follow the pattern `use<Name>Store.ts`
+- Each store must be typed with TypeScript interfaces
+- Prefer slices for large stores (split by domain: cart, filters, UI, etc.)
+
+```tsx
+// ✅ Correct — shared state in a Zustand store
+import { useCartStore } from "@/lib/stores/useCartStore";
+const { items, addItem } = useCartStore();
+
+// ❌ Wrong — lifting state via props or Context for cross-component state
+const [cartItems, setCartItems] = useState([]);
+```
+
 ### Path Aliases
 
 `@/*` maps to the repository root (configured in `tsconfig.json`).

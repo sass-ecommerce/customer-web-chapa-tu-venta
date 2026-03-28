@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { Check, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { MockProduct } from "@/lib/mock-products";
-import { tenantHref } from "@/lib/tenant-href";
-import { useCartStore } from "@/lib/cart-store";
+import { cn } from "@/lib/utils/utils";
+import type { MockProduct } from "@/lib/mocks/mock-products";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import { useCartStore } from "@/lib/stores/cart-store";
 
 const ITEMS_PER_PAGE = 9;
 

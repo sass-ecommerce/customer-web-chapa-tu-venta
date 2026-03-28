@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/home/navbar";
 import { Footer } from "@/components/home/footer";
 import { CartRoot } from "@/components/cart/cart-root";
-import { getTenantConfig } from "@/lib/tenants";
+import { getTenantConfig } from "@/lib/config/tenants";
 
 export default async function TenantLayout({
   children,

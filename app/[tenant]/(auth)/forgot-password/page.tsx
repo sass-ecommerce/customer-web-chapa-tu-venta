@@ -1,4 +1,4 @@
-import { getTenantConfig } from "@/lib/tenants";
+import { getTenantConfig } from "@/lib/config/tenants";
 import ForgotPasswordForm from "@/components/auth/forgot-password-form";
 
 export default async function TenantForgotPasswordPage({

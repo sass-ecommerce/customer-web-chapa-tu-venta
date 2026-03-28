@@ -6,7 +6,7 @@ import {
   Tag,
   Clock,
 } from "lucide-react";
-import type { Benefit } from "@/lib/tenants";
+import type { Benefit } from "@/lib/config/tenants";
 
 const iconMap = {
   truck: Truck,

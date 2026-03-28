@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { tenantHref } from "@/lib/tenant-href";
+import { tenantHref } from "@/lib/utils/tenant-href";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { signUp, confirmSignUp } from "aws-amplify/auth";

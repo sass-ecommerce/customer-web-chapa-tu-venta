@@ -12,8 +12,8 @@ import {
   Smartphone,
   Store,
 } from "lucide-react";
-import { useCheckoutStore } from "@/lib/checkout-store";
-import { tenantHref } from "@/lib/tenant-href";
+import { useCheckoutStore } from "@/lib/stores/checkout-store";
+import { tenantHref } from "@/lib/utils/tenant-href";
 import { Button } from "@/components/ui/button";
 
 const PAYMENT_LABELS: Record<string, string> = {

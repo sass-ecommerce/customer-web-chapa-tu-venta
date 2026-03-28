@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { tenantHref } from "@/lib/tenant-href";
-import type { PromoBanner as PromoBannerType } from "@/lib/tenants";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import type { PromoBanner as PromoBannerType } from "@/lib/config/tenants";
 
 export function PromoBanner({
   banner,

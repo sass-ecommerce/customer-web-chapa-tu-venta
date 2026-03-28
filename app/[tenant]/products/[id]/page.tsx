@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTenantConfig } from "@/lib/tenants";
-import { getProductById } from "@/lib/mock-products";
+import { getTenantConfig } from "@/lib/config/tenants";
+import { getProductById } from "@/lib/mocks/mock-products";
 import { ProductDetail } from "@/components/product/product-detail";
 
 export async function generateMetadata({

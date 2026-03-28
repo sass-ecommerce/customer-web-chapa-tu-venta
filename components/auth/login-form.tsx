@@ -12,8 +12,8 @@ import CognitoErrorDialog, {
   parseCognitoError,
   type CognitoErrorInfo,
 } from "@/components/auth/cognito-error-dialog";
-import { useAuth } from "@/lib/auth-context";
-import { tenantHref } from "@/lib/tenant-href";
+import { useAuth } from "@/lib/auth/auth-context";
+import { tenantHref } from "@/lib/utils/tenant-href";
 
 export default function LoginForm({ tenant }: { tenant: string }) {
   const router = useRouter();

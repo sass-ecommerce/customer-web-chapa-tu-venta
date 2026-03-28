@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import type { FilterState } from "./catalog-view";
-import type { SortOption } from "@/lib/mock-products";
+import type { SortOption } from "@/lib/mocks/mock-products";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "relevance", label: "Relevancia" },

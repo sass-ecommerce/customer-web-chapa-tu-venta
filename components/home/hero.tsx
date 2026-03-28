@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { tenantHref } from "@/lib/tenant-href";
-import { DEFAULT_HERO, type HeroConfig } from "@/lib/tenants";
+import { tenantHref } from "@/lib/utils/tenant-href";
+import { DEFAULT_HERO, type HeroConfig } from "@/lib/config/tenants";
 
 export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
   const h = hero ?? DEFAULT_HERO;
