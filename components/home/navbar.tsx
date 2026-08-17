@@ -103,16 +103,38 @@ export function Navbar({ tenant }: { tenant: string }) {
                       {user.signInDetails?.loginId ?? user.username}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(tenantHref(tenant, "/profile"))
+                      }
+                    >
                       <User size={14} /> Mi perfil
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(
+                          tenantHref(tenant, "/profile?tab=pedidos"),
+                        )
+                      }
+                    >
                       <Package size={14} /> Mis pedidos
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(
+                          tenantHref(tenant, "/profile?tab=favoritos"),
+                        )
+                      }
+                    >
                       <Heart size={14} /> Favoritos
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(
+                          tenantHref(tenant, "/profile?tab=configuracion"),
+                        )
+                      }
+                    >
                       <Settings size={14} /> Configuración
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -303,14 +325,33 @@ export function Navbar({ tenant }: { tenant: string }) {
                       {user.signInDetails?.loginId ?? user.username}
                     </p>
                     {[
-                      { icon: <User size={14} />, label: "Mi perfil" },
-                      { icon: <Package size={14} />, label: "Mis pedidos" },
-                      { icon: <Heart size={14} />, label: "Favoritos" },
-                      { icon: <Settings size={14} />, label: "Configuración" },
-                    ].map(({ icon, label }) => (
+                      {
+                        icon: <User size={14} />,
+                        label: "Mi perfil",
+                        href: tenantHref(tenant, "/profile"),
+                      },
+                      {
+                        icon: <Package size={14} />,
+                        label: "Mis pedidos",
+                        href: tenantHref(tenant, "/profile?tab=pedidos"),
+                      },
+                      {
+                        icon: <Heart size={14} />,
+                        label: "Favoritos",
+                        href: tenantHref(tenant, "/profile?tab=favoritos"),
+                      },
+                      {
+                        icon: <Settings size={14} />,
+                        label: "Configuración",
+                        href: tenantHref(tenant, "/profile?tab=configuracion"),
+                      },
+                    ].map(({ icon, label, href }) => (
                       <button
                         key={label}
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={() => {
+                          if (href) router.push(href);
+                          setIsMenuOpen(false);
+                        }}
                         className="flex items-center gap-2 w-full text-sm text-gray-700 hover:text-brand-accent py-1.5 px-1 transition-colors"
                       >
                         {icon} {label}

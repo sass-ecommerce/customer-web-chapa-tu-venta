@@ -131,3 +131,9 @@ export function getTenantConfig(slug: string): TenantConfig | null {
 export function getTenantBenefits(config: TenantConfig): Benefit[] {
   return config.benefits ?? DEFAULT_BENEFITS;
 }
+
+// Placeholder until tenantId is resolved from a real lookup endpoint.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getTenantId(tenant: string): string {
+  return "9ee19b4f-b99d-4479-a46f-86e747a3c6d5";
+}

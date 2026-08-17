@@ -5,32 +5,30 @@ import Link from "next/link";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils/utils";
 import { tenantHref } from "@/lib/utils/tenant-href";
-import {
-  mockProducts,
-  getProductsByBadge,
-  type MockProduct,
-} from "@/lib/mocks/mock-products";
+import { useProducts } from "@/lib/hooks/use-products";
+import type { DisplayProduct } from "@/lib/adapters/product-adapter";
+import { ProductImage } from "@/components/home/product-image";
 
-const tabs = [
+const tabs: { id: string; label: string; filter: (p: DisplayProduct) => boolean }[] = [
   {
     id: "best",
     label: "Mejor Vendido",
-    products: mockProducts.filter((p) => p.badge === "TOP" || p.rating >= 4.5),
+    filter: (p) => p.badge === "TOP" || p.rating >= 4.5,
   },
   {
     id: "discount",
     label: "Descuento",
-    products: getProductsByBadge("OFERTA"),
+    filter: (p) => p.badge === "OFERTA",
   },
   {
     id: "new",
     label: "Nuevos",
-    products: getProductsByBadge("NUEVO"),
+    filter: (p) => p.badge === "NUEVO",
   },
   {
     id: "featured",
     label: "Destacados",
-    products: mockProducts.filter((p) => p.rating >= 4.7),
+    filter: (p) => p.rating >= 4.7,
   },
 ];
 
@@ -49,7 +47,7 @@ function ProductCard({
   product,
   tenant,
 }: {
-  product: MockProduct;
+  product: DisplayProduct;
   tenant: string;
 }) {
   const [wished, setWished] = useState(false);
@@ -61,10 +59,10 @@ function ProductCard({
         className="block"
       >
         <div className="relative aspect-square bg-gray-100 overflow-hidden">
-          <img
-            src={product.image}
+          <ProductImage
+            imageKey={product.imageKey}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="group-hover:scale-105 transition-transform duration-300"
           />
           {product.badge && (
             <div className="absolute top-3 -left-5 w-20 bg-[#EF4444] text-white text-[10px] font-bold text-center py-0.5 rotate-[-45deg] shadow-sm tracking-wide">
@@ -113,9 +111,27 @@ function ProductCard({
   );
 }
 
+function ProductCardSkeleton() {
+  return (
+    <div className="bg-white rounded-xl overflow-hidden border border-gray-100 animate-pulse">
+      <div className="aspect-square bg-gray-100" />
+      <div className="p-3 space-y-2">
+        <div className="h-3 bg-gray-100 rounded w-3/4" />
+        <div className="h-3 bg-gray-100 rounded w-1/2" />
+        <div className="h-4 bg-gray-100 rounded w-1/3" />
+      </div>
+    </div>
+  );
+}
+
 export function FeaturedProducts({ tenant }: { tenant: string }) {
+  const { data: products, isLoading } = useProducts(tenant);
   const [activeTab, setActiveTab] = useState("best");
-  const activeProducts = tabs.find((t) => t.id === activeTab)?.products ?? [];
+
+  if (!isLoading && (products?.length ?? 0) === 0) return null;
+
+  const activeFilter = tabs.find((t) => t.id === activeTab)?.filter ?? (() => true);
+  const activeProducts = (products ?? []).filter(activeFilter);
 
   return (
     <section id="products" className="py-8 bg-[#F5F6F7]">
@@ -143,9 +159,13 @@ export function FeaturedProducts({ tenant }: { tenant: string }) {
 
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
-          {activeProducts.map((product) => (
-            <ProductCard key={product.id} product={product} tenant={tenant} />
-          ))}
+          {isLoading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))
+            : activeProducts.map((product) => (
+                <ProductCard key={product.id} product={product} tenant={tenant} />
+              ))}
         </div>
 
         {/* CTA */}

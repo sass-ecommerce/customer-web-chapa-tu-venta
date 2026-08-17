@@ -4,14 +4,24 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { tenantHref } from "@/lib/utils/tenant-href";
-import { getProductsByBadge, type MockProduct } from "@/lib/mocks/mock-products";
+import { useProducts } from "@/lib/hooks/use-products";
+import type { DisplayProduct } from "@/lib/adapters/product-adapter";
+import { ProductImage } from "@/components/home/product-image";
 
 // Fixed at module load time — stable across renders
 const OFFER_END_DATE = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
 
-const offerProducts = getProductsByBadge("OFERTA");
-
 const TOTAL_STOCK = 10;
+
+// Stable pseudo-random number derived from the product's UUID, used only
+// for the "sold" progress bar until real stock data is available.
+function hashToStock(id: string): number {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) % TOTAL_STOCK;
+  }
+  return hash + 1;
+}
 
 type TimeLeft = { hours: number; minutes: number; seconds: number };
 
@@ -44,12 +54,11 @@ function FlashCard({
   product,
   tenant,
 }: {
-  product: MockProduct;
+  product: DisplayProduct;
   tenant: string;
 }) {
   const [wished, setWished] = useState(false);
-  // Pseudo-random sold count based on product id (stable, no hydration mismatch)
-  const sold = ((product.id * 3) % TOTAL_STOCK) + 1;
+  const sold = hashToStock(product.id);
 
   return (
     <Link
@@ -58,10 +67,10 @@ function FlashCard({
     >
       {/* Image */}
       <div className="relative aspect-square bg-gray-100 overflow-hidden">
-        <img
-          src={product.image}
+        <ProductImage
+          imageKey={product.imageKey}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="group-hover:scale-105 transition-transform duration-300"
         />
         {product.discount && (
           <span className="absolute top-2 left-2 bg-brand-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
@@ -119,10 +128,15 @@ function FlashCard({
 const SCROLL_AMOUNT = 200;
 
 export function OffersSection({ tenant }: { tenant: string }) {
+  const { data: products, isLoading } = useProducts(tenant);
   const timeLeft = useCountdown(OFFER_END_DATE);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fmt = (v: number | null) =>
     v === null ? "--" : String(v).padStart(2, "0");
+
+  const offerProducts = (products ?? []).filter((p) => p.badge === "OFERTA");
+
+  if (!isLoading && offerProducts.length === 0) return null;
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({
@@ -179,9 +193,16 @@ export function OffersSection({ tenant }: { tenant: string }) {
           className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory"
           style={{ scrollbarWidth: "none" }}
         >
-          {offerProducts.map((product) => (
-            <FlashCard key={product.id} product={product} tenant={tenant} />
-          ))}
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="shrink-0 w-44 aspect-[176/260] bg-white border border-gray-100 rounded-xl animate-pulse"
+                />
+              ))
+            : offerProducts.map((product) => (
+                <FlashCard key={product.id} product={product} tenant={tenant} />
+              ))}
         </div>
       </div>
     </section>

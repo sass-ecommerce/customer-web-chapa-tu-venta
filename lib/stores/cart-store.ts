@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { MockProduct } from "../mock-products";
+import type { MockProduct } from "@/lib/mocks/mock-products";
 
 export type CartItem = {
   product: MockProduct;
