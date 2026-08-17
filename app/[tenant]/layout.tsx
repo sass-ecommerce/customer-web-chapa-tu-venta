@@ -3,7 +3,7 @@ import { Navbar } from "@/components/home/navbar";
 import { Footer } from "@/components/home/footer";
 import { CartRoot } from "@/components/cart/cart-root";
 import { getTenantConfig } from "@/lib/config/tenants";
-import { isLoginEnabled } from "@/lib/config/feature-flags";
+import { isLoginEnabled, isCartEnabled } from "@/lib/config/feature-flags";
 
 export default async function TenantLayout({
   children,
@@ -17,7 +17,11 @@ export default async function TenantLayout({
   if (!config) notFound();
   return (
     <CartRoot>
-      <Navbar tenant={tenant} showLogin={isLoginEnabled()} />
+      <Navbar
+        tenant={tenant}
+        showLogin={isLoginEnabled()}
+        showCart={isCartEnabled()}
+      />
       {children}
       <Footer />
     </CartRoot>

@@ -32,9 +32,11 @@ import {
 export function Navbar({
   tenant,
   showLogin = true,
+  showCart = true,
 }: {
   tenant: string;
   showLogin?: boolean;
+  showCart?: boolean;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -262,18 +264,20 @@ export function Navbar({
 
             {/* Right icons */}
             <div className="flex items-center gap-1 ml-auto md:ml-0">
-              <button
-                onClick={openSheet}
-                className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                aria-label="Abrir carrito"
-              >
-                <ShoppingCart className="size-5" />
-                {totalCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-brand-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">
-                    {totalCount > 9 ? "9+" : totalCount}
-                  </span>
-                )}
-              </button>
+              {showCart && (
+                <button
+                  onClick={openSheet}
+                  className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label="Abrir carrito"
+                >
+                  <ShoppingCart className="size-5" />
+                  {totalCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 bg-brand-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">
+                      {totalCount > 9 ? "9+" : totalCount}
+                    </span>
+                  )}
+                </button>
+              )}
               <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors hidden md:flex">
                 <Bell className="size-5" />
               </button>

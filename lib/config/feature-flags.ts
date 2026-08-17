@@ -5,3 +5,7 @@
 export function isLoginEnabled(): boolean {
   return process.env.LOGIN_ENABLED !== "false";
 }
+
+export function isCartEnabled(): boolean {
+  return process.env.CART_ENABLED !== "false";
+}
