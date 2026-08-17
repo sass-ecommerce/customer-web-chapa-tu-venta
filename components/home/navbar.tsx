@@ -29,7 +29,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function Navbar({ tenant }: { tenant: string }) {
+export function Navbar({
+  tenant,
+  showLogin = true,
+}: {
+  tenant: string;
+  showLogin?: boolean;
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -70,102 +76,104 @@ export function Navbar({ tenant }: { tenant: string }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top utility bar */}
-      <div className="bg-gray-100 border-b border-gray-200 text-xs text-gray-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
-          <span className="font-medium">📱 Descargar App</span>
-          <div className="hidden md:flex items-center gap-6">
-            {["Mitra", "Sobre Nosotros", "Atención", "Promo"].map((label) => (
-              <a
-                key={label}
-                href="#"
-                className="hover:text-gray-900 transition-colors"
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            {!isLoading &&
-              (user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="flex items-center gap-1.5 hover:text-gray-900 transition-colors focus:outline-none">
-                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-brand-accent text-white">
-                        <User size={12} />
-                      </span>
-                      <span className="font-medium truncate max-w-[120px]">
-                        {user.signInDetails?.loginId ?? user.username}
-                      </span>
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-52">
-                    <DropdownMenuLabel className="text-xs font-normal text-gray-500 truncate px-2 py-1.5">
-                      {user.signInDetails?.loginId ?? user.username}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(tenantHref(tenant, "/profile"))
-                      }
-                    >
-                      <User size={14} /> Mi perfil
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(
-                          tenantHref(tenant, "/profile?tab=pedidos"),
-                        )
-                      }
-                    >
-                      <Package size={14} /> Mis pedidos
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(
-                          tenantHref(tenant, "/profile?tab=favoritos"),
-                        )
-                      }
-                    >
-                      <Heart size={14} /> Favoritos
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(
-                          tenantHref(tenant, "/profile?tab=configuracion"),
-                        )
-                      }
-                    >
-                      <Settings size={14} /> Configuración
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      variant="destructive"
-                      onClick={() => logOut()}
-                    >
-                      <LogOut size={14} /> Cerrar sesión
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <>
-                  <Link
-                    href={tenantHref(tenant, "/register")}
-                    className="hover:text-gray-900 transition-colors"
-                  >
-                    Registrarse
-                  </Link>
-                  <span className="text-gray-300">|</span>
-                  <Link
-                    href={tenantHref(tenant, "/login")}
-                    className="hover:text-gray-900 transition-colors"
-                  >
-                    Iniciar sesión
-                  </Link>
-                </>
+      {showLogin && (
+        <div className="bg-gray-100 border-b border-gray-200 text-xs text-gray-600">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
+            <span className="font-medium">📱 Descargar App</span>
+            <div className="hidden md:flex items-center gap-6">
+              {["Mitra", "Sobre Nosotros", "Atención", "Promo"].map((label) => (
+                <a
+                  key={label}
+                  href="#"
+                  className="hover:text-gray-900 transition-colors"
+                >
+                  {label}
+                </a>
               ))}
+            </div>
+            <div className="flex items-center gap-3">
+              {!isLoading &&
+                (user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center gap-1.5 hover:text-gray-900 transition-colors focus:outline-none">
+                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-brand-accent text-white">
+                          <User size={12} />
+                        </span>
+                        <span className="font-medium truncate max-w-[120px]">
+                          {user.signInDetails?.loginId ?? user.username}
+                        </span>
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-52">
+                      <DropdownMenuLabel className="text-xs font-normal text-gray-500 truncate px-2 py-1.5">
+                        {user.signInDetails?.loginId ?? user.username}
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(tenantHref(tenant, "/profile"))
+                        }
+                      >
+                        <User size={14} /> Mi perfil
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(
+                            tenantHref(tenant, "/profile?tab=pedidos"),
+                          )
+                        }
+                      >
+                        <Package size={14} /> Mis pedidos
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(
+                            tenantHref(tenant, "/profile?tab=favoritos"),
+                          )
+                        }
+                      >
+                        <Heart size={14} /> Favoritos
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(
+                            tenantHref(tenant, "/profile?tab=configuracion"),
+                          )
+                        }
+                      >
+                        <Settings size={14} /> Configuración
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => logOut()}
+                      >
+                        <LogOut size={14} /> Cerrar sesión
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Link
+                      href={tenantHref(tenant, "/register")}
+                      className="hover:text-gray-900 transition-colors"
+                    >
+                      Registrarse
+                    </Link>
+                    <span className="text-gray-300">|</span>
+                    <Link
+                      href={tenantHref(tenant, "/login")}
+                      className="hover:text-gray-900 transition-colors"
+                    >
+                      Iniciar sesión
+                    </Link>
+                  </>
+                ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main navbar */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
@@ -376,13 +384,15 @@ export function Navbar({ tenant }: { tenant: string }) {
                     >
                       Registrarse
                     </Link>
-                    <Link
-                      href={tenantHref(tenant, "/login")}
-                      className="text-sm font-medium text-gray-600"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Iniciar sesión
-                    </Link>
+                    {showLogin && (
+                      <Link
+                        href={tenantHref(tenant, "/login")}
+                        className="text-sm font-medium text-gray-600"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Iniciar sesión
+                      </Link>
+                    )}
                   </div>
                 ))}
             </div>
