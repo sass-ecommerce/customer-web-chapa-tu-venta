@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, Heart, Minus, Plus, ShoppingCart, ChevronRight } from "lucide-react";
-import { mockProducts, type MockProduct } from "@/lib/mocks/mock-products";
+import { Check, Heart, Minus, Plus, ShoppingCart, ChevronRight, PackageSearch } from "lucide-react";
+import { useProducts } from "@/lib/hooks/use-products";
+import { useProductImage } from "@/lib/hooks/use-product-image";
+import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { useCartStore } from "@/lib/stores/cart-store";
+import { ProductImage } from "@/components/home/product-image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -39,17 +42,17 @@ function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md
   );
 }
 
-function RelatedCard({ product, tenant }: { product: MockProduct; tenant: string }) {
+function RelatedCard({ product, tenant }: { product: DisplayProduct; tenant: string }) {
   return (
     <Link
       href={tenantHref(tenant, `/products/${product.id}`)}
       className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 block"
     >
       <div className="aspect-square bg-gray-100 overflow-hidden">
-        <img
-          src={product.image}
+        <ProductImage
+          imageKey={product.imageKey}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          className="group-hover:scale-110 transition-transform duration-300"
         />
       </div>
       <div className="p-3 space-y-1">
@@ -65,7 +68,43 @@ function RelatedCard({ product, tenant }: { product: MockProduct; tenant: string
   );
 }
 
-export function ProductDetail({ product, tenant }: { product: MockProduct; tenant: string }) {
+function DetailSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-pulse">
+      <div className="h-4 bg-gray-100 rounded w-48 mb-6" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="bg-gray-100 rounded-2xl aspect-square" />
+        <div className="flex flex-col gap-4">
+          <div className="h-6 bg-gray-100 rounded w-3/4" />
+          <div className="h-4 bg-gray-100 rounded w-1/3" />
+          <div className="h-8 bg-gray-100 rounded w-1/2" />
+          <div className="h-24 bg-gray-100 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NotFoundState({ tenant }: { tenant: string }) {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center text-center">
+      <PackageSearch className="size-12 text-gray-300 mb-4" />
+      <h1 className="text-lg font-semibold text-brand-dark mb-1">Producto no encontrado</h1>
+      <p className="text-sm text-gray-500 mb-6">
+        Este producto ya no está disponible o el enlace es incorrecto.
+      </p>
+      <Link
+        href={tenantHref(tenant, "/catalog")}
+        className="text-sm font-medium text-brand-accent hover:underline"
+      >
+        Ver catálogo
+      </Link>
+    </div>
+  );
+}
+
+export function ProductDetail({ tenant, productId }: { tenant: string; productId: string }) {
+  const { data: products, isLoading } = useProducts(tenant);
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("Descripción");
@@ -73,14 +112,34 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
   const addItem = useCartStore((s) => s.addItem);
   const openSheet = useCartStore((s) => s.openSheet);
 
+  const product = products?.find((p) => p.id === productId);
+  const { data: imageUrl } = useProductImage(product?.imageKey);
+
+  if (isLoading) {
+    return <DetailSkeleton />;
+  }
+
+  if (!product) {
+    return <NotFoundState tenant={tenant} />;
+  }
+
   const handleAddToCart = () => {
-    addItem(product, quantity);
+    addItem(
+      {
+        id: product.id,
+        name: product.name,
+        image: imageUrl ?? "",
+        price: product.price,
+        category: product.category,
+      },
+      quantity
+    );
     setQuantity(1);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const related = mockProducts
+  const related = (products ?? [])
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
@@ -107,11 +166,7 @@ export function ProductDetail({ product, tenant }: { product: MockProduct; tenan
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Image */}
         <div className="bg-gray-50 rounded-2xl aspect-square overflow-hidden border border-gray-100">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
+          <ProductImage imageKey={product.imageKey} alt={product.name} />
         </div>
 
         {/* Info */}

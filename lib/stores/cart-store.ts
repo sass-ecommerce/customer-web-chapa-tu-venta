@@ -1,18 +1,27 @@
 import { create } from "zustand";
-import type { MockProduct } from "@/lib/mocks/mock-products";
+
+// Minimal shape the cart needs to render an item, satisfied by both
+// MockProduct (catalog) and DisplayProduct (API-backed product pages).
+export type CartProduct = {
+  id: string | number;
+  name: string;
+  image: string;
+  price: number;
+  category: string;
+};
 
 export type CartItem = {
-  product: MockProduct;
+  product: CartProduct;
   quantity: number;
 };
 
 type CartStore = {
   items: CartItem[];
   isSheetOpen: boolean;
-  lastAdded: MockProduct | null;
-  addItem: (product: MockProduct, quantity?: number) => void;
-  removeItem: (id: number) => void;
-  updateQty: (id: number, quantity: number) => void;
+  lastAdded: CartProduct | null;
+  addItem: (product: CartProduct, quantity?: number) => void;
+  removeItem: (id: string | number) => void;
+  updateQty: (id: string | number, quantity: number) => void;
   clear: () => void;
   openSheet: () => void;
   closeSheet: () => void;

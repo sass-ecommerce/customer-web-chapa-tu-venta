@@ -1,8 +1,20 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getTenantConfig } from "@/lib/config/tenants";
-import { getProductById } from "@/lib/mocks/mock-products";
+import { getTenantConfig, getTenantId } from "@/lib/config/tenants";
 import { ProductDetail } from "@/components/product/product-detail";
+import type { ApiProduct } from "@/lib/api/products";
+
+async function fetchProductName(tenant: string, productId: string): Promise<string | null> {
+  try {
+    const tenantId = getTenantId(tenant);
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const res = await fetch(`${baseUrl}/products?tenantId=${tenantId}`);
+    if (!res.ok) return null;
+    const products: ApiProduct[] = await res.json();
+    return products.find((p) => p.productId === productId)?.name ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export async function generateMetadata({
   params,
@@ -11,10 +23,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tenant, id } = await params;
   const config = getTenantConfig(tenant);
-  const product = getProductById(Number(id));
   const storeName = config ? config.name : "Chapa Tu Venta";
+  const productName = await fetchProductName(tenant, id);
   return {
-    title: product ? `${product.name} | ${storeName}` : "Producto | Chapa Tu Venta",
+    title: productName ? `${productName} | ${storeName}` : `Producto | ${storeName}`,
   };
 }
 
@@ -24,15 +36,10 @@ export default async function ProductPage({
   params: Promise<{ tenant: string; id: string }>;
 }) {
   const { tenant, id } = await params;
-  const product = getProductById(Number(id));
-
-  if (!product) {
-    notFound();
-  }
 
   return (
     <main className="pt-[100px]">
-      <ProductDetail product={product} tenant={tenant} />
+      <ProductDetail tenant={tenant} productId={id} />
     </main>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Hero } from "@/components/home/hero";
+// import { Hero } from "@/components/home/hero";
 import { PromoBanner } from "@/components/home/promo-banner";
 import { UspBar } from "@/components/home/usp-bar";
 import { FeaturedProducts } from "@/components/home/featured-products";
@@ -30,8 +30,8 @@ export default async function TenantHomePage({
 
   return (
     <>
-      <main>
-        <Hero tenant={tenant} hero={config?.hero} />
+      <main className="pt-[100px]">
+        {/* <Hero tenant={tenant} hero={config?.hero} /> */}
         {config?.promoBanner && (
           <PromoBanner banner={config.promoBanner} tenant={tenant} />
         )}
