@@ -63,7 +63,7 @@ function ProductCard({
       >
         <div className="relative aspect-square overflow-hidden bg-gray-100">
           <ProductImage
-            imageKey={product.imageKey}
+            imageUrl={product.imageUrl}
             alt={product.name}
             className="transition-transform duration-300 group-hover:scale-105"
           />

@@ -11,7 +11,6 @@ import {
   ChevronRight,
   PackageSearch,
 } from "lucide-react";
-import { useProductImage } from "@/lib/queries/use-product-image";
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { useCartStore } from "@/lib/stores/cart-store";
 import { ProductImage } from "@/components/home/product-image";
@@ -89,7 +88,7 @@ function RelatedCard({
     >
       <div className="aspect-square overflow-hidden bg-gray-100">
         <ProductImage
-          imageKey={product.imageKey}
+          imageUrl={product.imageUrl}
           alt={product.name}
           className="transition-transform duration-300 group-hover:scale-110"
         />
@@ -150,7 +149,6 @@ export function ProductDetail({
   const openSheet = useCartStore((s) => s.openSheet);
 
   const product = products.find((p) => p.id === productId);
-  const { data: imageUrl } = useProductImage(product?.imageKey);
 
   if (!product) {
     return <NotFoundState tenant={tenant} />;
@@ -161,7 +159,7 @@ export function ProductDetail({
       {
         id: product.id,
         name: product.name,
-        image: imageUrl ?? "",
+        image: product.imageUrl ?? "",
         price: product.price,
         category: product.category,
       },
@@ -207,7 +205,7 @@ export function ProductDetail({
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
         {/* Image */}
         <div className="aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
-          <ProductImage imageKey={product.imageKey} alt={product.name} />
+          <ProductImage imageUrl={product.imageUrl} alt={product.name} />
         </div>
 
         {/* Info */}

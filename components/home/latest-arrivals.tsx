@@ -50,7 +50,7 @@ export function LatestArrivals({
               >
                 <div className="aspect-square overflow-hidden rounded-xl bg-gray-100">
                   <ProductImage
-                    imageKey={product.imageKey}
+                    imageUrl={product.imageUrl}
                     alt={product.name}
                     className="transition-transform duration-300 group-hover:scale-105"
                   />

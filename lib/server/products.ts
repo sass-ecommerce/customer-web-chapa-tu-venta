@@ -13,7 +13,7 @@ export async function getTenantProducts(
     const res = await fetchProductsUpstream(tenantId);
     if (!res.ok) return [];
     const products: ApiProduct[] = await res.json();
-    return toDisplayProducts(products);
+    return await toDisplayProducts(products);
   } catch {
     console.error(`Failed to fetch products for tenant: ${tenant}`);
     return [];

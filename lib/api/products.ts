@@ -25,8 +25,6 @@ export type ApiProduct = {
   updatedAt?: string;
 };
 
-// Server-side call straight to the upstream API — used by server
-// components/pages, where CORS doesn't apply.
 export async function fetchProductsUpstream(
   tenantId: string,
 ): Promise<Response> {

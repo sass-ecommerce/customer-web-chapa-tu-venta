@@ -1,5 +1,4 @@
 import { headers } from "next/headers";
-import { resolveTenantId } from "@/lib/api/tenants";
 
 // El proxy ya resuelve el tenantId por subdominio y lo deja en el header
 // x-tenant-id. Si no está presente (dev con rewrite deshabilitado, o el
