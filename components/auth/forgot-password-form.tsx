@@ -53,7 +53,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
 
   if (step === "confirm") {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+      <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
         <CognitoErrorDialog
           errorInfo={errorInfo}
           onClose={() => setErrorInfo(null)}
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
           }}
         >
           <div className="space-y-1">
-            <h2 className="text-lg font-semibold text-brand-dark">
+            <h2 className="text-brand-dark text-lg font-semibold">
               Ingresa el código
             </h2>
             <p className="text-sm text-gray-500">
@@ -87,7 +87,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
             {(field) => (
               <div className="space-y-1.5">
                 <label
-                  className="text-sm font-medium text-brand-dark"
+                  className="text-brand-dark text-sm font-medium"
                   htmlFor="reset-code"
                 >
                   Código de verificación
@@ -122,7 +122,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
             {(field) => (
               <div className="space-y-1.5">
                 <label
-                  className="text-sm font-medium text-brand-dark"
+                  className="text-brand-dark text-sm font-medium"
                   htmlFor="new-password"
                 >
                   Nueva contraseña
@@ -141,7 +141,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -170,7 +170,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
             {(field) => (
               <div className="space-y-1.5">
                 <label
-                  className="text-sm font-medium text-brand-dark"
+                  className="text-brand-dark text-sm font-medium"
                   htmlFor="confirm-new-password"
                 >
                   Confirmar contraseña
@@ -189,7 +189,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
                   <button
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
                   >
                     {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -208,7 +208,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
             {(isSubmitting) => (
               <Button
                 type="submit"
-                className="w-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold py-2.5 text-sm mt-2"
+                className="bg-brand-accent hover:bg-brand-accent-hover mt-2 w-full py-2.5 text-sm font-semibold text-white"
                 size="lg"
                 disabled={isSubmitting}
               >
@@ -223,7 +223,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
               setStep("request");
               setErrorInfo(null);
             }}
-            className="w-full text-sm text-gray-500 hover:text-brand-accent transition-colors"
+            className="hover:text-brand-accent w-full text-sm text-gray-500 transition-colors"
           >
             Volver
           </button>
@@ -233,7 +233,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
       <CognitoErrorDialog
         errorInfo={errorInfo}
         onClose={() => setErrorInfo(null)}
@@ -261,7 +261,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
           {(field) => (
             <div className="space-y-1.5">
               <label
-                className="text-sm font-medium text-brand-dark"
+                className="text-brand-dark text-sm font-medium"
                 htmlFor="email"
               >
                 Correo electrónico
@@ -289,7 +289,7 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
           {(isSubmitting) => (
             <Button
               type="submit"
-              className="w-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold py-2.5 text-sm mt-2"
+              className="bg-brand-accent hover:bg-brand-accent-hover mt-2 w-full py-2.5 text-sm font-semibold text-white"
               size="lg"
               disabled={isSubmitting}
             >
@@ -300,17 +300,17 @@ export default function ForgotPasswordForm({ tenant }: { tenant: string }) {
       </form>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-5">
-        <span className="flex-1 h-px bg-gray-100" />
+      <div className="my-5 flex items-center gap-3">
+        <span className="h-px flex-1 bg-gray-100" />
         <span className="text-xs text-gray-400">o</span>
-        <span className="flex-1 h-px bg-gray-100" />
+        <span className="h-px flex-1 bg-gray-100" />
       </div>
 
       <p className="text-center text-sm text-gray-500">
         ¿Ya recuerdas tu contraseña?{" "}
         <Link
           href={tenantHref(tenant, "/login")}
-          className="text-brand-accent font-semibold hover:underline underline-offset-2"
+          className="text-brand-accent font-semibold underline-offset-2 hover:underline"
         >
           Iniciar sesión
         </Link>

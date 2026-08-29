@@ -43,11 +43,11 @@ function ActiveChip({
   onRemove: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+    <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
       {label}
       <button
         onClick={onRemove}
-        className="text-gray-400 hover:text-gray-700 transition-colors"
+        className="text-gray-400 transition-colors hover:text-gray-700"
         aria-label={`Quitar filtro ${label}`}
       >
         <X className="size-3" />
@@ -92,26 +92,26 @@ export function SortBar({
           <Button
             variant="outline"
             size="sm"
-            className="md:hidden flex items-center gap-1.5"
+            className="flex items-center gap-1.5 md:hidden"
             onClick={onOpenMobileFilters}
           >
             <SlidersHorizontal className="size-3.5" />
             Filtrar
             {activeFilterCount > 0 && (
-              <span className="bg-brand-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none ml-0.5">
+              <span className="bg-brand-accent ml-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] leading-none font-bold text-white">
                 {activeFilterCount}
               </span>
             )}
           </Button>
 
           <p className="text-sm text-gray-500">
-            <span className="font-semibold text-brand-dark">{count}</span>{" "}
+            <span className="text-brand-dark font-semibold">{count}</span>{" "}
             {count === totalCount ? (
               "productos"
             ) : (
               <>
                 de{" "}
-                <span className="font-semibold text-brand-dark">
+                <span className="text-brand-dark font-semibold">
                   {totalCount}
                 </span>{" "}
                 productos
@@ -139,14 +139,14 @@ export function SortBar({
           </Select>
 
           {/* View toggle */}
-          <div className="hidden sm:flex items-center border border-gray-200 rounded-lg overflow-hidden">
+          <div className="hidden items-center overflow-hidden rounded-lg border border-gray-200 sm:flex">
             <button
               onClick={() => onViewChange("grid")}
               className={cn(
                 "p-1.5 transition-colors",
                 filters.viewMode === "grid"
                   ? "bg-brand-dark text-white"
-                  : "text-gray-400 hover:text-gray-700 hover:bg-gray-50"
+                  : "text-gray-400 hover:bg-gray-50 hover:text-gray-700",
               )}
               aria-label="Vista grilla"
             >
@@ -155,10 +155,10 @@ export function SortBar({
             <button
               onClick={() => onViewChange("list")}
               className={cn(
-                "p-1.5 transition-colors border-l border-gray-200",
+                "border-l border-gray-200 p-1.5 transition-colors",
                 filters.viewMode === "list"
                   ? "bg-brand-dark text-white"
-                  : "text-gray-400 hover:text-gray-700 hover:bg-gray-50"
+                  : "text-gray-400 hover:bg-gray-50 hover:text-gray-700",
               )}
               aria-label="Vista lista"
             >
@@ -200,7 +200,7 @@ export function SortBar({
 
           <button
             onClick={onClearAll}
-            className="text-xs text-brand-accent hover:text-brand-accent-hover font-medium transition-colors"
+            className="text-brand-accent hover:text-brand-accent-hover text-xs font-medium transition-colors"
           >
             Limpiar
           </button>

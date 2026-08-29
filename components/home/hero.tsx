@@ -8,13 +8,13 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
 
   return (
     /* top-[100px] = top bar (36px h-9) + main navbar (64px h-16) */
-    <section className="pt-[100px] bg-[#F5F6F7] pb-4">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-2xl overflow-hidden bg-[#1A1A1A] min-h-[460px] flex flex-col lg:flex-row">
+    <section className="bg-[#F5F6F7] pt-[100px] pb-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative flex min-h-[460px] flex-col overflow-hidden rounded-2xl bg-[#1A1A1A] lg:flex-row">
           {/* Left — text */}
-          <div className="flex-1 flex flex-col justify-center px-8 lg:px-14 py-12 space-y-6 relative z-10">
+          <div className="relative z-10 flex flex-1 flex-col justify-center space-y-6 px-8 py-12 lg:px-14">
             <span
-              className="inline-flex items-center gap-2 bg-[#EF4444]/15 text-[#EF4444] text-[11px] font-bold px-3 py-1.5 rounded-full w-fit border border-[#EF4444]/25 opacity-0"
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-[#EF4444]/25 bg-[#EF4444]/15 px-3 py-1.5 text-[11px] font-bold text-[#EF4444] opacity-0"
               style={{
                 animation:
                   "heroUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards 0.05s",
@@ -30,18 +30,18 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
                   "heroUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards 0.15s",
               }}
             >
-              <h1 className="font-display italic text-5xl lg:text-6xl xl:text-[4.5rem] text-white leading-[1.05] tracking-tight whitespace-pre-line">
+              <h1 className="font-display text-5xl leading-[1.05] tracking-tight whitespace-pre-line text-white italic lg:text-6xl xl:text-[4.5rem]">
                 {h.heading}
               </h1>
               {h.discountLabel && (
-                <p className="text-[#EF4444] font-black text-2xl lg:text-3xl font-body mt-3 tracking-tight">
+                <p className="font-body mt-3 text-2xl font-black tracking-tight text-[#EF4444] lg:text-3xl">
                   {h.discountLabel}
                 </p>
               )}
             </div>
 
             <p
-              className="text-white/45 text-sm leading-relaxed max-w-[260px] opacity-0"
+              className="max-w-[260px] text-sm leading-relaxed text-white/45 opacity-0"
               style={{
                 animation:
                   "heroUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards 0.25s",
@@ -51,7 +51,7 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
             </p>
 
             <div
-              className="flex gap-3 flex-wrap opacity-0"
+              className="flex flex-wrap gap-3 opacity-0"
               style={{
                 animation:
                   "heroUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards 0.35s",
@@ -59,7 +59,7 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
             >
               <Button
                 asChild
-                className="bg-[#EF4444] hover:bg-[#dc2626] text-white font-semibold rounded-full border-0 px-7 h-11"
+                className="h-11 rounded-full border-0 bg-[#EF4444] px-7 font-semibold text-white hover:bg-[#dc2626]"
               >
                 <Link href={tenantHref(tenant, "/catalog")}>
                   {h.ctaPrimaryLabel}
@@ -68,7 +68,7 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
               <Button
                 asChild
                 variant="outline"
-                className="rounded-full px-7 font-semibold h-11 border-white/20 text-white hover:bg-white/10 hover:text-white bg-transparent"
+                className="h-11 rounded-full border-white/20 bg-transparent px-7 font-semibold text-white hover:bg-white/10 hover:text-white"
               >
                 <Link href={tenantHref(tenant, "/catalog")}>Ver catálogo</Link>
               </Button>
@@ -86,15 +86,15 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
                 {h.stats.map(({ value, label }, i) => (
                   <div key={label} className="flex items-center gap-6">
                     <div>
-                      <p className="text-white font-black text-base leading-none">
+                      <p className="text-base leading-none font-black text-white">
                         {value}
                       </p>
-                      <p className="text-white/35 text-[10px] mt-0.5 uppercase tracking-wide">
+                      <p className="mt-0.5 text-[10px] tracking-wide text-white/35 uppercase">
                         {label}
                       </p>
                     </div>
                     {i < h.stats!.length - 1 && (
-                      <div className="w-px h-6 bg-white/10" />
+                      <div className="h-6 w-px bg-white/10" />
                     )}
                   </div>
                 ))}
@@ -103,27 +103,27 @@ export function Hero({ tenant, hero }: { tenant: string; hero?: HeroConfig }) {
           </div>
 
           {/* Right — hero image */}
-          <div className="relative w-full lg:w-[45%] min-h-[280px] overflow-hidden">
+          <div className="relative min-h-[280px] w-full overflow-hidden lg:w-[45%]">
             <img
               src={h.image}
               alt="Hero"
-              className="absolute inset-0 w-full h-full object-cover object-top"
+              className="absolute inset-0 h-full w-full object-cover object-top"
             />
             {/* Blend into dark bg — desktop left edge */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A] via-[#1A1A1A]/20 to-transparent hidden lg:block" />
+            <div className="absolute inset-0 hidden bg-gradient-to-r from-[#1A1A1A] via-[#1A1A1A]/20 to-transparent lg:block" />
             {/* Blend into dark bg — mobile top edge */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A] via-[#1A1A1A]/30 to-transparent lg:hidden" />
 
             {/* Circular discount badge — only if discountBadge is set */}
             {h.discountBadge && (
-              <div className="absolute top-6 right-6 w-16 h-16 rounded-full bg-[#EF4444] flex flex-col items-center justify-center shadow-lg shadow-black/40">
-                <span className="text-[9px] text-white font-bold leading-none uppercase">
+              <div className="absolute top-6 right-6 flex h-16 w-16 flex-col items-center justify-center rounded-full bg-[#EF4444] shadow-lg shadow-black/40">
+                <span className="text-[9px] leading-none font-bold text-white uppercase">
                   Hasta
                 </span>
-                <span className="text-lg text-white font-black leading-none">
+                <span className="text-lg leading-none font-black text-white">
                   {h.discountBadge}
                 </span>
-                <span className="text-[9px] text-white font-bold leading-none uppercase">
+                <span className="text-[9px] leading-none font-bold text-white uppercase">
                   off
                 </span>
               </div>

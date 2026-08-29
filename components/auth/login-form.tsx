@@ -37,7 +37,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
   });
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
       <CognitoErrorDialog
         errorInfo={errorInfo}
         onClose={() => setErrorInfo(null)}
@@ -65,7 +65,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
           {(field) => (
             <div className="space-y-1.5">
               <label
-                className="text-sm font-medium text-brand-dark"
+                className="text-brand-dark text-sm font-medium"
                 htmlFor="email"
               >
                 Correo electrónico
@@ -101,14 +101,14 @@ export default function LoginForm({ tenant }: { tenant: string }) {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label
-                  className="text-sm font-medium text-brand-dark"
+                  className="text-brand-dark text-sm font-medium"
                   htmlFor="password"
                 >
                   Contraseña
                 </label>
                 <Link
                   href={tenantHref(tenant, "/forgot-password")}
-                  className="text-xs text-brand-accent hover:underline underline-offset-2"
+                  className="text-brand-accent text-xs underline-offset-2 hover:underline"
                 >
                   ¿Olvidaste tu contraseña?
                 </Link>
@@ -127,7 +127,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -147,7 +147,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
           {(isSubmitting) => (
             <Button
               type="submit"
-              className="w-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold py-2.5 text-sm mt-2"
+              className="bg-brand-accent hover:bg-brand-accent-hover mt-2 w-full py-2.5 text-sm font-semibold text-white"
               size="lg"
               disabled={isSubmitting}
             >
@@ -158,10 +158,10 @@ export default function LoginForm({ tenant }: { tenant: string }) {
       </form>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-5">
-        <span className="flex-1 h-px bg-gray-100" />
+      <div className="my-5 flex items-center gap-3">
+        <span className="h-px flex-1 bg-gray-100" />
         <span className="text-xs text-gray-400">o</span>
-        <span className="flex-1 h-px bg-gray-100" />
+        <span className="h-px flex-1 bg-gray-100" />
       </div>
 
       {/* Register link */}
@@ -169,7 +169,7 @@ export default function LoginForm({ tenant }: { tenant: string }) {
         ¿No tienes cuenta?{" "}
         <Link
           href={tenantHref(tenant, "/register")}
-          className="text-brand-accent font-semibold hover:underline underline-offset-2"
+          className="text-brand-accent font-semibold underline-offset-2 hover:underline"
         >
           Crear cuenta
         </Link>

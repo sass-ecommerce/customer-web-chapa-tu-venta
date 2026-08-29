@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${dmSans.variable} ${playfair.variable}`}>
-      <body className="antialiased font-body">
+      <body className="font-body antialiased">
         <QueryProvider>
           <AmplifyProvider>{children}</AmplifyProvider>
         </QueryProvider>

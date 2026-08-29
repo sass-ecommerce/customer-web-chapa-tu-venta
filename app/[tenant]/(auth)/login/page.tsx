@@ -13,19 +13,19 @@ export default async function TenantLoginPage({
   const loginEnabled = isLoginEnabled();
 
   return (
-    <div className="min-h-screen bg-gray-50 font-body text-brand-dark">
-      <main className="pt-28 pb-16 px-4">
-        <div className="max-w-md mx-auto">
+    <div className="font-body text-brand-dark min-h-screen bg-gray-50">
+      <main className="px-4 pt-28 pb-16">
+        <div className="mx-auto max-w-md">
           {loginEnabled ? (
             <>
               {/* Header */}
-              <div className="text-center mb-8">
-                <h1 className="font-display text-3xl font-bold text-brand-dark mb-2">
+              <div className="mb-8 text-center">
+                <h1 className="font-display text-brand-dark mb-2 text-3xl font-bold">
                   Iniciar sesión
                 </h1>
-                <p className="text-gray-500 text-sm">
+                <p className="text-sm text-gray-500">
                   Bienvenido de vuelta a{" "}
-                  <span className="font-semibold text-brand-dark">
+                  <span className="text-brand-dark font-semibold">
                     {config?.name ?? tenant}
                   </span>
                 </p>

@@ -41,7 +41,7 @@ export const useCartStore = create<CartStore>((set) => ({
         ? state.items.map((i) =>
             i.product.id === product.id
               ? { ...i, quantity: i.quantity + quantity }
-              : i
+              : i,
           )
         : [...state.items, { product, quantity }];
       return { items, lastAdded: product };
@@ -61,7 +61,7 @@ export const useCartStore = create<CartStore>((set) => ({
         quantity <= 0
           ? state.items.filter((i) => i.product.id !== id)
           : state.items.map((i) =>
-              i.product.id === id ? { ...i, quantity } : i
+              i.product.id === id ? { ...i, quantity } : i,
             ),
     })),
 

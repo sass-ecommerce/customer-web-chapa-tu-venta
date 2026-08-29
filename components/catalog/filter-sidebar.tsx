@@ -33,18 +33,18 @@ function AccordionSection({
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full py-3 text-sm font-semibold text-brand-dark hover:text-brand-accent transition-colors"
+        className="text-brand-dark hover:text-brand-accent flex w-full items-center justify-between py-3 text-sm font-semibold transition-colors"
       >
         {title}
         <ChevronDown
           className={cn(
             "size-4 text-gray-400 transition-transform duration-200",
-            open && "rotate-180"
+            open && "rotate-180",
           )}
         />
       </button>
 
-      {open && <div className="pb-4 space-y-2">{children}</div>}
+      {open && <div className="space-y-2 pb-4">{children}</div>}
     </div>
   );
 }
@@ -57,7 +57,7 @@ function StarRating({ rating }: { rating: number }) {
           key={star}
           className={cn(
             "text-xs",
-            star <= rating ? "text-yellow-400" : "text-gray-300"
+            star <= rating ? "text-yellow-400" : "text-gray-300",
           )}
         >
           ★
@@ -85,14 +85,14 @@ export function FilterSidebar({
   return (
     <aside className="w-full">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
           Filtros
         </h2>
         {hasActiveFilters && (
           <button
             onClick={onClearAll}
-            className="text-xs font-medium text-brand-accent hover:text-brand-accent-hover transition-colors"
+            className="text-brand-accent hover:text-brand-accent-hover text-xs font-medium transition-colors"
           >
             Limpiar todo
           </button>
@@ -108,20 +108,20 @@ export function FilterSidebar({
               return (
                 <label
                   key={cat}
-                  className="flex items-center gap-2.5 cursor-pointer group"
+                  className="group flex cursor-pointer items-center gap-2.5"
                 >
                   <div
                     className={cn(
-                      "w-4 h-4 rounded border flex items-center justify-center transition-all",
+                      "flex h-4 w-4 items-center justify-center rounded border transition-all",
                       active
                         ? "bg-brand-accent border-brand-accent"
-                        : "border-gray-300 group-hover:border-brand-accent"
+                        : "group-hover:border-brand-accent border-gray-300",
                     )}
                     onClick={() => onCategoryChange(cat)}
                   >
                     {active && (
                       <svg
-                        className="w-2.5 h-2.5 text-white"
+                        className="h-2.5 w-2.5 text-white"
                         viewBox="0 0 10 10"
                         fill="none"
                       >
@@ -146,7 +146,7 @@ export function FilterSidebar({
                       "text-sm transition-colors",
                       active
                         ? "text-brand-dark font-medium"
-                        : "text-gray-600 group-hover:text-brand-dark"
+                        : "group-hover:text-brand-dark text-gray-600",
                     )}
                     onClick={() => onCategoryChange(cat)}
                   >
@@ -164,7 +164,7 @@ export function FilterSidebar({
         <AccordionSection title="Precio">
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+              <span className="absolute top-1/2 left-2.5 -translate-y-1/2 text-xs text-gray-400">
                 $
               </span>
               <Input
@@ -179,9 +179,9 @@ export function FilterSidebar({
                 className="pl-5 text-sm"
               />
             </div>
-            <span className="text-gray-400 text-sm shrink-0">–</span>
+            <span className="shrink-0 text-sm text-gray-400">–</span>
             <div className="relative flex-1">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+              <span className="absolute top-1/2 left-2.5 -translate-y-1/2 text-xs text-gray-400">
                 $
               </span>
               <Input
@@ -193,7 +193,7 @@ export function FilterSidebar({
                 onChange={(e) =>
                   onPriceChange(
                     filters.priceMin,
-                    Number(e.target.value) || 1000
+                    Number(e.target.value) || 1000,
                   )
                 }
                 className="pl-5 text-sm"
@@ -214,19 +214,19 @@ export function FilterSidebar({
             ].map(({ value, label }) => (
               <label
                 key={value}
-                className="flex items-center gap-2.5 cursor-pointer group"
+                className="group flex cursor-pointer items-center gap-2.5"
               >
                 <div
                   className={cn(
-                    "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
+                    "flex h-4 w-4 items-center justify-center rounded-full border-2 transition-all",
                     filters.minRating === value
                       ? "border-brand-accent"
-                      : "border-gray-300 group-hover:border-brand-accent"
+                      : "group-hover:border-brand-accent border-gray-300",
                   )}
                   onClick={() => onRatingChange(value)}
                 >
                   {filters.minRating === value && (
-                    <div className="w-2 h-2 rounded-full bg-brand-accent" />
+                    <div className="bg-brand-accent h-2 w-2 rounded-full" />
                   )}
                 </div>
                 <input
@@ -247,7 +247,7 @@ export function FilterSidebar({
                         "text-sm transition-colors",
                         filters.minRating === value
                           ? "text-brand-dark font-medium"
-                          : "text-gray-600 group-hover:text-brand-dark"
+                          : "group-hover:text-brand-dark text-gray-600",
                       )}
                     >
                       {label}
@@ -271,19 +271,19 @@ export function FilterSidebar({
                   key={tag}
                   onClick={() => onTagChange(tag)}
                   className={cn(
-                    "px-3 py-1 text-xs font-bold rounded-full border transition-all",
+                    "rounded-full border px-3 py-1 text-xs font-bold transition-all",
                     tag === "NUEVO" &&
                       (active
-                        ? "bg-green-500 text-white border-green-500"
+                        ? "border-green-500 bg-green-500 text-white"
                         : "border-green-300 text-green-600 hover:bg-green-50"),
                     tag === "OFERTA" &&
                       (active
-                        ? "bg-brand-accent text-white border-brand-accent"
-                        : "border-orange-300 text-brand-accent hover:bg-orange-50"),
+                        ? "bg-brand-accent border-brand-accent text-white"
+                        : "text-brand-accent border-orange-300 hover:bg-orange-50"),
                     tag === "TOP" &&
                       (active
-                        ? "bg-brand-dark text-white border-brand-dark"
-                        : "border-gray-300 text-gray-600 hover:bg-gray-50")
+                        ? "bg-brand-dark border-brand-dark text-white"
+                        : "border-gray-300 text-gray-600 hover:bg-gray-50"),
                   )}
                 >
                   {tag}
@@ -312,18 +312,18 @@ export function FilterDrawer({
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-200"
+        className="animate-in fade-in fixed inset-0 z-40 bg-black/50 duration-200"
         onClick={onClose}
       />
 
       {/* Panel */}
-      <div className="fixed left-0 top-0 bottom-0 w-80 max-w-[90vw] bg-white z-50 flex flex-col animate-in slide-in-from-left duration-300 shadow-2xl">
+      <div className="animate-in slide-in-from-left fixed top-0 bottom-0 left-0 z-50 flex w-80 max-w-[90vw] flex-col bg-white shadow-2xl duration-300">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-brand-dark">Filtros</h2>
+        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+          <h2 className="text-brand-dark font-semibold">Filtros</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-brand-dark transition-colors p-1"
+            className="hover:text-brand-dark p-1 text-gray-400 transition-colors"
             aria-label="Cerrar filtros"
           >
             <svg
@@ -351,7 +351,7 @@ export function FilterDrawer({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-100 px-5 py-4 flex gap-3">
+        <div className="flex gap-3 border-t border-gray-100 px-5 py-4">
           <Button
             variant="outline"
             className="flex-1"
@@ -363,7 +363,7 @@ export function FilterDrawer({
           </Button>
           <Button
             onClick={onApply}
-            className="flex-1 bg-brand-accent hover:bg-brand-accent-hover text-white border-0"
+            className="bg-brand-accent hover:bg-brand-accent-hover flex-1 border-0 text-white"
           >
             Aplicar →
           </Button>

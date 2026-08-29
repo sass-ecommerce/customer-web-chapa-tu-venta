@@ -1,4 +1,4 @@
-import { Amplify } from 'aws-amplify';
+import { Amplify } from "aws-amplify";
 
 export function configureAmplify() {
   Amplify.configure({
@@ -6,7 +6,7 @@ export function configureAmplify() {
       Cognito: {
         userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID!,
         userPoolClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
-        signUpVerificationMethod: 'code',
+        signUpVerificationMethod: "code",
         loginWith: { email: true },
       },
     },

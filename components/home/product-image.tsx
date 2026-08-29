@@ -20,14 +20,14 @@ export function ProductImage({
   }
 
   if (isLoading) {
-    return <div className="w-full h-full bg-gray-100 animate-pulse" />;
+    return <div className="h-full w-full animate-pulse bg-gray-100" />;
   }
 
   return (
     <img
       src={url}
       alt={alt}
-      className={cn("w-full h-full object-cover", className)}
+      className={cn("h-full w-full object-cover", className)}
     />
   );
 }

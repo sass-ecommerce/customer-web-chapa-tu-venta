@@ -11,28 +11,28 @@ export function CartToast() {
   return (
     <div
       className={cn(
-        "fixed bottom-6 left-1/2 -translate-x-1/2 z-50",
-        "bg-brand-dark text-white text-sm font-medium",
-        "flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl",
-        "transition-all duration-300 whitespace-nowrap",
+        "fixed bottom-6 left-1/2 z-50 -translate-x-1/2",
+        "bg-brand-dark text-sm font-medium text-white",
+        "flex items-center gap-3 rounded-2xl px-4 py-3 shadow-xl",
+        "whitespace-nowrap transition-all duration-300",
         lastAdded
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-3 pointer-events-none"
+          ? "pointer-events-auto translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-3 opacity-0",
       )}
     >
       {lastAdded?.image && (
         <img
           src={lastAdded.image}
           alt={lastAdded.name}
-          className="w-8 h-8 rounded-lg object-cover shrink-0"
+          className="h-8 w-8 shrink-0 rounded-lg object-cover"
         />
       )}
-      <span className="max-w-[140px] truncate text-white/90 text-xs">
+      <span className="max-w-[140px] truncate text-xs text-white/90">
         {lastAdded?.name}
       </span>
       <button
         onClick={openSheet}
-        className="flex items-center gap-1.5 bg-brand-accent hover:bg-brand-accent-hover text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors shrink-0"
+        className="bg-brand-accent hover:bg-brand-accent-hover flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-white transition-colors"
       >
         <ShoppingCart className="size-3" />
         Ver carrito

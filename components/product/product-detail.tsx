@@ -2,8 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, Heart, Minus, Plus, ShoppingCart, ChevronRight, PackageSearch } from "lucide-react";
-import { useProducts } from "@/lib/queries/use-products";
+import {
+  Check,
+  Heart,
+  Minus,
+  Plus,
+  ShoppingCart,
+  ChevronRight,
+  PackageSearch,
+} from "lucide-react";
 import { useProductImage } from "@/lib/queries/use-product-image";
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { useCartStore } from "@/lib/stores/cart-store";
@@ -24,17 +31,43 @@ const TABS = ["Descripción", "Especificaciones", "Reseñas"] as const;
 type Tab = (typeof TABS)[number];
 
 const MOCK_REVIEWS = [
-  { id: 1, name: "Ana G.", avatar: "👩", rating: 5, text: "Excelente producto, muy buena calidad y llegó rápido." },
-  { id: 2, name: "Carlos M.", avatar: "👨", rating: 4, text: "Muy satisfecho con la compra. El material es resistente." },
-  { id: 3, name: "Sofía R.", avatar: "👩‍🦱", rating: 5, text: "Lo recomiendo totalmente. Cumple con todas las expectativas." },
+  {
+    id: 1,
+    name: "Ana G.",
+    avatar: "👩",
+    rating: 5,
+    text: "Excelente producto, muy buena calidad y llegó rápido.",
+  },
+  {
+    id: 2,
+    name: "Carlos M.",
+    avatar: "👨",
+    rating: 4,
+    text: "Muy satisfecho con la compra. El material es resistente.",
+  },
+  {
+    id: 3,
+    name: "Sofía R.",
+    avatar: "👩‍🦱",
+    rating: 5,
+    text: "Lo recomiendo totalmente. Cumple con todas las expectativas.",
+  },
 ];
 
-function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
+function StarRating({
+  rating,
+  size = "sm",
+}: {
+  rating: number;
+  size?: "sm" | "md";
+}) {
   const full = Math.floor(rating);
   const half = rating % 1 >= 0.5;
   const empty = 5 - full - (half ? 1 : 0);
   return (
-    <span className={cn("text-yellow-400", size === "md" ? "text-base" : "text-xs")}>
+    <span
+      className={cn("text-yellow-400", size === "md" ? "text-base" : "text-xs")}
+    >
       {"★".repeat(full)}
       {half ? "½" : ""}
       <span className="text-gray-300">{"★".repeat(empty)}</span>
@@ -42,25 +75,37 @@ function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md
   );
 }
 
-function RelatedCard({ product, tenant }: { product: DisplayProduct; tenant: string }) {
+function RelatedCard({
+  product,
+  tenant,
+}: {
+  product: DisplayProduct;
+  tenant: string;
+}) {
   return (
     <Link
       href={tenantHref(tenant, `/products/${product.id}`)}
-      className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 block"
+      className="group block overflow-hidden rounded-xl border border-gray-100 bg-white transition-all duration-300 hover:shadow-md"
     >
-      <div className="aspect-square bg-gray-100 overflow-hidden">
+      <div className="aspect-square overflow-hidden bg-gray-100">
         <ProductImage
           imageKey={product.imageKey}
           alt={product.name}
-          className="group-hover:scale-110 transition-transform duration-300"
+          className="transition-transform duration-300 group-hover:scale-110"
         />
       </div>
-      <div className="p-3 space-y-1">
-        <p className="text-xs text-gray-800 font-medium line-clamp-2 leading-snug">{product.name}</p>
+      <div className="space-y-1 p-3">
+        <p className="line-clamp-2 text-xs leading-snug font-medium text-gray-800">
+          {product.name}
+        </p>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-sm font-bold text-gray-900">S/ {product.price.toFixed(2)}</span>
+          <span className="text-sm font-bold text-gray-900">
+            S/ {product.price.toFixed(2)}
+          </span>
           {product.originalPrice && (
-            <span className="text-xs text-gray-400 line-through">S/ {product.originalPrice.toFixed(2)}</span>
+            <span className="text-xs text-gray-400 line-through">
+              S/ {product.originalPrice.toFixed(2)}
+            </span>
           )}
         </div>
       </div>
@@ -68,34 +113,19 @@ function RelatedCard({ product, tenant }: { product: DisplayProduct; tenant: str
   );
 }
 
-function DetailSkeleton() {
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-pulse">
-      <div className="h-4 bg-gray-100 rounded w-48 mb-6" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-        <div className="bg-gray-100 rounded-2xl aspect-square" />
-        <div className="flex flex-col gap-4">
-          <div className="h-6 bg-gray-100 rounded w-3/4" />
-          <div className="h-4 bg-gray-100 rounded w-1/3" />
-          <div className="h-8 bg-gray-100 rounded w-1/2" />
-          <div className="h-24 bg-gray-100 rounded" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function NotFoundState({ tenant }: { tenant: string }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center text-center">
-      <PackageSearch className="size-12 text-gray-300 mb-4" />
-      <h1 className="text-lg font-semibold text-brand-dark mb-1">Producto no encontrado</h1>
-      <p className="text-sm text-gray-500 mb-6">
+    <div className="mx-auto flex max-w-7xl flex-col items-center px-4 py-24 text-center sm:px-6 lg:px-8">
+      <PackageSearch className="mb-4 size-12 text-gray-300" />
+      <h1 className="text-brand-dark mb-1 text-lg font-semibold">
+        Producto no encontrado
+      </h1>
+      <p className="mb-6 text-sm text-gray-500">
         Este producto ya no está disponible o el enlace es incorrecto.
       </p>
       <Link
         href={tenantHref(tenant, "/catalog")}
-        className="text-sm font-medium text-brand-accent hover:underline"
+        className="text-brand-accent text-sm font-medium hover:underline"
       >
         Ver catálogo
       </Link>
@@ -103,8 +133,15 @@ function NotFoundState({ tenant }: { tenant: string }) {
   );
 }
 
-export function ProductDetail({ tenant, productId }: { tenant: string; productId: string }) {
-  const { data: products, isLoading } = useProducts(tenant);
+export function ProductDetail({
+  tenant,
+  productId,
+  products,
+}: {
+  tenant: string;
+  productId: string;
+  products: DisplayProduct[];
+}) {
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("Descripción");
@@ -112,12 +149,8 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
   const addItem = useCartStore((s) => s.addItem);
   const openSheet = useCartStore((s) => s.openSheet);
 
-  const product = products?.find((p) => p.id === productId);
+  const product = products.find((p) => p.id === productId);
   const { data: imageUrl } = useProductImage(product?.imageKey);
-
-  if (isLoading) {
-    return <DetailSkeleton />;
-  }
 
   if (!product) {
     return <NotFoundState tenant={tenant} />;
@@ -132,14 +165,14 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
         price: product.price,
         category: product.category,
       },
-      quantity
+      quantity,
     );
     setQuantity(1);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const related = (products ?? [])
+  const related = products
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
@@ -148,36 +181,49 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
     : product.discount;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-6 font-body">
-        <Link href={tenantHref(tenant, "/")} className="hover:text-brand-accent transition-colors">
+      <nav className="font-body mb-6 flex items-center gap-1.5 text-xs text-gray-500">
+        <Link
+          href={tenantHref(tenant, "/")}
+          className="hover:text-brand-accent transition-colors"
+        >
           Inicio
         </Link>
         <ChevronRight className="size-3 text-gray-300" />
-        <Link href={tenantHref(tenant, "/catalog")} className="hover:text-brand-accent transition-colors">
+        <Link
+          href={tenantHref(tenant, "/catalog")}
+          className="hover:text-brand-accent transition-colors"
+        >
           {product.category}
         </Link>
         <ChevronRight className="size-3 text-gray-300" />
-        <span className="text-gray-800 font-medium truncate max-w-[200px]">{product.name}</span>
+        <span className="max-w-[200px] truncate font-medium text-gray-800">
+          {product.name}
+        </span>
       </nav>
 
       {/* Hero */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
         {/* Image */}
-        <div className="bg-gray-50 rounded-2xl aspect-square overflow-hidden border border-gray-100">
+        <div className="aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
           <ProductImage imageKey={product.imageKey} alt={product.name} />
         </div>
 
         {/* Info */}
         <div className="flex flex-col gap-4">
           {product.badge && (
-            <Badge className={cn("w-fit text-[11px] uppercase tracking-wide", BADGE_STYLES[product.badge])}>
+            <Badge
+              className={cn(
+                "w-fit text-[11px] tracking-wide uppercase",
+                BADGE_STYLES[product.badge],
+              )}
+            >
               {product.badge}
             </Badge>
           )}
 
-          <h1 className="font-display text-2xl sm:text-3xl text-brand-dark font-bold leading-tight">
+          <h1 className="font-display text-brand-dark text-2xl leading-tight font-bold sm:text-3xl">
             {product.name}
           </h1>
 
@@ -189,36 +235,47 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
           </div>
 
           <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-brand-dark">S/ {product.price.toFixed(2)}</span>
+            <span className="text-brand-dark text-3xl font-bold">
+              S/ {product.price.toFixed(2)}
+            </span>
             {product.originalPrice && (
               <>
-                <span className="text-lg text-gray-400 line-through">S/ {product.originalPrice.toFixed(2)}</span>
-                <span className="text-sm font-semibold text-brand-accent">-{discountPct}%</span>
+                <span className="text-lg text-gray-400 line-through">
+                  S/ {product.originalPrice.toFixed(2)}
+                </span>
+                <span className="text-brand-accent text-sm font-semibold">
+                  -{discountPct}%
+                </span>
               </>
             )}
           </div>
 
-          <p className="text-xs text-gray-500 font-body">
-            Categoría: <span className="text-gray-700 font-medium">{product.category}</span>
+          <p className="font-body text-xs text-gray-500">
+            Categoría:{" "}
+            <span className="font-medium text-gray-700">
+              {product.category}
+            </span>
           </p>
 
           <Separator />
 
           {/* Quantity */}
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-600 font-medium">Cantidad:</span>
-            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+            <span className="text-sm font-medium text-gray-600">Cantidad:</span>
+            <div className="flex items-center overflow-hidden rounded-lg border border-gray-200">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-9 h-9 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                className="flex h-9 w-9 items-center justify-center transition-colors hover:bg-gray-50"
                 aria-label="Reducir cantidad"
               >
                 <Minus className="size-3.5" />
               </button>
-              <span className="w-10 text-center text-sm font-semibold tabular-nums">{quantity}</span>
+              <span className="w-10 text-center text-sm font-semibold tabular-nums">
+                {quantity}
+              </span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-9 h-9 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                className="flex h-9 w-9 items-center justify-center transition-colors hover:bg-gray-50"
                 aria-label="Aumentar cantidad"
               >
                 <Plus className="size-3.5" />
@@ -227,14 +284,14 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row">
             <Button
               onClick={handleAddToCart}
               className={cn(
-                "flex-1 text-white font-semibold gap-2 transition-colors duration-300",
+                "flex-1 gap-2 font-semibold text-white transition-colors duration-300",
                 added
                   ? "bg-green-500 hover:bg-green-500"
-                  : "bg-brand-accent hover:bg-brand-accent/90"
+                  : "bg-brand-accent hover:bg-brand-accent/90",
               )}
             >
               {added ? (
@@ -254,7 +311,7 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
               onClick={() => setWishlisted((w) => !w)}
               className={cn(
                 "flex items-center gap-2 transition-colors",
-                wishlisted && "border-brand-accent text-brand-accent"
+                wishlisted && "border-brand-accent text-brand-accent",
               )}
             >
               <Heart
@@ -269,7 +326,7 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
           {added && (
             <button
               onClick={openSheet}
-              className="text-xs text-brand-accent hover:underline font-medium mt-1"
+              className="text-brand-accent mt-1 text-xs font-medium hover:underline"
             >
               Ver carrito →
             </button>
@@ -279,7 +336,7 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
 
       {/* Tabs */}
       <div className="mt-12">
-        <div className="flex border-b border-gray-200 gap-6">
+        <div className="flex gap-6 border-b border-gray-200">
           {TABS.map((tab) => (
             <button
               key={tab}
@@ -287,8 +344,8 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
               className={cn(
                 "pb-3 text-sm font-medium transition-colors",
                 activeTab === tab
-                  ? "border-b-2 border-brand-accent text-brand-accent -mb-px"
-                  : "text-gray-500 hover:text-gray-800"
+                  ? "border-brand-accent text-brand-accent -mb-px border-b-2"
+                  : "text-gray-500 hover:text-gray-800",
               )}
             >
               {tab}
@@ -296,29 +353,40 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
           ))}
         </div>
 
-        <div className="py-6 text-sm text-gray-600 font-body leading-relaxed">
+        <div className="font-body py-6 text-sm leading-relaxed text-gray-600">
           {activeTab === "Descripción" && (
             <p>
-              {product.name} es un producto de alta calidad en la categoría {product.category}. Diseñado para ofrecer
-              el mejor rendimiento y durabilidad, este producto ha sido seleccionado cuidadosamente para satisfacer
-              las necesidades de nuestros clientes. Con materiales premium y acabados de primera, es una excelente
-              opción para quienes buscan calidad y estilo.
+              {product.name} es un producto de alta calidad en la categoría{" "}
+              {product.category}. Diseñado para ofrecer el mejor rendimiento y
+              durabilidad, este producto ha sido seleccionado cuidadosamente
+              para satisfacer las necesidades de nuestros clientes. Con
+              materiales premium y acabados de primera, es una excelente opción
+              para quienes buscan calidad y estilo.
             </p>
           )}
           {activeTab === "Especificaciones" && (
-            <table className="w-full text-sm border-collapse">
+            <table className="w-full border-collapse text-sm">
               <tbody>
                 {[
                   ["Categoría", product.category],
                   ["Precio", `S/ ${product.price.toFixed(2)}`],
-                  ...(product.originalPrice ? [["Precio original", `S/ ${product.originalPrice.toFixed(2)}`]] : []),
+                  ...(product.originalPrice
+                    ? [
+                        [
+                          "Precio original",
+                          `S/ ${product.originalPrice.toFixed(2)}`,
+                        ],
+                      ]
+                    : []),
                   ["Valoración", `${product.rating} / 5`],
                   ["Reseñas", product.reviewCount.toString()],
                   ["Disponibilidad", "En stock"],
                   ["Envío", "Envío estándar gratuito"],
                 ].map(([label, value]) => (
                   <tr key={label} className="border-b border-gray-100">
-                    <td className="py-2.5 pr-4 font-medium text-gray-700 w-40">{label}</td>
+                    <td className="w-40 py-2.5 pr-4 font-medium text-gray-700">
+                      {label}
+                    </td>
                     <td className="py-2.5 text-gray-600">{value}</td>
                   </tr>
                 ))}
@@ -328,14 +396,21 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
           {activeTab === "Reseñas" && (
             <div className="space-y-4">
               {MOCK_REVIEWS.map((review) => (
-                <div key={review.id} className="flex gap-3 p-4 bg-gray-50 rounded-xl">
+                <div
+                  key={review.id}
+                  className="flex gap-3 rounded-xl bg-gray-50 p-4"
+                >
                   <span className="text-2xl">{review.avatar}</span>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-gray-800 text-xs">{review.name}</span>
+                    <div className="mb-1 flex items-center gap-2">
+                      <span className="text-xs font-semibold text-gray-800">
+                        {review.name}
+                      </span>
                       <StarRating rating={review.rating} />
                     </div>
-                    <p className="text-gray-600 text-xs leading-relaxed">{review.text}</p>
+                    <p className="text-xs leading-relaxed text-gray-600">
+                      {review.text}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -347,8 +422,10 @@ export function ProductDetail({ tenant, productId }: { tenant: string; productId
       {/* Related Products */}
       {related.length > 0 && (
         <div className="mt-12">
-          <h2 className="text-lg font-bold text-brand-dark mb-4">Productos relacionados</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
+          <h2 className="text-brand-dark mb-4 text-lg font-bold">
+            Productos relacionados
+          </h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-4">
             {related.map((p) => (
               <RelatedCard key={p.id} product={p} tenant={tenant} />
             ))}

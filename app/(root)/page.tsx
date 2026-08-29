@@ -14,7 +14,7 @@ import {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAF8] font-body text-brand-dark overflow-x-hidden">
+    <div className="font-body text-brand-dark min-h-screen overflow-x-hidden bg-[#FAFAF8]">
       <MarketingNav />
       <Hero />
       <LogoBar />
@@ -30,18 +30,18 @@ export default function LandingPage() {
 /* ── 1. NAV ──────────────────────────────── */
 function MarketingNav() {
   return (
-    <header className="sticky top-0 z-50 bg-[#FAFAF8]/90 backdrop-blur-md border-b border-black/8">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+    <header className="sticky top-0 z-50 border-b border-black/8 bg-[#FAFAF8]/90 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="group flex items-center gap-2">
           <span className="text-2xl leading-none">🛍️</span>
-          <span className="font-display text-lg font-bold tracking-tight text-brand-dark">
+          <span className="font-display text-brand-dark text-lg font-bold tracking-tight">
             Chapa<span className="text-brand-accent">Tu</span>Venta
           </span>
         </Link>
 
         {/* Nav links */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden items-center gap-8 md:flex">
           {[
             ["Características", "#features"],
             ["Precios", "#pricing"],
@@ -50,7 +50,7 @@ function MarketingNav() {
             <Link
               key={label}
               href={href}
-              className="text-sm font-medium text-gray-600 hover:text-brand-dark transition-colors"
+              className="hover:text-brand-dark text-sm font-medium text-gray-600 transition-colors"
             >
               {label}
             </Link>
@@ -60,7 +60,7 @@ function MarketingNav() {
         {/* CTA */}
         <Link
           href="#pricing"
-          className="hidden md:inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-semibold transition-colors"
+          className="bg-brand-accent hover:bg-brand-accent-hover hidden items-center gap-1.5 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-colors md:inline-flex"
         >
           Empieza gratis →
         </Link>
@@ -68,7 +68,7 @@ function MarketingNav() {
         {/* Mobile CTA */}
         <Link
           href="#pricing"
-          className="md:hidden inline-flex items-center px-4 py-2 rounded-lg bg-brand-accent text-white text-sm font-semibold"
+          className="bg-brand-accent inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-white md:hidden"
         >
           Gratis →
         </Link>
@@ -80,27 +80,27 @@ function MarketingNav() {
 /* ── 2. HERO ─────────────────────────────── */
 function Hero() {
   return (
-    <section className="relative max-w-6xl mx-auto px-6 pt-20 pb-24 lg:pt-28 lg:pb-32">
+    <section className="relative mx-auto max-w-6xl px-6 pt-20 pb-24 lg:pt-28 lg:pb-32">
       {/* Decorative blob */}
       <div
         aria-hidden
-        className="absolute top-0 right-0 w-[560px] h-[560px] rounded-full bg-brand-accent/6 blur-3xl -translate-y-1/4 translate-x-1/4 pointer-events-none"
+        className="bg-brand-accent/6 pointer-events-none absolute top-0 right-0 h-[560px] w-[560px] translate-x-1/4 -translate-y-1/4 rounded-full blur-3xl"
       />
 
-      <div className="relative grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative grid items-center gap-12 lg:grid-cols-2">
         {/* Left: copy */}
         <div className="space-y-7">
           {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent/10 border border-brand-accent/20 text-brand-accent text-xs font-semibold tracking-wide uppercase">
+          <span className="bg-brand-accent/10 border-brand-accent/20 text-brand-accent inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold tracking-wide uppercase">
             ✦ Plataforma SaaS de e-commerce
           </span>
 
-          <h1 className="font-display text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-brand-dark">
+          <h1 className="font-display text-brand-dark text-5xl leading-[1.08] font-bold tracking-tight lg:text-6xl">
             Tu tienda online,{" "}
-            <em className="not-italic text-brand-accent">lista en minutos.</em>
+            <em className="text-brand-accent not-italic">lista en minutos.</em>
           </h1>
 
-          <p className="text-lg text-gray-500 leading-relaxed max-w-md">
+          <p className="max-w-md text-lg leading-relaxed text-gray-500">
             Crea, personaliza y escala tu negocio digital sin código. Cada marca
             recibe su propio subdominio, catálogo y panel de control.
           </p>
@@ -108,13 +108,13 @@ function Hero() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="#pricing"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-base transition-colors shadow-lg shadow-brand-accent/25"
+              className="bg-brand-accent hover:bg-brand-accent-hover shadow-brand-accent/25 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-colors"
             >
               Empieza gratis
             </Link>
             <Link
               href="/demo"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-black/15 bg-white hover:bg-gray-50 text-brand-dark font-semibold text-base transition-colors"
+              className="text-brand-dark inline-flex items-center gap-2 rounded-xl border border-black/15 bg-white px-7 py-3.5 text-base font-semibold transition-colors hover:bg-gray-50"
             >
               Ver demo →
             </Link>
@@ -126,7 +126,7 @@ function Hero() {
               {["🧑‍💼", "👩‍💻", "🧑‍🍳", "👩‍🎨"].map((e, i) => (
                 <div
                   key={i}
-                  className="w-8 h-8 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-base leading-none"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-base leading-none"
                 >
                   {e}
                 </div>
@@ -151,88 +151,116 @@ function Hero() {
 
 function StoreMockup() {
   const products = [
-    { name: "Zapatillas Air", price: "$89", badge: "🔥 Top", color: "bg-orange-50" },
-    { name: "Mochila Urban", price: "$54", badge: "Nuevo", color: "bg-blue-50" },
-    { name: "Gorra Vintage", price: "$32", badge: "−20%", color: "bg-green-50" },
-    { name: "Lentes Retro", price: "$45", badge: "Popular", color: "bg-purple-50" },
+    {
+      name: "Zapatillas Air",
+      price: "$89",
+      badge: "🔥 Top",
+      color: "bg-orange-50",
+    },
+    {
+      name: "Mochila Urban",
+      price: "$54",
+      badge: "Nuevo",
+      color: "bg-blue-50",
+    },
+    {
+      name: "Gorra Vintage",
+      price: "$32",
+      badge: "−20%",
+      color: "bg-green-50",
+    },
+    {
+      name: "Lentes Retro",
+      price: "$45",
+      badge: "Popular",
+      color: "bg-purple-50",
+    },
   ];
 
   return (
     <div className="relative w-full max-w-md">
       {/* Browser chrome */}
-      <div className="rounded-2xl border border-black/10 shadow-2xl shadow-black/12 bg-white overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl shadow-black/12">
         {/* Browser bar */}
-        <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 border-b border-black/8">
+        <div className="flex items-center gap-2 border-b border-black/8 bg-gray-50 px-4 py-3">
           <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-red-400" />
-            <div className="w-3 h-3 rounded-full bg-yellow-400" />
-            <div className="w-3 h-3 rounded-full bg-green-400" />
+            <div className="h-3 w-3 rounded-full bg-red-400" />
+            <div className="h-3 w-3 rounded-full bg-yellow-400" />
+            <div className="h-3 w-3 rounded-full bg-green-400" />
           </div>
-          <div className="flex-1 mx-3 rounded-md bg-white border border-black/10 px-3 py-1.5 text-xs text-gray-400 font-mono">
+          <div className="mx-3 flex-1 rounded-md border border-black/10 bg-white px-3 py-1.5 font-mono text-xs text-gray-400">
             demo.chapa-tu-venta.com
           </div>
         </div>
 
         {/* Store nav */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-black/6">
-          <span className="text-sm font-bold text-brand-dark">🛍️ DemoStore</span>
+        <div className="flex items-center justify-between border-b border-black/6 px-4 py-3">
+          <span className="text-brand-dark text-sm font-bold">
+            🛍️ DemoStore
+          </span>
           <div className="flex items-center gap-3">
             <div className="h-2 w-16 rounded bg-gray-100" />
-            <div className="w-7 h-7 rounded-lg bg-brand-accent flex items-center justify-center text-white text-xs">
+            <div className="bg-brand-accent flex h-7 w-7 items-center justify-center rounded-lg text-xs text-white">
               3
             </div>
           </div>
         </div>
 
         {/* Product grid */}
-        <div className="p-4 grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 p-4">
           {products.map((p) => (
             <div
               key={p.name}
-              className={`${p.color} rounded-xl p-3 space-y-2 border border-black/5`}
+              className={`${p.color} space-y-2 rounded-xl border border-black/5 p-3`}
             >
-              <div className="h-16 rounded-lg bg-white/70 flex items-center justify-center text-2xl">
+              <div className="flex h-16 items-center justify-center rounded-lg bg-white/70 text-2xl">
                 🛒
               </div>
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-semibold text-gray-700 leading-tight">
+                  <span className="text-[11px] leading-tight font-semibold text-gray-700">
                     {p.name}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-brand-accent/10 text-brand-accent font-semibold">
+                  <span className="bg-brand-accent/10 text-brand-accent rounded-full px-1.5 py-0.5 text-[9px] font-semibold">
                     {p.badge}
                   </span>
                 </div>
-                <span className="text-sm font-bold text-brand-dark">{p.price}</span>
+                <span className="text-brand-dark text-sm font-bold">
+                  {p.price}
+                </span>
               </div>
             </div>
           ))}
         </div>
 
         {/* Footer bar */}
-        <div className="px-4 py-3 bg-brand-dark flex items-center justify-between">
-          <span className="text-white/60 text-xs">Powered by ChapaTuVenta</span>
-          <span className="text-brand-accent text-xs font-semibold">Ver todo →</span>
+        <div className="bg-brand-dark flex items-center justify-between px-4 py-3">
+          <span className="text-xs text-white/60">Powered by ChapaTuVenta</span>
+          <span className="text-brand-accent text-xs font-semibold">
+            Ver todo →
+          </span>
         </div>
       </div>
 
       {/* Floating stat badge */}
-      <div className="absolute -bottom-4 -left-6 bg-white rounded-xl shadow-lg shadow-black/10 border border-black/8 px-4 py-3 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center text-lg">
+      <div className="absolute -bottom-4 -left-6 flex items-center gap-3 rounded-xl border border-black/8 bg-white px-4 py-3 shadow-lg shadow-black/10">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-50 text-lg">
           📈
         </div>
         <div>
           <div className="text-xs text-gray-400">Ventas hoy</div>
-          <div className="text-base font-bold text-brand-dark">+$1,240</div>
+          <div className="text-brand-dark text-base font-bold">+$1,240</div>
         </div>
       </div>
 
       {/* Floating order badge */}
-      <div className="absolute -top-4 -right-4 bg-white rounded-xl shadow-lg shadow-black/10 border border-black/8 px-4 py-3 flex items-center gap-2">
+      <div className="absolute -top-4 -right-4 flex items-center gap-2 rounded-xl border border-black/8 bg-white px-4 py-3 shadow-lg shadow-black/10">
         <span className="text-lg">🎉</span>
         <div>
           <div className="text-xs text-gray-400">Nuevo pedido</div>
-          <div className="text-xs font-semibold text-brand-dark">Zapatillas Air ×1</div>
+          <div className="text-brand-dark text-xs font-semibold">
+            Zapatillas Air ×1
+          </div>
         </div>
       </div>
     </div>
@@ -241,19 +269,25 @@ function StoreMockup() {
 
 /* ── 3. LOGO BAR ─────────────────────────── */
 function LogoBar() {
-  const brands = ["Modanova", "TechShop", "FreshMart", "ArtesanCo", "SportZone"];
+  const brands = [
+    "Modanova",
+    "TechShop",
+    "FreshMart",
+    "ArtesanCo",
+    "SportZone",
+  ];
 
   return (
     <section className="border-y border-black/8 bg-white py-10">
-      <div className="max-w-5xl mx-auto px-6">
-        <p className="text-center text-xs font-semibold tracking-widest uppercase text-gray-400 mb-7">
+      <div className="mx-auto max-w-5xl px-6">
+        <p className="mb-7 text-center text-xs font-semibold tracking-widest text-gray-400 uppercase">
           Confían en nosotros
         </p>
-        <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-5">
+        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
           {brands.map((brand) => (
             <span
               key={brand}
-              className="font-display text-lg font-bold text-gray-200 hover:text-gray-300 transition-colors cursor-default select-none"
+              className="font-display cursor-default text-lg font-bold text-gray-200 transition-colors select-none hover:text-gray-300"
             >
               {brand}
             </span>
@@ -288,30 +322,30 @@ function Features() {
   ];
 
   return (
-    <section id="features" className="max-w-6xl mx-auto px-6 py-24">
-      <div className="text-center mb-14">
-        <span className="inline-block text-xs font-semibold tracking-widest uppercase text-brand-accent mb-3">
+    <section id="features" className="mx-auto max-w-6xl px-6 py-24">
+      <div className="mb-14 text-center">
+        <span className="text-brand-accent mb-3 inline-block text-xs font-semibold tracking-widest uppercase">
           ✦ Características
         </span>
-        <h2 className="font-display text-4xl font-bold text-brand-dark">
+        <h2 className="font-display text-brand-dark text-4xl font-bold">
           Todo lo que necesitas, sin complicaciones
         </h2>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid gap-6 md:grid-cols-3">
         {features.map((f) => (
           <Card
             key={f.title}
-            className="border-black/8 bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+            className="border-black/8 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
           >
             <CardHeader>
-              <div className="w-12 h-12 rounded-xl bg-brand-accent/8 flex items-center justify-center text-2xl mb-3">
+              <div className="bg-brand-accent/8 mb-3 flex h-12 w-12 items-center justify-center rounded-xl text-2xl">
                 {f.icon}
               </div>
-              <CardTitle className="text-lg font-bold text-brand-dark">
+              <CardTitle className="text-brand-dark text-lg font-bold">
                 {f.title}
               </CardTitle>
-              <CardDescription className="text-gray-500 leading-relaxed">
+              <CardDescription className="leading-relaxed text-gray-500">
                 {f.description}
               </CardDescription>
             </CardHeader>
@@ -344,32 +378,32 @@ function HowItWorks() {
 
   return (
     <section className="bg-brand-bg py-24">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="text-center mb-14">
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-brand-accent mb-3">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="mb-14 text-center">
+          <span className="text-brand-accent mb-3 inline-block text-xs font-semibold tracking-widest uppercase">
             ✦ Cómo funciona
           </span>
-          <h2 className="font-display text-4xl font-bold text-brand-dark">
+          <h2 className="font-display text-brand-dark text-4xl font-bold">
             Tres pasos para lanzar tu tienda
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 relative">
+        <div className="relative grid gap-8 md:grid-cols-3">
           {/* Connector line (desktop) */}
           <div
             aria-hidden
-            className="hidden md:block absolute top-8 left-[calc(16.7%+16px)] right-[calc(16.7%+16px)] h-px bg-gradient-to-r from-transparent via-brand-accent/30 to-transparent"
+            className="via-brand-accent/30 absolute top-8 right-[calc(16.7%+16px)] left-[calc(16.7%+16px)] hidden h-px bg-gradient-to-r from-transparent to-transparent md:block"
           />
 
           {steps.map((s) => (
-            <div key={s.n} className="relative text-center space-y-4">
-              <div className="inline-flex w-16 h-16 rounded-2xl bg-white border-2 border-brand-accent/20 items-center justify-center mx-auto shadow-sm">
-                <span className="font-display text-xl font-bold text-brand-accent">
+            <div key={s.n} className="relative space-y-4 text-center">
+              <div className="border-brand-accent/20 mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl border-2 bg-white shadow-sm">
+                <span className="font-display text-brand-accent text-xl font-bold">
                   {s.n}
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-brand-dark">{s.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{s.desc}</p>
+              <h3 className="text-brand-dark text-lg font-bold">{s.title}</h3>
+              <p className="text-sm leading-relaxed text-gray-500">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -381,25 +415,31 @@ function HowItWorks() {
 /* ── 6. PRICING ──────────────────────────── */
 function Pricing() {
   return (
-    <section id="pricing" className="max-w-5xl mx-auto px-6 py-24">
-      <div className="text-center mb-14">
-        <span className="inline-block text-xs font-semibold tracking-widest uppercase text-brand-accent mb-3">
+    <section id="pricing" className="mx-auto max-w-5xl px-6 py-24">
+      <div className="mb-14 text-center">
+        <span className="text-brand-accent mb-3 inline-block text-xs font-semibold tracking-widest uppercase">
           ✦ Precios
         </span>
-        <h2 className="font-display text-4xl font-bold text-brand-dark">
+        <h2 className="font-display text-brand-dark text-4xl font-bold">
           Planes pensados para crecer
         </h2>
-        <p className="mt-3 text-gray-500">Sin sorpresas. Cancela cuando quieras.</p>
+        <p className="mt-3 text-gray-500">
+          Sin sorpresas. Cancela cuando quieras.
+        </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+      <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-2">
         {/* Plan Gratis */}
         <Card className="border-black/10 bg-white">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-brand-dark">Gratis</CardTitle>
-            <div className="flex items-end gap-1 mt-2">
-              <span className="font-display text-5xl font-bold text-brand-dark">$0</span>
-              <span className="text-gray-400 mb-2">/mes</span>
+            <CardTitle className="text-brand-dark text-xl font-bold">
+              Gratis
+            </CardTitle>
+            <div className="mt-2 flex items-end gap-1">
+              <span className="font-display text-brand-dark text-5xl font-bold">
+                $0
+              </span>
+              <span className="mb-2 text-gray-400">/mes</span>
             </div>
             <CardDescription>Perfecto para empezar a explorar.</CardDescription>
           </CardHeader>
@@ -410,15 +450,18 @@ function Pricing() {
               "Panel de control básico",
               "Soporte por email",
             ].map((item) => (
-              <div key={item} className="flex items-center gap-2.5 text-sm text-gray-600">
-                <span className="text-green-500 font-bold shrink-0">✓</span>
+              <div
+                key={item}
+                className="flex items-center gap-2.5 text-sm text-gray-600"
+              >
+                <span className="shrink-0 font-bold text-green-500">✓</span>
                 {item}
               </div>
             ))}
             <div className="pt-4">
               <Link
                 href="#"
-                className="block w-full text-center py-3 rounded-xl border border-black/15 bg-gray-50 hover:bg-gray-100 text-brand-dark font-semibold text-sm transition-colors"
+                className="text-brand-dark block w-full rounded-xl border border-black/15 bg-gray-50 py-3 text-center text-sm font-semibold transition-colors hover:bg-gray-100"
               >
                 Empezar gratis
               </Link>
@@ -427,18 +470,24 @@ function Pricing() {
         </Card>
 
         {/* Plan Pro */}
-        <Card className="border-2 border-brand-accent bg-white relative overflow-visible">
+        <Card className="border-brand-accent relative overflow-visible border-2 bg-white">
           {/* Popular badge */}
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-brand-accent text-white text-xs font-bold tracking-wide">
+          <div className="bg-brand-accent absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-bold tracking-wide text-white">
             Más popular
           </div>
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-brand-dark">Pro</CardTitle>
-            <div className="flex items-end gap-1 mt-2">
-              <span className="font-display text-5xl font-bold text-brand-dark">$29</span>
-              <span className="text-gray-400 mb-2">/mes</span>
+            <CardTitle className="text-brand-dark text-xl font-bold">
+              Pro
+            </CardTitle>
+            <div className="mt-2 flex items-end gap-1">
+              <span className="font-display text-brand-dark text-5xl font-bold">
+                $29
+              </span>
+              <span className="mb-2 text-gray-400">/mes</span>
             </div>
-            <CardDescription>Para negocios que quieren escalar.</CardDescription>
+            <CardDescription>
+              Para negocios que quieren escalar.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {[
@@ -448,15 +497,18 @@ function Pricing() {
               "Soporte prioritario 24/7",
               "Integraciones de pago",
             ].map((item) => (
-              <div key={item} className="flex items-center gap-2.5 text-sm text-gray-600">
-                <span className="text-brand-accent font-bold shrink-0">✓</span>
+              <div
+                key={item}
+                className="flex items-center gap-2.5 text-sm text-gray-600"
+              >
+                <span className="text-brand-accent shrink-0 font-bold">✓</span>
                 {item}
               </div>
             ))}
             <div className="pt-4">
               <Link
                 href="#"
-                className="block w-full text-center py-3 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-sm transition-colors shadow-lg shadow-brand-accent/25"
+                className="bg-brand-accent hover:bg-brand-accent-hover shadow-brand-accent/25 block w-full rounded-xl py-3 text-center text-sm font-semibold text-white shadow-lg transition-colors"
               >
                 Empezar con Pro
               </Link>
@@ -472,24 +524,24 @@ function Pricing() {
 function CtaBanner() {
   return (
     <section className="bg-brand-dark py-20">
-      <div className="max-w-3xl mx-auto px-6 text-center space-y-6">
-        <h2 className="font-display text-4xl md:text-5xl font-bold text-white leading-tight">
+      <div className="mx-auto max-w-3xl space-y-6 px-6 text-center">
+        <h2 className="font-display text-4xl leading-tight font-bold text-white md:text-5xl">
           ¿Listo para vender online?
         </h2>
-        <p className="text-white/60 text-lg">
+        <p className="text-lg text-white/60">
           Únete a miles de emprendedores que ya confían en Chapa Tu Venta para
           hacer crecer su negocio digital.
         </p>
         <div className="flex flex-wrap justify-center gap-4 pt-2">
           <Link
             href="#pricing"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-bold text-base transition-colors shadow-xl shadow-brand-accent/30"
+            className="bg-brand-accent hover:bg-brand-accent-hover shadow-brand-accent/30 inline-flex items-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white shadow-xl transition-colors"
           >
             Empieza gratis hoy →
           </Link>
           <Link
             href="/demo"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-white/20 text-white hover:bg-white/8 font-semibold text-base transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-white/8"
           >
             Ver tienda demo
           </Link>
@@ -508,18 +560,18 @@ function MarketingFooter() {
   };
 
   return (
-    <footer className="bg-white border-t border-black/8">
-      <div className="max-w-6xl mx-auto px-6 py-14">
-        <div className="grid md:grid-cols-4 gap-10">
+    <footer className="border-t border-black/8 bg-white">
+      <div className="mx-auto max-w-6xl px-6 py-14">
+        <div className="grid gap-10 md:grid-cols-4">
           {/* Brand */}
           <div className="space-y-3">
             <Link href="/" className="flex items-center gap-2">
               <span className="text-2xl">🛍️</span>
-              <span className="font-display text-base font-bold text-brand-dark">
+              <span className="font-display text-brand-dark text-base font-bold">
                 Chapa<span className="text-brand-accent">Tu</span>Venta
               </span>
             </Link>
-            <p className="text-sm text-gray-400 leading-relaxed max-w-[200px]">
+            <p className="max-w-[200px] text-sm leading-relaxed text-gray-400">
               La plataforma más rápida para lanzar tu tienda online.
             </p>
           </div>
@@ -527,7 +579,7 @@ function MarketingFooter() {
           {/* Link columns */}
           {Object.entries(links).map(([section, items]) => (
             <div key={section}>
-              <h4 className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-4">
+              <h4 className="mb-4 text-xs font-bold tracking-widest text-gray-400 uppercase">
                 {section}
               </h4>
               <ul className="space-y-2.5">
@@ -535,7 +587,7 @@ function MarketingFooter() {
                   <li key={item}>
                     <Link
                       href="#"
-                      className="text-sm text-gray-500 hover:text-brand-dark transition-colors"
+                      className="hover:text-brand-dark text-sm text-gray-500 transition-colors"
                     >
                       {item}
                     </Link>
@@ -546,9 +598,13 @@ function MarketingFooter() {
           ))}
         </div>
 
-        <div className="mt-12 pt-6 border-t border-black/8 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-gray-400">© 2026 Chapa Tu Venta. Todos los derechos reservados.</p>
-          <p className="text-xs text-gray-300">Hecho con ❤️ para emprendedores latam</p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-black/8 pt-6 md:flex-row">
+          <p className="text-xs text-gray-400">
+            © 2026 Chapa Tu Venta. Todos los derechos reservados.
+          </p>
+          <p className="text-xs text-gray-300">
+            Hecho con ❤️ para emprendedores latam
+          </p>
         </div>
       </div>
     </footer>

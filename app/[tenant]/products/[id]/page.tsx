@@ -1,19 +1,7 @@
 import type { Metadata } from "next";
-import { getTenantConfig, getTenantId } from "@/lib/config/tenants";
+import { getTenantConfig } from "@/lib/config/tenants";
 import { ProductDetail } from "@/components/product/product-detail";
-import { fetchProductsUpstream, type ApiProduct } from "@/lib/api/products";
-
-async function fetchProductName(tenant: string, productId: string): Promise<string | null> {
-  try {
-    const tenantId = getTenantId(tenant);
-    const res = await fetchProductsUpstream(tenantId);
-    if (!res.ok) return null;
-    const products: ApiProduct[] = await res.json();
-    return products.find((p) => p.productId === productId)?.name ?? null;
-  } catch {
-    return null;
-  }
-}
+import { getTenantProducts } from "@/lib/server/products";
 
 export async function generateMetadata({
   params,
@@ -23,9 +11,12 @@ export async function generateMetadata({
   const { tenant, id } = await params;
   const config = getTenantConfig(tenant);
   const storeName = config ? config.name : "Chapa Tu Venta";
-  const productName = await fetchProductName(tenant, id);
+  const products = await getTenantProducts(tenant);
+  const productName = products.find((p) => p.id === id)?.name ?? null;
   return {
-    title: productName ? `${productName} | ${storeName}` : `Producto | ${storeName}`,
+    title: productName
+      ? `${productName} | ${storeName}`
+      : `Producto | ${storeName}`,
   };
 }
 
@@ -35,10 +26,11 @@ export default async function ProductPage({
   params: Promise<{ tenant: string; id: string }>;
 }) {
   const { tenant, id } = await params;
+  const products = await getTenantProducts(tenant);
 
   return (
     <main className="pt-[100px]">
-      <ProductDetail tenant={tenant} productId={id} />
+      <ProductDetail tenant={tenant} productId={id} products={products} />
     </main>
   );
 }

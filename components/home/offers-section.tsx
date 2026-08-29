@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { tenantHref } from "@/lib/utils/tenant-href";
-import { useProducts } from "@/lib/queries/use-products";
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { ProductImage } from "@/components/home/product-image";
 
@@ -63,22 +62,22 @@ function FlashCard({
   return (
     <Link
       href={tenantHref(tenant, `/products/${product.id}`)}
-      className="shrink-0 snap-start w-44 bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer group block"
+      className="group block w-44 shrink-0 cursor-pointer snap-start overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md"
     >
       {/* Image */}
-      <div className="relative aspect-square bg-gray-100 overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
         <ProductImage
           imageKey={product.imageKey}
           alt={product.name}
-          className="group-hover:scale-105 transition-transform duration-300"
+          className="transition-transform duration-300 group-hover:scale-105"
         />
         {product.discount && (
-          <span className="absolute top-2 left-2 bg-brand-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+          <span className="bg-brand-accent absolute top-2 left-2 rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white">
             -{product.discount}%
           </span>
         )}
         <button
-          className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full border border-gray-200 flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+          className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-transform hover:scale-110"
           onClick={(e) => {
             e.preventDefault();
             setWished(!wished);
@@ -94,8 +93,8 @@ function FlashCard({
       </div>
 
       {/* Info */}
-      <div className="p-3 space-y-2">
-        <p className="text-xs font-medium text-gray-800 line-clamp-2 leading-snug">
+      <div className="space-y-2 p-3">
+        <p className="line-clamp-2 text-xs leading-snug font-medium text-gray-800">
           {product.name}
         </p>
         <div>
@@ -103,16 +102,16 @@ function FlashCard({
             S/ {product.price.toFixed(2)}
           </span>
           {product.originalPrice && (
-            <span className="text-xs text-brand-accent line-through ml-1.5">
+            <span className="text-brand-accent ml-1.5 text-xs line-through">
               S/ {product.originalPrice.toFixed(2)}
             </span>
           )}
         </div>
         {/* Progress bar */}
         <div className="space-y-1">
-          <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-1.5 overflow-hidden rounded-full bg-gray-200">
             <div
-              className="h-full bg-brand-dark rounded-full"
+              className="bg-brand-dark h-full rounded-full"
               style={{ width: `${(sold / TOTAL_STOCK) * 100}%` }}
             />
           </div>
@@ -127,16 +126,21 @@ function FlashCard({
 
 const SCROLL_AMOUNT = 200;
 
-export function OffersSection({ tenant }: { tenant: string }) {
-  const { data: products, isLoading } = useProducts(tenant);
+export function OffersSection({
+  tenant,
+  products,
+}: {
+  tenant: string;
+  products: DisplayProduct[];
+}) {
   const timeLeft = useCountdown(OFFER_END_DATE);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fmt = (v: number | null) =>
     v === null ? "--" : String(v).padStart(2, "0");
 
-  const offerProducts = (products ?? []).filter((p) => p.badge === "OFERTA");
+  const offerProducts = products.filter((p) => p.badge === "OFERTA");
 
-  if (!isLoading && offerProducts.length === 0) return null;
+  if (offerProducts.length === 0) return null;
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({
@@ -146,25 +150,25 @@ export function OffersSection({ tenant }: { tenant: string }) {
   };
 
   return (
-    <section id="offers" className="bg-white border-b border-gray-200 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="offers" className="border-b border-gray-200 bg-white py-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3 flex-wrap">
+        <div className="mb-5 flex items-center justify-between">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="text-lg font-bold text-gray-900">
               ⚡ Flash Sale
             </span>
             {/* HH:MM:SS timer badges */}
             <div className="flex items-center gap-1 text-sm font-bold tabular-nums">
-              <span className="bg-brand-accent text-white px-2 py-0.5 rounded">
+              <span className="bg-brand-accent rounded px-2 py-0.5 text-white">
                 {fmt(timeLeft?.hours ?? null)}
               </span>
-              <span className="text-gray-400 font-normal text-xs">:</span>
-              <span className="bg-brand-accent text-white px-2 py-0.5 rounded">
+              <span className="text-xs font-normal text-gray-400">:</span>
+              <span className="bg-brand-accent rounded px-2 py-0.5 text-white">
                 {fmt(timeLeft?.minutes ?? null)}
               </span>
-              <span className="text-gray-400 font-normal text-xs">:</span>
-              <span className="bg-brand-accent text-white px-2 py-0.5 rounded">
+              <span className="text-xs font-normal text-gray-400">:</span>
+              <span className="bg-brand-accent rounded px-2 py-0.5 text-white">
                 {fmt(timeLeft?.seconds ?? null)}
               </span>
             </div>
@@ -174,13 +178,13 @@ export function OffersSection({ tenant }: { tenant: string }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => scroll("left")}
-              className="w-8 h-8 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 transition-colors hover:bg-gray-50"
             >
               <ChevronLeft className="size-4" />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="w-8 h-8 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 transition-colors hover:bg-gray-50"
             >
               <ChevronRight className="size-4" />
             </button>
@@ -190,19 +194,12 @@ export function OffersSection({ tenant }: { tenant: string }) {
         {/* Horizontal cards */}
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory"
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
           style={{ scrollbarWidth: "none" }}
         >
-          {isLoading
-            ? Array.from({ length: 5 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="shrink-0 w-44 aspect-[176/260] bg-white border border-gray-100 rounded-xl animate-pulse"
-                />
-              ))
-            : offerProducts.map((product) => (
-                <FlashCard key={product.id} product={product} tenant={tenant} />
-              ))}
+          {offerProducts.map((product) => (
+            <FlashCard key={product.id} product={product} tenant={tenant} />
+          ))}
         </div>
       </div>
     </section>

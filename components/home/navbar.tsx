@@ -76,18 +76,18 @@ export function Navbar({
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header className="fixed top-0 right-0 left-0 z-50">
       {/* Top utility bar */}
       {showLogin && (
-        <div className="bg-gray-100 border-b border-gray-200 text-xs text-gray-600">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
+        <div className="border-b border-gray-200 bg-gray-100 text-xs text-gray-600">
+          <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <span className="font-medium">📱 Descargar App</span>
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden items-center gap-6 md:flex">
               {["Mitra", "Sobre Nosotros", "Atención", "Promo"].map((label) => (
                 <a
                   key={label}
                   href="#"
-                  className="hover:text-gray-900 transition-colors"
+                  className="transition-colors hover:text-gray-900"
                 >
                   {label}
                 </a>
@@ -98,17 +98,17 @@ export function Navbar({
                 (user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="flex items-center gap-1.5 hover:text-gray-900 transition-colors focus:outline-none">
-                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-brand-accent text-white">
+                      <button className="flex items-center gap-1.5 transition-colors hover:text-gray-900 focus:outline-none">
+                        <span className="bg-brand-accent flex h-6 w-6 items-center justify-center rounded-full text-white">
                           <User size={12} />
                         </span>
-                        <span className="font-medium truncate max-w-[120px]">
+                        <span className="max-w-[120px] truncate font-medium">
                           {user.signInDetails?.loginId ?? user.username}
                         </span>
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-52">
-                      <DropdownMenuLabel className="text-xs font-normal text-gray-500 truncate px-2 py-1.5">
+                      <DropdownMenuLabel className="truncate px-2 py-1.5 text-xs font-normal text-gray-500">
                         {user.signInDetails?.loginId ?? user.username}
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
@@ -159,14 +159,14 @@ export function Navbar({
                   <>
                     <Link
                       href={tenantHref(tenant, "/register")}
-                      className="hover:text-gray-900 transition-colors"
+                      className="transition-colors hover:text-gray-900"
                     >
                       Registrarse
                     </Link>
                     <span className="text-gray-300">|</span>
                     <Link
                       href={tenantHref(tenant, "/login")}
-                      className="hover:text-gray-900 transition-colors"
+                      className="transition-colors hover:text-gray-900"
                     >
                       Iniciar sesión
                     </Link>
@@ -178,13 +178,13 @@ export function Navbar({
       )}
 
       {/* Main navbar */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 h-16">
+      <div className="border-b border-gray-200 bg-white shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center gap-4">
             {/* Logo */}
             <Link
               href={tenantHref(tenant, "/")}
-              className="flex items-center gap-1.5 shrink-0"
+              className="flex shrink-0 items-center gap-1.5"
             >
               <span className="text-xl">🛍️</span>
               <span className="text-sm font-bold tracking-tight text-gray-900">
@@ -194,14 +194,14 @@ export function Navbar({
             </Link>
 
             {/* Search bar */}
-            <div ref={searchRef} className="hidden md:flex flex-1 relative">
+            <div ref={searchRef} className="relative hidden flex-1 md:flex">
               <form
                 onSubmit={handleSearchSubmit}
-                className="flex flex-1 items-center rounded-lg border border-gray-200 overflow-hidden"
+                className="flex flex-1 items-center overflow-hidden rounded-lg border border-gray-200"
               >
                 <button
                   type="button"
-                  className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-xs font-medium whitespace-nowrap hover:bg-gray-100 transition-colors shrink-0"
+                  className="flex shrink-0 items-center gap-1.5 border-r border-gray-200 bg-gray-50 px-4 py-2.5 text-xs font-medium whitespace-nowrap transition-colors hover:bg-gray-100"
                 >
                   Todas las Categorías
                   <ChevronDown className="size-3.5" />
@@ -214,17 +214,17 @@ export function Navbar({
                   }}
                   onFocus={() => setIsSearchOpen(true)}
                   placeholder="Buscar productos, marcas y más..."
-                  className="flex-1 px-4 py-2.5 text-sm outline-none bg-white min-w-0"
+                  className="min-w-0 flex-1 bg-white px-4 py-2.5 text-sm outline-none"
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-hover text-white transition-colors shrink-0"
+                  className="bg-brand-accent hover:bg-brand-accent-hover shrink-0 px-5 py-2.5 text-white transition-colors"
                 >
                   <Search className="size-4" />
                 </button>
               </form>
               {isSearchOpen && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="absolute top-full right-0 left-0 z-50 mt-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
                   {searchResults.map((p) => (
                     <Link
                       key={p.id}
@@ -233,28 +233,31 @@ export function Navbar({
                         setIsSearchOpen(false);
                         setQuery("");
                       }}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-gray-50"
                     >
                       <img
                         src={p.image}
                         alt={p.name}
-                        className="w-9 h-9 rounded object-cover shrink-0"
+                        className="h-9 w-9 shrink-0 rounded object-cover"
                       />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-800 truncate">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-gray-800">
                           {p.name}
                         </p>
                         <p className="text-xs text-gray-400">{p.category}</p>
                       </div>
-                      <span className="text-sm font-semibold text-brand-accent shrink-0">
+                      <span className="text-brand-accent shrink-0 text-sm font-semibold">
                         ${p.price}
                       </span>
                     </Link>
                   ))}
                   <Link
-                    href={tenantHref(tenant, `/catalog?q=${encodeURIComponent(query.trim())}`)}
+                    href={tenantHref(
+                      tenant,
+                      `/catalog?q=${encodeURIComponent(query.trim())}`,
+                    )}
                     onClick={() => setIsSearchOpen(false)}
-                    className="block w-full px-4 py-2.5 text-xs text-center text-brand-accent hover:bg-gray-50 border-t border-gray-100 transition-colors"
+                    className="text-brand-accent block w-full border-t border-gray-100 px-4 py-2.5 text-center text-xs transition-colors hover:bg-gray-50"
                   >
                     Ver todos los resultados para &ldquo;{query}&rdquo;
                   </Link>
@@ -263,27 +266,27 @@ export function Navbar({
             </div>
 
             {/* Right icons */}
-            <div className="flex items-center gap-1 ml-auto md:ml-0">
+            <div className="ml-auto flex items-center gap-1 md:ml-0">
               {showCart && (
                 <button
                   onClick={openSheet}
-                  className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="relative rounded-lg p-2 transition-colors hover:bg-gray-100"
                   aria-label="Abrir carrito"
                 >
                   <ShoppingCart className="size-5" />
                   {totalCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-brand-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">
+                    <span className="bg-brand-accent absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] leading-none font-bold text-white">
                       {totalCount > 9 ? "9+" : totalCount}
                     </span>
                   )}
                 </button>
               )}
-              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors hidden md:flex">
+              <button className="hidden rounded-lg p-2 transition-colors hover:bg-gray-100 md:flex">
                 <Bell className="size-5" />
               </button>
               {/* Mobile hamburger */}
               <button
-                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="rounded-lg p-2 transition-colors hover:bg-gray-100 md:hidden"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Menú"
               >
@@ -300,14 +303,14 @@ export function Navbar({
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-100 animate-in slide-in-from-top-2 duration-200">
-          <div className="max-w-7xl mx-auto px-4 py-4 space-y-3">
+        <div className="animate-in slide-in-from-top-2 border-b border-gray-100 bg-white duration-200 md:hidden">
+          <div className="mx-auto max-w-7xl space-y-3 px-4 py-4">
             <form
               onSubmit={(e) => {
                 handleSearchSubmit(e);
                 setIsMenuOpen(false);
               }}
-              className="flex items-center rounded-lg border border-gray-200 overflow-hidden"
+              className="flex items-center overflow-hidden rounded-lg border border-gray-200"
             >
               <input
                 value={query}
@@ -315,7 +318,10 @@ export function Navbar({
                 placeholder="Buscar productos..."
                 className="flex-1 px-4 py-2.5 text-sm outline-none"
               />
-              <button type="submit" className="px-4 py-2.5 bg-brand-accent text-white">
+              <button
+                type="submit"
+                className="bg-brand-accent px-4 py-2.5 text-white"
+              >
                 <Search className="size-4" />
               </button>
             </form>
@@ -323,17 +329,17 @@ export function Navbar({
               <a
                 key={label}
                 href="#"
-                className="block text-sm font-medium text-gray-700 hover:text-brand-accent transition-colors py-1"
+                className="hover:text-brand-accent block py-1 text-sm font-medium text-gray-700 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {label}
               </a>
             ))}
-            <div className="pt-1 border-t border-gray-100">
+            <div className="border-t border-gray-100 pt-1">
               {!isLoading &&
                 (user ? (
                   <div className="space-y-0.5">
-                    <p className="text-xs text-gray-400 px-1 pb-1 truncate">
+                    <p className="truncate px-1 pb-1 text-xs text-gray-400">
                       {user.signInDetails?.loginId ?? user.username}
                     </p>
                     {[
@@ -364,7 +370,7 @@ export function Navbar({
                           if (href) router.push(href);
                           setIsMenuOpen(false);
                         }}
-                        className="flex items-center gap-2 w-full text-sm text-gray-700 hover:text-brand-accent py-1.5 px-1 transition-colors"
+                        className="hover:text-brand-accent flex w-full items-center gap-2 px-1 py-1.5 text-sm text-gray-700 transition-colors"
                       >
                         {icon} {label}
                       </button>
@@ -374,7 +380,7 @@ export function Navbar({
                         logOut();
                         setIsMenuOpen(false);
                       }}
-                      className="flex items-center gap-2 w-full text-sm text-red-500 hover:text-red-600 py-1.5 px-1 transition-colors"
+                      className="flex w-full items-center gap-2 px-1 py-1.5 text-sm text-red-500 transition-colors hover:text-red-600"
                     >
                       <LogOut size={14} /> Cerrar sesión
                     </button>
@@ -383,7 +389,7 @@ export function Navbar({
                   <div className="flex gap-4">
                     <Link
                       href={tenantHref(tenant, "/register")}
-                      className="text-sm font-semibold text-brand-accent"
+                      className="text-brand-accent text-sm font-semibold"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Registrarse

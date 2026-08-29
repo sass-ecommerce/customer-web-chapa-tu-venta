@@ -23,8 +23,8 @@ export default function RequireAuth({
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-brand-accent border-t-transparent animate-spin" />
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="border-brand-accent h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }

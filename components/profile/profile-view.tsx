@@ -107,28 +107,28 @@ export function ProfileView({ tenant }: { tenant: string }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 font-body">
+    <div className="font-body min-h-screen bg-gray-50">
       {/* Header banner */}
       <div className="bg-gray-900 pt-[100px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="flex items-end gap-5">
             <div className="relative shrink-0">
-              <div className="w-20 h-20 rounded-full bg-brand-accent flex items-center justify-center ring-4 ring-white/10">
+              <div className="bg-brand-accent flex h-20 w-20 items-center justify-center rounded-full ring-4 ring-white/10">
                 <User size={36} className="text-white" />
               </div>
               <button
-                className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors"
+                className="absolute -right-1 -bottom-1 flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-colors hover:bg-gray-50"
                 aria-label="Editar foto"
               >
                 <Camera size={13} className="text-gray-600" />
               </button>
             </div>
             <div className="pb-1">
-              <p className="text-xs text-gray-400 mb-0.5">Mi cuenta</p>
-              <h1 className="text-white text-xl font-semibold leading-tight font-display">
+              <p className="mb-0.5 text-xs text-gray-400">Mi cuenta</p>
+              <h1 className="font-display text-xl leading-tight font-semibold text-white">
                 {displayName}
               </h1>
-              <p className="text-gray-400 text-sm flex items-center gap-1.5 mt-0.5">
+              <p className="mt-0.5 flex items-center gap-1.5 text-sm text-gray-400">
                 <Mail size={12} />
                 {email}
               </p>
@@ -138,16 +138,16 @@ export function ProfileView({ tenant }: { tenant: string }) {
       </div>
 
       {/* Mobile tab bar */}
-      <div className="md:hidden bg-white border-b border-gray-200 sticky top-[100px] z-40">
-        <div className="flex overflow-x-auto scrollbar-hide">
+      <div className="sticky top-[100px] z-40 border-b border-gray-200 bg-white md:hidden">
+        <div className="scrollbar-hide flex overflow-x-auto">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center gap-1 px-5 py-3 text-xs font-medium whitespace-nowrap transition-colors shrink-0 border-b-2 ${
+              className={`flex shrink-0 flex-col items-center gap-1 border-b-2 px-5 py-3 text-xs font-medium whitespace-nowrap transition-colors ${
                 activeTab === item.id
                   ? "text-brand-accent border-brand-accent"
-                  : "text-gray-500 border-transparent hover:text-gray-700"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
               {item.icon}
@@ -158,20 +158,20 @@ export function ProfileView({ tenant }: { tenant: string }) {
       </div>
 
       {/* Body */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex gap-6">
           {/* Desktop sidebar */}
-          <aside className="hidden md:flex flex-col w-[240px] shrink-0">
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <aside className="hidden w-[240px] shrink-0 flex-col md:flex">
+            <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
               <nav className="py-2">
                 {navItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-3 w-full px-5 py-3 text-sm font-medium transition-colors text-left border-r-2 ${
+                    className={`flex w-full items-center gap-3 border-r-2 px-5 py-3 text-left text-sm font-medium transition-colors ${
                       activeTab === item.id
-                        ? "bg-red-50 text-brand-accent border-brand-accent"
-                        : "text-gray-600 border-transparent hover:bg-gray-50 hover:text-gray-900"
+                        ? "text-brand-accent border-brand-accent bg-red-50"
+                        : "border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
                     {item.icon}
@@ -182,7 +182,7 @@ export function ProfileView({ tenant }: { tenant: string }) {
               <div className="border-t border-gray-100 py-2">
                 <button
                   onClick={() => logOut()}
-                  className="flex items-center gap-3 w-full px-5 py-3 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
+                  className="flex w-full items-center gap-3 px-5 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
                 >
                   <LogOut size={16} />
                   Cerrar sesión
@@ -192,24 +192,24 @@ export function ProfileView({ tenant }: { tenant: string }) {
           </aside>
 
           {/* Content */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             {/* ── Mi perfil ── */}
             {activeTab === "perfil" && (
               <div className="space-y-5">
                 {/* Información personal */}
-                <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                  <h2 className="text-sm font-semibold text-gray-900 mb-5">
+                <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <h2 className="mb-5 text-sm font-semibold text-gray-900">
                     Información personal
                   </h2>
                   <div className="space-y-4">
                     {/* Email (read-only) */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">
+                      <label className="mb-1 block text-xs font-medium text-gray-500">
                         Correo electrónico
                       </label>
-                      <div className="flex items-center justify-between px-3.5 py-2.5 rounded-lg border border-gray-200 bg-gray-50">
+                      <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-2.5">
                         <span className="text-sm text-gray-700">{email}</span>
-                        <Mail size={14} className="text-gray-400 shrink-0" />
+                        <Mail size={14} className="shrink-0 text-gray-400" />
                       </div>
                     </div>
 
@@ -221,15 +221,15 @@ export function ProfileView({ tenant }: { tenant: string }) {
                       { label: "DNI", placeholder: "Sin registrar" },
                     ].map((field) => (
                       <div key={field.label}>
-                        <label className="block text-xs font-medium text-gray-500 mb-1">
+                        <label className="mb-1 block text-xs font-medium text-gray-500">
                           {field.label}
                         </label>
-                        <div className="flex items-center justify-between px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white hover:border-gray-300 transition-colors group">
+                        <div className="group flex items-center justify-between rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 transition-colors hover:border-gray-300">
                           <span className="text-sm text-gray-400 italic">
                             {field.placeholder}
                           </span>
                           <button
-                            className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-gray-400 hover:text-brand-accent"
+                            className="hover:text-brand-accent rounded p-0.5 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100"
                             aria-label={`Editar ${field.label}`}
                           >
                             <Edit2 size={13} />
@@ -240,25 +240,25 @@ export function ProfileView({ tenant }: { tenant: string }) {
                   </div>
                   <button
                     disabled
-                    className="mt-6 px-5 py-2.5 rounded-lg bg-gray-100 text-gray-400 text-sm font-medium cursor-not-allowed"
+                    className="mt-6 cursor-not-allowed rounded-lg bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-400"
                   >
                     Guardar cambios
                   </button>
                 </section>
 
                 {/* Dirección de entrega */}
-                <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                  <h2 className="text-sm font-semibold text-gray-900 mb-5">
+                <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <h2 className="mb-5 text-sm font-semibold text-gray-900">
                     Dirección de entrega
                   </h2>
                   <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
                       <MapPin size={20} className="text-gray-400" />
                     </div>
-                    <p className="text-sm text-gray-500 mb-4">
+                    <p className="mb-4 text-sm text-gray-500">
                       No tienes una dirección guardada
                     </p>
-                    <button className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-brand-accent text-brand-accent text-sm font-medium hover:bg-red-50 transition-colors">
+                    <button className="border-brand-accent text-brand-accent flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-red-50">
                       + Agregar dirección
                     </button>
                   </div>
@@ -275,18 +275,18 @@ export function ProfileView({ tenant }: { tenant: string }) {
                 {mockOrders.map((order) => (
                   <div
                     key={order.id}
-                    className="bg-white rounded-xl border border-gray-100 shadow-sm p-5"
+                    className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-100 bg-gray-50">
                           <ShoppingBag size={18} className="text-gray-400" />
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-gray-900">
                             {order.id}
                           </p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="mt-0.5 text-xs text-gray-400">
                             {order.date} · {order.items}{" "}
                             {order.items === 1 ? "producto" : "productos"} ·{" "}
                             {order.payment}
@@ -294,7 +294,7 @@ export function ProfileView({ tenant }: { tenant: string }) {
                         </div>
                       </div>
                       <span
-                        className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${statusStyles[order.statusColor]}`}
+                        className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${statusStyles[order.statusColor]}`}
                       >
                         {order.status}
                       </span>
@@ -305,7 +305,7 @@ export function ProfileView({ tenant }: { tenant: string }) {
                       </span>
                       <Link
                         href={tenantHref(tenant, "/checkout/confirmation")}
-                        className="flex items-center gap-1 text-xs font-medium text-brand-accent hover:underline"
+                        className="text-brand-accent flex items-center gap-1 text-xs font-medium hover:underline"
                       >
                         Ver detalle
                         <ChevronRight size={12} />
@@ -319,12 +319,12 @@ export function ProfileView({ tenant }: { tenant: string }) {
             {/* ── Favoritos ── */}
             {activeTab === "favoritos" && (
               <div>
-                <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                <h2 className="mb-4 text-sm font-semibold text-gray-900">
                   Favoritos ({favoriteProducts.length})
                 </h2>
                 {favoriteProducts.length === 0 ? (
-                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-16 text-center">
-                    <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-3">
+                  <div className="flex flex-col items-center justify-center rounded-xl border border-gray-100 bg-white py-16 text-center shadow-sm">
+                    <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
                       <Heart size={24} className="text-gray-400" />
                     </div>
                     <p className="text-sm text-gray-500">
@@ -332,21 +332,21 @@ export function ProfileView({ tenant }: { tenant: string }) {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                     {favoriteProducts.map((p) => (
                       <div
                         key={p.id}
-                        className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden group"
+                        className="group overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm"
                       >
                         <div className="relative aspect-square overflow-hidden bg-gray-50">
                           <img
                             src={p.image}
                             alt={p.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                           <button
                             onClick={() => toggleFavorite(p.id)}
-                            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white shadow-sm flex items-center justify-center hover:scale-110 transition-transform"
+                            className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-sm transition-transform hover:scale-110"
                             aria-label="Quitar de favoritos"
                           >
                             <Heart
@@ -356,25 +356,25 @@ export function ProfileView({ tenant }: { tenant: string }) {
                           </button>
                         </div>
                         <div className="p-3">
-                          <p className="text-xs font-medium text-gray-800 leading-tight line-clamp-2 mb-1">
+                          <p className="mb-1 line-clamp-2 text-xs leading-tight font-medium text-gray-800">
                             {p.name}
                           </p>
-                          <div className="flex items-center gap-1 mb-2">
+                          <div className="mb-2 flex items-center gap-1">
                             <Star
                               size={10}
-                              className="text-yellow-400 fill-yellow-400"
+                              className="fill-yellow-400 text-yellow-400"
                             />
                             <span className="text-[10px] text-gray-500">
                               {p.rating}
                             </span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-brand-accent">
+                            <span className="text-brand-accent text-sm font-bold">
                               S/ {p.price}
                             </span>
                             <Link
                               href={tenantHref(tenant, `/products/${p.id}`)}
-                              className="text-[10px] font-medium text-gray-500 hover:text-brand-accent transition-colors"
+                              className="hover:text-brand-accent text-[10px] font-medium text-gray-500 transition-colors"
                             >
                               Ver →
                             </Link>
@@ -391,8 +391,8 @@ export function ProfileView({ tenant }: { tenant: string }) {
             {activeTab === "configuracion" && (
               <div className="space-y-5">
                 {/* Notificaciones */}
-                <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                  <div className="flex items-center gap-2 mb-5">
+                <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <div className="mb-5 flex items-center gap-2">
                     <Bell size={16} className="text-gray-500" />
                     <h2 className="text-sm font-semibold text-gray-900">
                       Notificaciones
@@ -426,7 +426,7 @@ export function ProfileView({ tenant }: { tenant: string }) {
                           <p className="text-sm font-medium text-gray-800">
                             {item.label}
                           </p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="mt-0.5 text-xs text-gray-400">
                             {item.desc}
                           </p>
                         </div>
@@ -439,7 +439,7 @@ export function ProfileView({ tenant }: { tenant: string }) {
                               [item.key]: !prev[item.key],
                             }))
                           }
-                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors shrink-0 ${
+                          className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${
                             notifications[item.key]
                               ? "bg-brand-accent"
                               : "bg-gray-200"
@@ -459,8 +459,8 @@ export function ProfileView({ tenant }: { tenant: string }) {
                 </section>
 
                 {/* Seguridad */}
-                <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                  <div className="flex items-center gap-2 mb-5">
+                <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <div className="mb-5 flex items-center gap-2">
                     <Shield size={16} className="text-gray-500" />
                     <h2 className="text-sm font-semibold text-gray-900">
                       Seguridad
@@ -468,22 +468,22 @@ export function ProfileView({ tenant }: { tenant: string }) {
                   </div>
                   <Link
                     href={tenantHref(tenant, "/forgot-password")}
-                    className="flex items-center justify-between w-full py-2 text-sm text-gray-700 hover:text-brand-accent transition-colors group"
+                    className="hover:text-brand-accent group flex w-full items-center justify-between py-2 text-sm text-gray-700 transition-colors"
                   >
                     <span>Cambiar contraseña</span>
                     <ChevronRight
                       size={16}
-                      className="text-gray-400 group-hover:text-brand-accent transition-colors"
+                      className="group-hover:text-brand-accent text-gray-400 transition-colors"
                     />
                   </Link>
                 </section>
 
                 {/* Cuenta */}
-                <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                  <h2 className="text-sm font-semibold text-gray-900 mb-5">
+                <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <h2 className="mb-5 text-sm font-semibold text-gray-900">
                     Cuenta
                   </h2>
-                  <button className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-600 transition-colors">
+                  <button className="flex items-center gap-2 text-sm font-medium text-red-500 transition-colors hover:text-red-600">
                     <Trash2 size={15} />
                     Eliminar cuenta
                   </button>

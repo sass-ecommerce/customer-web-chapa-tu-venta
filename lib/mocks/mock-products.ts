@@ -2,12 +2,7 @@ export type MockProduct = {
   id: number;
   name: string;
   category:
-    | "Calzado"
-    | "Electrónica"
-    | "Ropa"
-    | "Hogar"
-    | "Deporte"
-    | "Accesorios";
+    "Calzado" | "Electrónica" | "Ropa" | "Hogar" | "Deporte" | "Accesorios";
   price: number;
   originalPrice?: number;
   image: string;
@@ -349,11 +344,7 @@ export const CATEGORIES = [
 export const TAGS = ["NUEVO", "OFERTA", "TOP"] as const;
 
 export type SortOption =
-  | "relevance"
-  | "price-asc"
-  | "price-desc"
-  | "newest"
-  | "rating";
+  "relevance" | "price-asc" | "price-desc" | "newest" | "rating";
 
 export function getProductById(id: number): MockProduct | undefined {
   return mockProducts.find((p) => p.id === id);

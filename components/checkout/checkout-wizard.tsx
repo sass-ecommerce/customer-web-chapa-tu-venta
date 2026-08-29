@@ -61,10 +61,12 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+      <label className="mb-1.5 block text-sm font-medium text-gray-700">
         {label}
         {optional && (
-          <span className="ml-1 text-xs font-normal text-gray-400">(opcional)</span>
+          <span className="ml-1 text-xs font-normal text-gray-400">
+            (opcional)
+          </span>
         )}
       </label>
       {children}
@@ -91,28 +93,26 @@ function RadioCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "w-full flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all",
+        "flex w-full items-start gap-4 rounded-xl border-2 p-4 text-left transition-all",
         selected
           ? "border-brand-accent bg-red-50/50"
-          : "border-gray-200 hover:border-gray-300 bg-white"
+          : "border-gray-200 bg-white hover:border-gray-300",
       )}
     >
       <div
         className={cn(
-          "mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
-          selected ? "border-brand-accent" : "border-gray-300"
+          "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+          selected ? "border-brand-accent" : "border-gray-300",
         )}
       >
-        {selected && (
-          <div className="size-2.5 rounded-full bg-brand-accent" />
-        )}
+        {selected && <div className="bg-brand-accent size-2.5 rounded-full" />}
       </div>
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           {icon}
-          <span className="text-sm font-semibold text-brand-dark">{title}</span>
+          <span className="text-brand-dark text-sm font-semibold">{title}</span>
         </div>
-        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+        <p className="mt-0.5 text-xs text-gray-500">{description}</p>
       </div>
     </button>
   );
@@ -134,20 +134,20 @@ function StepIndicator({ step }: { step: number }) {
           {i > 0 && (
             <div
               className={cn(
-                "flex-1 h-px mx-2 transition-colors",
-                step > i ? "bg-brand-accent" : "bg-gray-200"
+                "mx-2 h-px flex-1 transition-colors",
+                step > i ? "bg-brand-accent" : "bg-gray-200",
               )}
             />
           )}
           <div className="flex flex-col items-center gap-1">
             <div
               className={cn(
-                "size-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all",
+                "flex size-8 items-center justify-center rounded-full text-sm font-semibold transition-all",
                 step > s.n
                   ? "bg-brand-accent text-white"
                   : step === s.n
-                  ? "bg-brand-accent text-white ring-4 ring-brand-accent/15"
-                  : "bg-gray-100 text-gray-400"
+                    ? "bg-brand-accent ring-brand-accent/15 text-white ring-4"
+                    : "bg-gray-100 text-gray-400",
               )}
             >
               {step > s.n ? <Check className="size-4" /> : s.n}
@@ -155,7 +155,7 @@ function StepIndicator({ step }: { step: number }) {
             <span
               className={cn(
                 "text-xs font-medium whitespace-nowrap",
-                step >= s.n ? "text-brand-dark" : "text-gray-400"
+                step >= s.n ? "text-brand-dark" : "text-gray-400",
               )}
             >
               {s.label}
@@ -181,13 +181,15 @@ function StepBuyerInfo({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-brand-dark">Datos de contacto</h2>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h2 className="text-brand-dark text-lg font-semibold">
+          Datos de contacto
+        </h2>
+        <p className="mt-0.5 text-sm text-gray-500">
           Te contactaremos para coordinar tu pedido.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Nombre" error={errors.firstName}>
           <Input
             value={form.firstName}
@@ -195,7 +197,7 @@ function StepBuyerInfo({
             placeholder="Juan"
             className={cn(
               "h-11 rounded-xl px-4 text-sm",
-              errors.firstName && "border-red-400 focus-visible:border-red-400"
+              errors.firstName && "border-red-400 focus-visible:border-red-400",
             )}
           />
         </Field>
@@ -207,7 +209,7 @@ function StepBuyerInfo({
             placeholder="Pérez"
             className={cn(
               "h-11 rounded-xl px-4 text-sm",
-              errors.lastName && "border-red-400 focus-visible:border-red-400"
+              errors.lastName && "border-red-400 focus-visible:border-red-400",
             )}
           />
         </Field>
@@ -221,7 +223,7 @@ function StepBuyerInfo({
           placeholder="juan@email.com"
           className={cn(
             "h-11 rounded-xl px-4 text-sm",
-            errors.email && "border-red-400 focus-visible:border-red-400"
+            errors.email && "border-red-400 focus-visible:border-red-400",
           )}
         />
       </Field>
@@ -234,7 +236,7 @@ function StepBuyerInfo({
           placeholder="999 123 456"
           className={cn(
             "h-11 rounded-xl px-4 text-sm",
-            errors.phone && "border-red-400 focus-visible:border-red-400"
+            errors.phone && "border-red-400 focus-visible:border-red-400",
           )}
         />
       </Field>
@@ -266,8 +268,10 @@ function StepDelivery({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-brand-dark">Método de entrega</h2>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h2 className="text-brand-dark text-lg font-semibold">
+          Método de entrega
+        </h2>
+        <p className="mt-0.5 text-sm text-gray-500">
           ¿Cómo quieres recibir tu pedido?
         </p>
       </div>
@@ -276,14 +280,14 @@ function StepDelivery({
         <RadioCard
           selected={form.deliveryMethod === "delivery"}
           onClick={() => onChange("deliveryMethod", "delivery")}
-          icon={<MapPin className="size-4 text-brand-accent shrink-0" />}
+          icon={<MapPin className="text-brand-accent size-4 shrink-0" />}
           title="Delivery a domicilio"
           description="Entrega en tu dirección — S/ 15.00 en toda Lima"
         />
         <RadioCard
           selected={form.deliveryMethod === "pickup"}
           onClick={() => onChange("deliveryMethod", "pickup")}
-          icon={<Store className="size-4 text-gray-500 shrink-0" />}
+          icon={<Store className="size-4 shrink-0 text-gray-500" />}
           title="Recojo en tienda"
           description="Recoge gratis en nuestra tienda — coordinaremos contigo"
         />
@@ -298,7 +302,7 @@ function StepDelivery({
               placeholder="Jr. Los Girasoles 123, Dpto. 201"
               className={cn(
                 "h-11 rounded-xl px-4 text-sm",
-                errors.address && "border-red-400 focus-visible:border-red-400"
+                errors.address && "border-red-400 focus-visible:border-red-400",
               )}
             />
           </Field>
@@ -319,9 +323,9 @@ function StepDelivery({
                 onChange={(e) => onChange("district", e.target.value)}
                 className={cn(
                   "w-full appearance-none rounded-xl border bg-white px-4 py-3 pr-10 text-sm",
-                  "focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors",
+                  "focus:ring-brand-accent/20 focus:border-brand-accent transition-colors focus:ring-2 focus:outline-none",
                   form.district ? "text-brand-dark" : "text-gray-400",
-                  errors.district ? "border-red-400" : "border-gray-200"
+                  errors.district ? "border-red-400" : "border-gray-200",
                 )}
               >
                 <option value="">Selecciona tu distrito</option>
@@ -332,7 +336,11 @@ function StepDelivery({
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                <svg className="size-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg
+                  className="size-4 text-gray-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
                   <path
                     fillRule="evenodd"
                     d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
@@ -344,28 +352,28 @@ function StepDelivery({
             {form.district && !errors.district && (
               <p className="mt-1.5 text-xs text-gray-500">
                 Costo de envío:{" "}
-                <span className="font-semibold text-brand-dark">S/ 15.00</span>
+                <span className="text-brand-dark font-semibold">S/ 15.00</span>
               </p>
             )}
           </Field>
         </div>
       ) : (
-        <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 space-y-2">
+        <div className="space-y-2 rounded-xl border border-gray-200 bg-gray-50 p-4">
           <div className="flex items-center gap-2">
-            <Package className="size-4 text-brand-accent shrink-0" />
-            <span className="text-sm font-semibold text-brand-dark">
+            <Package className="text-brand-accent size-4 shrink-0" />
+            <span className="text-brand-dark text-sm font-semibold">
               Dirección de la tienda
             </span>
           </div>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm leading-relaxed text-gray-600">
             Av. Ejemplo 456, Miraflores, Lima
           </p>
           <p className="text-xs text-gray-400">
             Lun – Sáb: 9 am – 7 pm · Dom: 10 am – 4 pm
           </p>
-          <p className="text-xs text-gray-500 mt-1 border-t border-gray-200 pt-2">
-            Una vez confirmado el pedido, nos comunicaremos contigo para coordinar el
-            horario de recojo.
+          <p className="mt-1 border-t border-gray-200 pt-2 text-xs text-gray-500">
+            Una vez confirmado el pedido, nos comunicaremos contigo para
+            coordinar el horario de recojo.
           </p>
         </div>
       )}
@@ -383,25 +391,25 @@ const PAYMENT_METHODS: {
 }[] = [
   {
     id: "cash",
-    icon: <Banknote className="size-4 text-green-600 shrink-0" />,
+    icon: <Banknote className="size-4 shrink-0 text-green-600" />,
     title: "Contra entrega (efectivo)",
     description: "Paga en efectivo cuando recibas tu pedido",
   },
   {
     id: "yape",
-    icon: <Smartphone className="size-4 text-purple-600 shrink-0" />,
+    icon: <Smartphone className="size-4 shrink-0 text-purple-600" />,
     title: "Yape",
     description: "Paga con Yape y sube tu captura para validación",
   },
   {
     id: "plin",
-    icon: <Smartphone className="size-4 text-green-500 shrink-0" />,
+    icon: <Smartphone className="size-4 shrink-0 text-green-500" />,
     title: "Plin",
     description: "Paga con Plin y sube tu captura para validación",
   },
   {
     id: "transfer",
-    icon: <Building2 className="size-4 text-blue-600 shrink-0" />,
+    icon: <Building2 className="size-4 shrink-0 text-blue-600" />,
     title: "Transferencia bancaria",
     description: "Transfiere a nuestra cuenta y envíanos el voucher",
   },
@@ -425,8 +433,10 @@ function StepPayment({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-brand-dark">Método de pago</h2>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h2 className="text-brand-dark text-lg font-semibold">
+          Método de pago
+        </h2>
+        <p className="mt-0.5 text-sm text-gray-500">
           Selecciona cómo quieres pagar.
         </p>
       </div>
@@ -446,21 +456,23 @@ function StepPayment({
 
       {/* Yape / Plin details */}
       {(form.paymentMethod === "yape" || form.paymentMethod === "plin") && (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 space-y-4">
+        <div className="space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-5">
           <div className="text-center">
-            <p className="text-sm font-semibold text-brand-dark">
-              {form.paymentMethod === "yape" ? "Yapea al número" : "Plínea al número"}
+            <p className="text-brand-dark text-sm font-semibold">
+              {form.paymentMethod === "yape"
+                ? "Yapea al número"
+                : "Plínea al número"}
             </p>
-            <p className="text-2xl font-bold text-brand-dark tracking-widest mt-1">
+            <p className="text-brand-dark mt-1 text-2xl font-bold tracking-widest">
               999 999 999
             </p>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="mt-0.5 text-xs text-gray-400">
               Titular: Tienda Demo S.A.C.
             </p>
           </div>
 
           <div className="border-t border-gray-200 pt-4">
-            <p className="text-xs font-medium text-gray-600 mb-3 text-center">
+            <p className="mb-3 text-center text-xs font-medium text-gray-600">
               Sube tu captura de pantalla del pago para validación manual
             </p>
 
@@ -468,12 +480,12 @@ function StepPayment({
             <div
               onClick={() => fileInputRef.current?.click()}
               className={cn(
-                "relative border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-colors",
+                "relative cursor-pointer rounded-xl border-2 border-dashed p-5 text-center transition-colors",
                 form.proofPreview
                   ? "border-brand-accent/40 bg-red-50/30"
                   : errors.proofFile
-                  ? "border-red-400 bg-red-50/20"
-                  : "border-gray-300 hover:border-brand-accent/40 hover:bg-gray-100/50"
+                    ? "border-red-400 bg-red-50/20"
+                    : "hover:border-brand-accent/40 border-gray-300 hover:bg-gray-100/50",
               )}
             >
               {form.proofPreview ? (
@@ -482,7 +494,7 @@ function StepPayment({
                   <img
                     src={form.proofPreview}
                     alt="Comprobante de pago"
-                    className="max-h-36 rounded-lg mx-auto object-contain"
+                    className="mx-auto max-h-36 rounded-lg object-contain"
                   />
                   <button
                     type="button"
@@ -490,7 +502,7 @@ function StepPayment({
                       e.stopPropagation();
                       onClearProof();
                     }}
-                    className="absolute -top-2 -right-2 size-5 rounded-full bg-brand-accent text-white flex items-center justify-center"
+                    className="bg-brand-accent absolute -top-2 -right-2 flex size-5 items-center justify-center rounded-full text-white"
                   >
                     <X className="size-3" />
                   </button>
@@ -498,7 +510,7 @@ function StepPayment({
               ) : (
                 <div className="flex flex-col items-center gap-2 py-2">
                   <Upload className="size-8 text-gray-300" />
-                  <p className="text-sm text-gray-500 font-medium">
+                  <p className="text-sm font-medium text-gray-500">
                     Toca para subir tu captura
                   </p>
                   <p className="text-xs text-gray-400">JPG, PNG (máx. 5 MB)</p>
@@ -521,8 +533,8 @@ function StepPayment({
 
       {/* Transfer details */}
       {form.paymentMethod === "transfer" && (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 space-y-3">
-          <p className="text-sm font-semibold text-brand-dark">
+        <div className="space-y-3 rounded-xl border border-gray-200 bg-gray-50 p-5">
+          <p className="text-brand-dark text-sm font-semibold">
             Datos para la transferencia
           </p>
           <div className="space-y-2 text-sm">
@@ -532,14 +544,15 @@ function StepPayment({
               ["N° de cuenta", "191-12345678-0-12"],
               ["CCI", "002-191-012345678012-19"],
             ].map(([label, value]) => (
-              <div key={label} className="flex justify-between items-center">
+              <div key={label} className="flex items-center justify-between">
                 <span className="text-gray-500">{label}</span>
-                <span className="font-medium text-brand-dark">{value}</span>
+                <span className="text-brand-dark font-medium">{value}</span>
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 border-t border-gray-200 pt-3">
-            Una vez realizada la transferencia, guarda el comprobante. Te pediremos el número de operación para confirmar tu pedido.
+          <p className="border-t border-gray-200 pt-3 text-xs text-gray-400">
+            Una vez realizada la transferencia, guarda el comprobante. Te
+            pediremos el número de operación para confirmar tu pedido.
           </p>
         </div>
       )}
@@ -578,7 +591,10 @@ export function CheckoutWizard() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const shippingCost = form.deliveryMethod === "delivery" ? 15 : 0;
-  const subtotal = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
+  const subtotal = items.reduce(
+    (sum, i) => sum + i.product.price * i.quantity,
+    0,
+  );
   const total = subtotal + shippingCost;
 
   function handleChange(field: keyof FormData, value: string) {
@@ -591,7 +607,8 @@ export function CheckoutWizard() {
     if (!file) return;
     const preview = URL.createObjectURL(file);
     setForm((prev) => ({ ...prev, proofFile: file, proofPreview: preview }));
-    if (errors.proofFile) setErrors((prev) => ({ ...prev, proofFile: undefined }));
+    if (errors.proofFile)
+      setErrors((prev) => ({ ...prev, proofFile: undefined }));
   }
 
   function handleClearProof() {
@@ -607,7 +624,8 @@ export function CheckoutWizard() {
       if (!form.firstName.trim()) newErrors.firstName = "Requerido";
       if (!form.lastName.trim()) newErrors.lastName = "Requerido";
       if (!form.email.trim()) newErrors.email = "Requerido";
-      else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Email inválido";
+      else if (!/\S+@\S+\.\S+/.test(form.email))
+        newErrors.email = "Email inválido";
       if (!form.phone.trim()) newErrors.phone = "Requerido";
     }
 
@@ -657,8 +675,10 @@ export function CheckoutWizard() {
       delivery: {
         method: form.deliveryMethod,
         address: form.deliveryMethod === "delivery" ? form.address : undefined,
-        reference: form.deliveryMethod === "delivery" ? form.reference : undefined,
-        district: form.deliveryMethod === "delivery" ? form.district : undefined,
+        reference:
+          form.deliveryMethod === "delivery" ? form.reference : undefined,
+        district:
+          form.deliveryMethod === "delivery" ? form.district : undefined,
         shippingCost,
       },
       payment: {
@@ -676,38 +696,49 @@ export function CheckoutWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/70 pt-[116px] pb-16 sm:pb-8 px-0">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen bg-gray-50/70 px-0 pt-[116px] pb-16 sm:pb-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
         {/* Back link */}
         <Link
           href={tenantHref(tenant, "/")}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-brand-dark transition-colors mb-6"
+          className="hover:text-brand-dark mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 transition-colors"
         >
           <ChevronLeft className="size-4" />
           Seguir comprando
         </Link>
 
         {/* Mobile order summary */}
-        <div className="lg:hidden mb-6">
-          <OrderSummary shippingCost={shippingCost} deliveryMethod={form.deliveryMethod} />
+        <div className="mb-6 lg:hidden">
+          <OrderSummary
+            shippingCost={shippingCost}
+            deliveryMethod={form.deliveryMethod}
+          />
         </div>
 
         {/* Grid layout */}
-        <div className="lg:grid lg:grid-cols-[1fr_360px] lg:gap-8 lg:items-start">
+        <div className="lg:grid lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
           {/* Left: wizard */}
           <div className="space-y-5">
             {/* Step indicator */}
-            <div className="bg-white rounded-2xl border border-gray-200 px-6 py-5">
+            <div className="rounded-2xl border border-gray-200 bg-white px-6 py-5">
               <StepIndicator step={step} />
             </div>
 
             {/* Step content */}
-            <div className="bg-white rounded-2xl border border-gray-200 px-6 py-6">
+            <div className="rounded-2xl border border-gray-200 bg-white px-6 py-6">
               {step === 1 && (
-                <StepBuyerInfo form={form} errors={errors} onChange={handleChange} />
+                <StepBuyerInfo
+                  form={form}
+                  errors={errors}
+                  onChange={handleChange}
+                />
               )}
               {step === 2 && (
-                <StepDelivery form={form} errors={errors} onChange={handleChange} />
+                <StepDelivery
+                  form={form}
+                  errors={errors}
+                  onChange={handleChange}
+                />
               )}
               {step === 3 && (
                 <StepPayment
@@ -727,23 +758,23 @@ export function CheckoutWizard() {
                 <Button
                   variant="outline"
                   onClick={handleBack}
-                  className="h-12 px-5 rounded-xl border-gray-200 text-gray-600 hover:bg-gray-50"
+                  className="h-12 rounded-xl border-gray-200 px-5 text-gray-600 hover:bg-gray-50"
                 >
-                  <ChevronLeft className="size-4 mr-1" />
+                  <ChevronLeft className="mr-1 size-4" />
                   Anterior
                 </Button>
               )}
               {step < 3 ? (
                 <Button
                   onClick={handleNext}
-                  className="flex-1 h-12 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-base border-0"
+                  className="bg-brand-accent hover:bg-brand-accent-hover h-12 flex-1 rounded-xl border-0 text-base font-semibold text-white"
                 >
                   Siguiente
                 </Button>
               ) : (
                 <Button
                   onClick={handleSubmit}
-                  className="flex-1 h-12 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-base border-0"
+                  className="bg-brand-accent hover:bg-brand-accent-hover h-12 flex-1 rounded-xl border-0 text-base font-semibold text-white"
                 >
                   Confirmar pedido →
                 </Button>
@@ -754,14 +785,19 @@ export function CheckoutWizard() {
             {step === 3 && (
               <p className="text-center text-sm text-gray-500">
                 Total a pagar:{" "}
-                <span className="font-bold text-brand-dark">S/ {total.toFixed(2)}</span>
+                <span className="text-brand-dark font-bold">
+                  S/ {total.toFixed(2)}
+                </span>
               </p>
             )}
           </div>
 
           {/* Right: order summary (desktop) */}
           <div className="hidden lg:block">
-            <OrderSummary shippingCost={shippingCost} deliveryMethod={form.deliveryMethod} />
+            <OrderSummary
+              shippingCost={shippingCost}
+              deliveryMethod={form.deliveryMethod}
+            />
           </div>
         </div>
       </div>

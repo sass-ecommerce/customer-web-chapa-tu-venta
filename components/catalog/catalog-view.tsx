@@ -191,10 +191,10 @@ export function CatalogView({
   return (
     <div className="min-h-screen bg-[#F5F6F7]">
       {/* Page Header */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6">
+      <div className="border-b border-gray-100 bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-8 pb-6 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+          <nav className="mb-4 flex items-center gap-2 text-sm text-gray-400">
             <Link
               href={tenantHref(tenant, "/")}
               className="hover:text-brand-accent transition-colors"
@@ -205,17 +205,17 @@ export function CatalogView({
             <span className="text-brand-dark font-medium">Catálogo</span>
           </nav>
 
-          <h1 className="text-3xl sm:text-4xl font-black font-body text-brand-dark">
+          <h1 className="font-body text-brand-dark text-3xl font-black sm:text-4xl">
             Catálogo
           </h1>
         </div>
       </div>
 
       {/* Main workspace */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex gap-8">
           {/* Desktop Sidebar */}
-          <div className="hidden md:block w-[260px] shrink-0">
+          <div className="hidden w-[260px] shrink-0 md:block">
             <div className="sticky top-[108px]">
               <FilterSidebar
                 filters={filters}
@@ -229,7 +229,7 @@ export function CatalogView({
           </div>
 
           {/* Content area */}
-          <div className="flex-1 min-w-0 space-y-5">
+          <div className="min-w-0 flex-1 space-y-5">
             {/* Sort bar */}
             <SortBar
               count={filteredProducts.length}

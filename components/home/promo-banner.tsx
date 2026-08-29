@@ -12,33 +12,33 @@ export function PromoBanner({
 }) {
   return (
     <section className="bg-[#F5F6F7] py-4">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-2xl overflow-hidden h-[180px] sm:h-[200px]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative h-[180px] overflow-hidden rounded-2xl sm:h-[200px]">
           {/* Background image */}
           <img
             src={banner.image}
             alt={banner.title}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           />
           {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
 
           {/* Content */}
-          <div className="relative h-full flex flex-col justify-center px-8 sm:px-10 max-w-lg space-y-3">
+          <div className="relative flex h-full max-w-lg flex-col justify-center space-y-3 px-8 sm:px-10">
             {banner.badge && (
-              <span className="inline-flex w-fit items-center bg-brand-accent text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
+              <span className="bg-brand-accent inline-flex w-fit items-center rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
                 {banner.badge}
               </span>
             )}
-            <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">
+            <h2 className="text-xl leading-tight font-black text-white sm:text-2xl">
               {banner.title}
             </h2>
-            <p className="text-white/70 text-xs sm:text-sm leading-snug">
+            <p className="text-xs leading-snug text-white/70 sm:text-sm">
               {banner.description}
             </p>
             <Button
               asChild
-              className="w-fit bg-white text-gray-900 hover:bg-gray-100 border-0 font-semibold text-xs rounded-full px-5"
+              className="w-fit rounded-full border-0 bg-white px-5 text-xs font-semibold text-gray-900 hover:bg-gray-100"
             >
               <Link href={tenantHref(tenant, banner.ctaHref)}>
                 {banner.ctaLabel}

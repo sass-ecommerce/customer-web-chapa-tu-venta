@@ -51,7 +51,10 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
     defaultValues: { code: "" },
     onSubmit: async ({ value }) => {
       try {
-        await confirmSignUp({ username: registeredEmail, confirmationCode: value.code });
+        await confirmSignUp({
+          username: registeredEmail,
+          confirmationCode: value.code,
+        });
         router.push(`/${tenant}/login`);
       } catch (err: unknown) {
         setErrorInfo(parseCognitoError(err));
@@ -61,15 +64,23 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
 
   if (step === "confirm") {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-        <CognitoErrorDialog errorInfo={errorInfo} onClose={() => setErrorInfo(null)} />
+      <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+        <CognitoErrorDialog
+          errorInfo={errorInfo}
+          onClose={() => setErrorInfo(null)}
+        />
 
         <form
           className="space-y-4"
-          onSubmit={(e) => { e.preventDefault(); confirmForm.handleSubmit(); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            confirmForm.handleSubmit();
+          }}
         >
           <div className="space-y-1">
-            <h2 className="text-lg font-semibold text-brand-dark">Confirma tu correo</h2>
+            <h2 className="text-brand-dark text-lg font-semibold">
+              Confirma tu correo
+            </h2>
             <p className="text-sm text-gray-500">
               Ingresa el código que enviamos a{" "}
               <span className="font-medium">{registeredEmail}</span>.
@@ -78,11 +89,17 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
 
           <confirmForm.Field
             name="code"
-            validators={{ onChange: ({ value }) => !value ? "El código es requerido." : undefined }}
+            validators={{
+              onChange: ({ value }) =>
+                !value ? "El código es requerido." : undefined,
+            }}
           >
             {(field) => (
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-brand-dark" htmlFor="confirm-code">
+                <label
+                  className="text-brand-dark text-sm font-medium"
+                  htmlFor="confirm-code"
+                >
                   Código de verificación
                 </label>
                 <Input
@@ -94,9 +111,12 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
                 />
-                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                  <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
-                )}
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors.length > 0 && (
+                    <p className="text-xs text-red-500">
+                      {field.state.meta.errors.join(", ")}
+                    </p>
+                  )}
               </div>
             )}
           </confirmForm.Field>
@@ -105,7 +125,7 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
             {(isSubmitting) => (
               <Button
                 type="submit"
-                className="w-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold py-2.5 text-sm mt-2"
+                className="bg-brand-accent hover:bg-brand-accent-hover mt-2 w-full py-2.5 text-sm font-semibold text-white"
                 size="lg"
                 disabled={isSubmitting}
               >
@@ -116,8 +136,11 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
 
           <button
             type="button"
-            onClick={() => { setStep("register"); setErrorInfo(null); }}
-            className="w-full text-sm text-gray-500 hover:text-brand-accent transition-colors"
+            onClick={() => {
+              setStep("register");
+              setErrorInfo(null);
+            }}
+            className="hover:text-brand-accent w-full text-sm text-gray-500 transition-colors"
           >
             Volver al registro
           </button>
@@ -127,21 +150,33 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-      <CognitoErrorDialog errorInfo={errorInfo} onClose={() => setErrorInfo(null)} />
+    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+      <CognitoErrorDialog
+        errorInfo={errorInfo}
+        onClose={() => setErrorInfo(null)}
+      />
 
       <form
         className="space-y-4"
-        onSubmit={(e) => { e.preventDefault(); registerForm.handleSubmit(); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          registerForm.handleSubmit();
+        }}
       >
         {/* Full name */}
         <registerForm.Field
           name="name"
-          validators={{ onChange: ({ value }) => !value.trim() ? "El nombre es requerido." : undefined }}
+          validators={{
+            onChange: ({ value }) =>
+              !value.trim() ? "El nombre es requerido." : undefined,
+          }}
         >
           {(field) => (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-brand-dark" htmlFor="full-name">
+              <label
+                className="text-brand-dark text-sm font-medium"
+                htmlFor="full-name"
+              >
                 Nombre completo
               </label>
               <Input
@@ -153,9 +188,12 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
               />
-              {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
-              )}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p className="text-xs text-red-500">
+                    {field.state.meta.errors.join(", ")}
+                  </p>
+                )}
             </div>
           )}
         </registerForm.Field>
@@ -165,13 +203,19 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
           name="email"
           validators={{
             onChange: ({ value }) =>
-              !value ? "El correo es requerido." :
-              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? "Correo inválido." : undefined,
+              !value
+                ? "El correo es requerido."
+                : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                  ? "Correo inválido."
+                  : undefined,
           }}
         >
           {(field) => (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-brand-dark" htmlFor="email">
+              <label
+                className="text-brand-dark text-sm font-medium"
+                htmlFor="email"
+              >
                 Correo electrónico
               </label>
               <Input
@@ -183,9 +227,12 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
               />
-              {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
-              )}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p className="text-xs text-red-500">
+                    {field.state.meta.errors.join(", ")}
+                  </p>
+                )}
             </div>
           )}
         </registerForm.Field>
@@ -193,11 +240,17 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
         {/* Password */}
         <registerForm.Field
           name="password"
-          validators={{ onChange: ({ value }) => value.length < 8 ? "Mínimo 8 caracteres." : undefined }}
+          validators={{
+            onChange: ({ value }) =>
+              value.length < 8 ? "Mínimo 8 caracteres." : undefined,
+          }}
         >
           {(field) => (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-brand-dark" htmlFor="password">
+              <label
+                className="text-brand-dark text-sm font-medium"
+                htmlFor="password"
+              >
                 Contraseña
               </label>
               <div className="relative">
@@ -214,14 +267,17 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
-              )}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p className="text-xs text-red-500">
+                    {field.state.meta.errors.join(", ")}
+                  </p>
+                )}
             </div>
           )}
         </registerForm.Field>
@@ -239,7 +295,10 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
         >
           {(field) => (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-brand-dark" htmlFor="confirm-password">
+              <label
+                className="text-brand-dark text-sm font-medium"
+                htmlFor="confirm-password"
+              >
                 Confirmar contraseña
               </label>
               <div className="relative">
@@ -256,26 +315,35 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
                 <button
                   type="button"
                   onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
                 >
                   {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
-              )}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p className="text-xs text-red-500">
+                    {field.state.meta.errors.join(", ")}
+                  </p>
+                )}
             </div>
           )}
         </registerForm.Field>
 
         {/* Terms */}
-        <p className="text-xs text-gray-400 leading-relaxed">
+        <p className="text-xs leading-relaxed text-gray-400">
           Al registrarte aceptas nuestros{" "}
-          <Link href="#" className="text-brand-accent hover:underline underline-offset-2">
+          <Link
+            href="#"
+            className="text-brand-accent underline-offset-2 hover:underline"
+          >
             Términos de uso
           </Link>{" "}
           y{" "}
-          <Link href="#" className="text-brand-accent hover:underline underline-offset-2">
+          <Link
+            href="#"
+            className="text-brand-accent underline-offset-2 hover:underline"
+          >
             Política de privacidad
           </Link>
           .
@@ -286,7 +354,7 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
           {(isSubmitting) => (
             <Button
               type="submit"
-              className="w-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold py-2.5 text-sm mt-2"
+              className="bg-brand-accent hover:bg-brand-accent-hover mt-2 w-full py-2.5 text-sm font-semibold text-white"
               size="lg"
               disabled={isSubmitting}
             >
@@ -297,10 +365,10 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
       </form>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-5">
-        <span className="flex-1 h-px bg-gray-100" />
+      <div className="my-5 flex items-center gap-3">
+        <span className="h-px flex-1 bg-gray-100" />
         <span className="text-xs text-gray-400">o</span>
-        <span className="flex-1 h-px bg-gray-100" />
+        <span className="h-px flex-1 bg-gray-100" />
       </div>
 
       {/* Login link */}
@@ -308,7 +376,7 @@ export default function RegisterForm({ tenant }: { tenant: string }) {
         ¿Ya tienes cuenta?{" "}
         <Link
           href={tenantHref(tenant, "/login")}
-          className="text-brand-accent font-semibold hover:underline underline-offset-2"
+          className="text-brand-accent font-semibold underline-offset-2 hover:underline"
         >
           Iniciar sesión
         </Link>

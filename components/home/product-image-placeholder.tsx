@@ -5,7 +5,7 @@ export function ProductImagePlaceholder({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "w-full h-full flex items-center justify-center bg-gray-100 text-gray-300",
+        "flex h-full w-full items-center justify-center bg-gray-100 text-gray-300",
         className,
       )}
     >

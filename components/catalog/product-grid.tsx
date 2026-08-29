@@ -23,8 +23,8 @@ function StarRating({ rating }: { rating: number }) {
               star <= Math.floor(rating)
                 ? "text-yellow-400"
                 : star - 0.5 <= rating
-                ? "text-yellow-400 opacity-50"
-                : "text-gray-300"
+                  ? "text-yellow-400 opacity-50"
+                  : "text-gray-300",
             )}
           >
             ★
@@ -36,15 +36,21 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-function ProductBadge({ badge, discount }: { badge?: string; discount?: number }) {
+function ProductBadge({
+  badge,
+  discount,
+}: {
+  badge?: string;
+  discount?: number;
+}) {
   if (!badge) return null;
   return (
     <span
       className={cn(
-        "absolute top-3 left-3 text-white text-[10px] font-bold px-2 py-0.5 rounded-full z-10",
+        "absolute top-3 left-3 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold text-white",
         badge === "NUEVO" && "bg-green-500",
         badge === "TOP" && "bg-brand-dark",
-        badge === "OFERTA" && "bg-brand-accent"
+        badge === "OFERTA" && "bg-brand-accent",
       )}
     >
       {badge === "OFERTA" && discount ? `-${discount}%` : badge}
@@ -52,7 +58,13 @@ function ProductBadge({ badge, discount }: { badge?: string; discount?: number }
   );
 }
 
-function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: string }) {
+function ProductCardGrid({
+  product,
+  tenant,
+}: {
+  product: MockProduct;
+  tenant: string;
+}) {
   const [wished, setWished] = useState(false);
   const [added, setAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
@@ -66,19 +78,25 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
   };
 
   return (
-    <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
+    <div className="group overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow duration-300 hover:shadow-md">
       {/* Image */}
-      <Link href={tenantHref(tenant, `/products/${product.id}`)} className="block">
-        <div className="relative overflow-hidden bg-gray-50 aspect-square">
+      <Link
+        href={tenantHref(tenant, `/products/${product.id}`)}
+        className="block"
+      >
+        <div className="relative aspect-square overflow-hidden bg-gray-50">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
           <ProductBadge badge={product.badge} discount={product.discount} />
           <button
-            className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full border border-gray-200 flex items-center justify-center shadow-sm"
-            onClick={(e) => { e.preventDefault(); setWished(!wished); }}
+            className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm"
+            onClick={(e) => {
+              e.preventDefault();
+              setWished(!wished);
+            }}
             aria-label="Agregar a favoritos"
           >
             <Heart
@@ -91,12 +109,15 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
       </Link>
 
       {/* Info */}
-      <Link href={tenantHref(tenant, `/products/${product.id}`)} className="block p-4 space-y-2.5">
+      <Link
+        href={tenantHref(tenant, `/products/${product.id}`)}
+        className="block space-y-2.5 p-4"
+      >
         <div>
-          <p className="text-xs text-gray-400 uppercase tracking-wide mb-0.5">
+          <p className="mb-0.5 text-xs tracking-wide text-gray-400 uppercase">
             {product.category}
           </p>
-          <h3 className="text-sm font-semibold text-brand-dark line-clamp-2 leading-snug">
+          <h3 className="text-brand-dark line-clamp-2 text-sm leading-snug font-semibold">
             {product.name}
           </h3>
         </div>
@@ -117,10 +138,10 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
           <Button
             size="icon-sm"
             className={cn(
-              "rounded-xl text-white border-0 transition-colors duration-300",
+              "rounded-xl border-0 text-white transition-colors duration-300",
               added
                 ? "bg-green-500 hover:bg-green-500"
-                : "bg-brand-accent hover:bg-brand-accent-hover"
+                : "bg-brand-accent hover:bg-brand-accent-hover",
             )}
             aria-label="Agregar al carrito"
             onClick={handleAddToCart}
@@ -137,7 +158,13 @@ function ProductCardGrid({ product, tenant }: { product: MockProduct; tenant: st
   );
 }
 
-function ProductCardList({ product, tenant }: { product: MockProduct; tenant: string }) {
+function ProductCardList({
+  product,
+  tenant,
+}: {
+  product: MockProduct;
+  tenant: string;
+}) {
   const [wished, setWished] = useState(false);
   const [added, setAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
@@ -153,39 +180,42 @@ function ProductCardList({ product, tenant }: { product: MockProduct; tenant: st
   return (
     <Link
       href={tenantHref(tenant, `/products/${product.id}`)}
-      className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 flex items-stretch"
+      className="group flex items-stretch overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:shadow-md"
     >
       {/* Image */}
-      <div className="relative w-28 sm:w-36 shrink-0 bg-gray-50 overflow-hidden">
+      <div className="relative w-28 shrink-0 overflow-hidden bg-gray-50 sm:w-36">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <ProductBadge badge={product.badge} discount={product.discount} />
       </div>
 
       {/* Info */}
-      <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
         <div className="space-y-1">
-          <p className="text-xs text-gray-400 uppercase tracking-wide">
+          <p className="text-xs tracking-wide text-gray-400 uppercase">
             {product.category}
           </p>
-          <h3 className="text-sm font-semibold text-brand-dark line-clamp-1">
+          <h3 className="text-brand-dark line-clamp-1 text-sm font-semibold">
             {product.name}
           </h3>
           <StarRating rating={product.rating} />
-          <p className="text-xs text-gray-400 hidden sm:block">
+          <p className="hidden text-xs text-gray-400 sm:block">
             {product.reviewCount} reseñas
           </p>
         </div>
       </div>
 
       {/* Price + action */}
-      <div className="flex flex-col items-end justify-between p-4 shrink-0">
+      <div className="flex shrink-0 flex-col items-end justify-between p-4">
         <button
-          onClick={(e) => { e.preventDefault(); setWished(!wished); }}
-          className="text-gray-300 hover:text-brand-accent transition-colors"
+          onClick={(e) => {
+            e.preventDefault();
+            setWished(!wished);
+          }}
+          className="hover:text-brand-accent text-gray-300 transition-colors"
           aria-label="Agregar a favoritos"
         >
           <Heart
@@ -208,10 +238,10 @@ function ProductCardList({ product, tenant }: { product: MockProduct; tenant: st
           <Button
             size="sm"
             className={cn(
-              "text-white border-0 text-xs transition-colors duration-300",
+              "border-0 text-xs text-white transition-colors duration-300",
               added
                 ? "bg-green-500 hover:bg-green-500"
-                : "bg-brand-accent hover:bg-brand-accent-hover"
+                : "bg-brand-accent hover:bg-brand-accent-hover",
             )}
             onClick={handleAddToCart}
           >
@@ -220,7 +250,7 @@ function ProductCardList({ product, tenant }: { product: MockProduct; tenant: st
             ) : (
               <ShoppingCart className="size-3" />
             )}
-            <span className="hidden sm:inline ml-1">
+            <span className="ml-1 hidden sm:inline">
               {added ? "Agregado" : "Agregar"}
             </span>
           </Button>
@@ -254,17 +284,17 @@ export function ProductGrid({
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <span className="text-6xl mb-4 select-none">🔍</span>
-        <h3 className="text-xl font-semibold text-brand-dark mb-2 font-display">
+        <span className="mb-4 text-6xl select-none">🔍</span>
+        <h3 className="text-brand-dark font-display mb-2 text-xl font-semibold">
           Sin resultados
         </h3>
-        <p className="text-gray-500 text-sm mb-6 max-w-xs">
+        <p className="mb-6 max-w-xs text-sm text-gray-500">
           No encontramos productos con los filtros seleccionados. Intenta
           ajustar tu búsqueda.
         </p>
         <Button
           onClick={onClearFilters}
-          className="bg-brand-accent hover:bg-brand-accent-hover text-white border-0"
+          className="bg-brand-accent hover:bg-brand-accent-hover border-0 text-white"
         >
           Limpiar filtros
         </Button>
@@ -275,25 +305,33 @@ export function ProductGrid({
   return (
     <div className="space-y-6">
       {viewMode === "grid" ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {visible.map((product) => (
-            <ProductCardGrid key={product.id} product={product} tenant={tenant} />
+            <ProductCardGrid
+              key={product.id}
+              product={product}
+              tenant={tenant}
+            />
           ))}
         </div>
       ) : (
         <div className="flex flex-col gap-3">
           {visible.map((product) => (
-            <ProductCardList key={product.id} product={product} tenant={tenant} />
+            <ProductCardList
+              key={product.id}
+              product={product}
+              tenant={tenant}
+            />
           ))}
         </div>
       )}
 
       {hasMore && (
-        <div className="text-center pt-2">
+        <div className="pt-2 text-center">
           <Button
             variant="outline"
             onClick={onLoadMore}
-            className="px-8 rounded-full font-medium"
+            className="rounded-full px-8 font-medium"
           >
             Ver más productos ▼
           </Button>

@@ -56,11 +56,11 @@
 
 :root {
   /* Brand tokens */
-  --brand-accent: #EF4444;
-  --brand-accent-hover: #DC2626;
-  --brand-dark: #1A1A1A;
-  --brand-bg: #F5F6F7;
-  --brand-red-sale: #EF4444;
+  --brand-accent: #ef4444;
+  --brand-accent-hover: #dc2626;
+  --brand-dark: #1a1a1a;
+  --brand-bg: #f5f6f7;
+  --brand-red-sale: #ef4444;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -103,7 +103,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.87 0.00 0);
+  --primary: oklch(0.87 0 0);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -140,16 +140,30 @@
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes flash-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
