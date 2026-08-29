@@ -10,7 +10,7 @@ import {
   getTenantBenefits,
   DEFAULT_BENEFITS,
 } from "@/lib/config/tenants";
-import { getTenantProducts } from "@/lib/server/products";
+import { getTenantProducts } from "@/lib/api/products";
 
 export async function generateMetadata({
   params,

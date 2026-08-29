@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTenantConfig } from "@/lib/config/tenants";
 import { ProductDetail } from "@/components/product/product-detail";
-import { getTenantProducts } from "@/lib/server/products";
+import { getTenantProducts } from "@/lib/api/products";
 
 export async function generateMetadata({
   params,

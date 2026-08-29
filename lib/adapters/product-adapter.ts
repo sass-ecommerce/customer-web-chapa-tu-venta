@@ -1,7 +1,7 @@
 import { mockProducts } from "@/lib/mocks/mock-products";
 import type { ApiProduct, ApiProductImage } from "@/lib/api/products";
 import {
-  fetchPresignedViewUrlUpstream,
+  fetchPresignedViewUrl,
   type PresignedViewResponse,
 } from "@/lib/api/storage";
 
@@ -32,7 +32,7 @@ function getPrimaryImageKey(images: ApiProductImage[]): string | undefined {
 async function resolveImageUrl(key: string | undefined): Promise<string | undefined> {
   if (!key) return undefined;
   try {
-    const res = await fetchPresignedViewUrlUpstream(key);
+    const res = await fetchPresignedViewUrl(key);
     if (!res.ok) return undefined;
     const json: PresignedViewResponse = await res.json();
     return json.data.viewUrl;
