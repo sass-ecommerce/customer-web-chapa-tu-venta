@@ -36,3 +36,10 @@ export async function fetchProducts(tenantId: string): Promise<ApiProduct[]> {
 
   return res.json();
 }
+
+// Server-side call straight to the upstream API — used by the /api/products
+// route handler and by server components, where CORS doesn't apply.
+export async function fetchProductsUpstream(tenantId: string): Promise<Response> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  return fetch(`${baseUrl}/products?tenantId=${tenantId}`);
+}

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchPresignedViewUrlUpstream } from "@/lib/api/storage";
 
 export async function GET(request: NextRequest) {
   const key = request.nextUrl.searchParams.get("key");
@@ -7,10 +8,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: "key is required" }, { status: 400 });
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_STORAGE_API_URL;
-  const res = await fetch(
-    `${baseUrl}/api/storage/presigned-view?key=${encodeURIComponent(key)}`,
-  );
+  const res = await fetchPresignedViewUrlUpstream(key);
 
   if (!res.ok) {
     return NextResponse.json(

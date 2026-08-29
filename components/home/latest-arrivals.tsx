@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { tenantHref } from "@/lib/utils/tenant-href";
-import { useProducts } from "@/lib/hooks/use-products";
+import { useProducts } from "@/lib/queries/use-products";
 import { ProductImage } from "@/components/home/product-image";
 
 export function LatestArrivals({ tenant }: { tenant: string }) {

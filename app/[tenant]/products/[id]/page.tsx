@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { getTenantConfig, getTenantId } from "@/lib/config/tenants";
 import { ProductDetail } from "@/components/product/product-detail";
-import type { ApiProduct } from "@/lib/api/products";
+import { fetchProductsUpstream, type ApiProduct } from "@/lib/api/products";
 
 async function fetchProductName(tenant: string, productId: string): Promise<string | null> {
   try {
     const tenantId = getTenantId(tenant);
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-    const res = await fetch(`${baseUrl}/products?tenantId=${tenantId}`);
+    const res = await fetchProductsUpstream(tenantId);
     if (!res.ok) return null;
     const products: ApiProduct[] = await res.json();
     return products.find((p) => p.productId === productId)?.name ?? null;

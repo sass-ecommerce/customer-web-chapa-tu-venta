@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchProductsUpstream } from "@/lib/api/products";
 
 export async function GET(request: NextRequest) {
   const tenantId = request.nextUrl.searchParams.get("tenantId");
@@ -10,8 +11,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${baseUrl}/products?tenantId=${tenantId}`);
+  const res = await fetchProductsUpstream(tenantId);
 
   if (!res.ok) {
     return NextResponse.json(

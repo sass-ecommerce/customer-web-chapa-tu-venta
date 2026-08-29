@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils/utils";
 import { tenantHref } from "@/lib/utils/tenant-href";
-import { useProducts } from "@/lib/hooks/use-products";
+import { useProducts } from "@/lib/queries/use-products";
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { ProductImage } from "@/components/home/product-image";
 

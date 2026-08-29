@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, Heart, Minus, Plus, ShoppingCart, ChevronRight, PackageSearch } from "lucide-react";
-import { useProducts } from "@/lib/hooks/use-products";
-import { useProductImage } from "@/lib/hooks/use-product-image";
+import { useProducts } from "@/lib/queries/use-products";
+import { useProductImage } from "@/lib/queries/use-product-image";
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { useCartStore } from "@/lib/stores/cart-store";
 import { ProductImage } from "@/components/home/product-image";

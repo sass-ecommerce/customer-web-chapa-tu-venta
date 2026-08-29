@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils/utils";
-import { useProductImage } from "@/lib/hooks/use-product-image";
+import { useProductImage } from "@/lib/queries/use-product-image";
 import { ProductImagePlaceholder } from "@/components/home/product-image-placeholder";
 
 export function ProductImage({
