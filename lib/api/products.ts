@@ -18,6 +18,12 @@ export type ApiProductCategory = {
   parentId: string | null;
 };
 
+export type ApiProductAttribute = {
+  attributeKey: string;
+  attributeLabel: string;
+  value: string;
+};
+
 export type ApiProduct = {
   productId: string;
   tenantId: string;
@@ -26,25 +32,51 @@ export type ApiProduct = {
   basePrice: number;
   isActive: boolean;
   images: ApiProductImage[];
+  attributes?: ApiProductAttribute[];
   category?: ApiProductCategory[];
   createdAt?: string;
   updatedAt?: string;
 };
 
-export async function fetchProducts(tenantId: string): Promise<Response> {
+export type ApiProductsResponse = {
+  code: number;
+  message: string;
+  data: {
+    items: ApiProduct[];
+    nextToken?: string;
+  };
+};
+
+const DEFAULT_PRODUCTS_LIMIT = 20;
+
+export type FetchProductsOptions = {
+  limit?: number;
+  nextToken?: string;
+};
+
+export async function fetchProducts(
+  tenantId: string,
+  { limit = DEFAULT_PRODUCTS_LIMIT, nextToken }: FetchProductsOptions = {},
+): Promise<Response> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  return fetch(`${baseUrl}/products?tenantId=${tenantId}`);
+  const params = new URLSearchParams({ tenantId, limit: String(limit) });
+  // nextToken is only sent when paging past the first batch of products.
+  if (nextToken) params.set("nextToken", nextToken);
+  return fetch(`${baseUrl}/products?${params.toString()}`, {
+    next: { revalidate: 20 },
+  });
 }
 
 export async function getTenantProducts(
   tenant: string,
+  options?: FetchProductsOptions,
 ): Promise<DisplayProduct[]> {
   try {
     const tenantId = await getTenantId(tenant);
-    const res = await fetchProducts(tenantId);
+    const res = await fetchProducts(tenantId, options);
     if (!res.ok) return [];
-    const products: ApiProduct[] = await res.json();
-    return await toDisplayProducts(products);
+    const { data }: ApiProductsResponse = await res.json();
+    return await toDisplayProducts(data.items);
   } catch {
     console.error(`Failed to fetch products for tenant: ${tenant}`);
     return [];
