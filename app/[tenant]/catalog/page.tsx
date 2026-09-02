@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { CatalogView } from "@/components/catalog/catalog-view";
 import { getTenantConfig } from "@/lib/config/tenants";
+import { getTenantProducts } from "@/lib/api/products";
+
+const INITIAL_CATALOG_LIMIT = 9;
 
 export async function generateMetadata({
   params,
@@ -26,9 +29,17 @@ export default async function TenantCatalogPage({
 }) {
   const { tenant } = await params;
   const { q } = await searchParams;
+  const { products, nextToken } = await getTenantProducts(tenant, {
+    limit: INITIAL_CATALOG_LIMIT,
+  });
   return (
     <main className="pt-[100px]">
-      <CatalogView tenant={tenant} search={q ?? ""} />
+      <CatalogView
+        tenant={tenant}
+        search={q ?? ""}
+        initialProducts={products}
+        initialNextToken={nextToken}
+      />
     </main>
   );
 }

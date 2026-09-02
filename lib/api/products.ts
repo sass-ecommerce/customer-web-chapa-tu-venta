@@ -67,18 +67,33 @@ export async function fetchProducts(
   });
 }
 
+export type ProductsPage = {
+  products: DisplayProduct[];
+  nextToken?: string;
+};
+
+export async function getProductsPage(
+  tenantId: string,
+  options?: FetchProductsOptions,
+): Promise<ProductsPage> {
+  const res = await fetchProducts(tenantId, options);
+  if (!res.ok) return { products: [] };
+  const { data }: ApiProductsResponse = await res.json();
+  return {
+    products: await toDisplayProducts(data.items),
+    nextToken: data.nextToken,
+  };
+}
+
 export async function getTenantProducts(
   tenant: string,
   options?: FetchProductsOptions,
-): Promise<DisplayProduct[]> {
+): Promise<ProductsPage> {
   try {
     const tenantId = await getTenantId(tenant);
-    const res = await fetchProducts(tenantId, options);
-    if (!res.ok) return [];
-    const { data }: ApiProductsResponse = await res.json();
-    return await toDisplayProducts(data.items);
+    return await getProductsPage(tenantId, options);
   } catch {
     console.error(`Failed to fetch products for tenant: ${tenant}`);
-    return [];
+    return { products: [] };
   }
 }

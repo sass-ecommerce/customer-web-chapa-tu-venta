@@ -5,11 +5,10 @@ import Link from "next/link";
 import { Check, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/utils";
-import type { MockProduct } from "@/lib/mocks/mock-products";
+import type { DisplayProduct } from "@/lib/adapters/product-adapter";
+import { ProductImage } from "@/components/home/product-image";
 import { tenantHref } from "@/lib/utils/tenant-href";
 import { useCartStore } from "@/lib/stores/cart-store";
-
-const ITEMS_PER_PAGE = 9;
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -62,7 +61,7 @@ function ProductCardGrid({
   product,
   tenant,
 }: {
-  product: MockProduct;
+  product: DisplayProduct;
   tenant: string;
 }) {
   const [wished, setWished] = useState(false);
@@ -72,7 +71,13 @@ function ProductCardGrid({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(product);
+    addItem({
+      id: product.id,
+      name: product.name,
+      image: product.imageUrl ?? "",
+      price: product.price,
+      category: product.category,
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
@@ -85,11 +90,7 @@ function ProductCardGrid({
         className="block"
       >
         <div className="relative aspect-square overflow-hidden bg-gray-50">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-          />
+          <ProductImage imageUrl={product.imageUrl} alt={product.name} />
           <ProductBadge badge={product.badge} discount={product.discount} />
           <button
             className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm"
@@ -162,7 +163,7 @@ function ProductCardList({
   product,
   tenant,
 }: {
-  product: MockProduct;
+  product: DisplayProduct;
   tenant: string;
 }) {
   const [wished, setWished] = useState(false);
@@ -172,7 +173,13 @@ function ProductCardList({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(product);
+    addItem({
+      id: product.id,
+      name: product.name,
+      image: product.imageUrl ?? "",
+      price: product.price,
+      category: product.category,
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
@@ -184,11 +191,7 @@ function ProductCardList({
     >
       {/* Image */}
       <div className="relative w-28 shrink-0 overflow-hidden bg-gray-50 sm:w-36">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-        />
+        <ProductImage imageUrl={product.imageUrl} alt={product.name} />
         <ProductBadge badge={product.badge} discount={product.discount} />
       </div>
 
@@ -261,10 +264,11 @@ function ProductCardList({
 }
 
 type ProductGridProps = {
-  products: MockProduct[];
+  products: DisplayProduct[];
   viewMode: "grid" | "list";
-  page: number;
   tenant: string;
+  hasMore: boolean;
+  isLoadingMore: boolean;
   onLoadMore: () => void;
   onClearFilters: () => void;
 };
@@ -272,15 +276,12 @@ type ProductGridProps = {
 export function ProductGrid({
   products,
   viewMode,
-  page,
   tenant,
+  hasMore,
+  isLoadingMore,
   onLoadMore,
   onClearFilters,
 }: ProductGridProps) {
-  const visibleCount = page * ITEMS_PER_PAGE;
-  const visible = products.slice(0, visibleCount);
-  const hasMore = visibleCount < products.length;
-
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
@@ -306,7 +307,7 @@ export function ProductGrid({
     <div className="space-y-6">
       {viewMode === "grid" ? (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          {visible.map((product) => (
+          {products.map((product) => (
             <ProductCardGrid
               key={product.id}
               product={product}
@@ -316,7 +317,7 @@ export function ProductGrid({
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {visible.map((product) => (
+          {products.map((product) => (
             <ProductCardList
               key={product.id}
               product={product}
@@ -331,9 +332,10 @@ export function ProductGrid({
           <Button
             variant="outline"
             onClick={onLoadMore}
+            disabled={isLoadingMore}
             className="rounded-full px-8 font-medium"
           >
-            Ver más productos ▼
+            {isLoadingMore ? "Cargando..." : "Ver más productos ▼"}
           </Button>
         </div>
       )}

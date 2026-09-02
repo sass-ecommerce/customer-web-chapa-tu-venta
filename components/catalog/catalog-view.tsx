@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useReducer, useCallback } from "react";
+import { useMemo, useReducer, useState, useCallback } from "react";
 import Link from "next/link";
-import { mockProducts } from "@/lib/mocks/mock-products";
 import { tenantHref } from "@/lib/utils/tenant-href";
 import type { SortOption } from "@/lib/mocks/mock-products";
+import type { DisplayProduct } from "@/lib/adapters/product-adapter";
+import type { ProductsPage } from "@/lib/api/products";
 import { FilterSidebar, FilterDrawer } from "./filter-sidebar";
 import { SortBar } from "./sort-bar";
 import { ProductGrid } from "./product-grid";
@@ -18,7 +19,6 @@ export type FilterState = {
   sortBy: SortOption;
   viewMode: "grid" | "list";
   showMobileFilters: boolean;
-  page: number;
 };
 
 const initialState: FilterState = {
@@ -30,7 +30,6 @@ const initialState: FilterState = {
   sortBy: "relevance",
   viewMode: "grid",
   showMobileFilters: false,
-  page: 1,
 };
 
 type Action =
@@ -42,7 +41,6 @@ type Action =
   | { type: "SET_VIEW"; view: "grid" | "list" }
   | { type: "TOGGLE_MOBILE_FILTERS" }
   | { type: "CLOSE_MOBILE_FILTERS" }
-  | { type: "LOAD_MORE" }
   | { type: "CLEAR_ALL" }
   | { type: "REMOVE_CATEGORY"; category: string }
   | { type: "REMOVE_TAG"; tag: string }
@@ -54,33 +52,29 @@ function reducer(state: FilterState, action: Action): FilterState {
     case "TOGGLE_CATEGORY":
       return {
         ...state,
-        page: 1,
         categories: state.categories.includes(action.category)
           ? state.categories.filter((c) => c !== action.category)
           : [...state.categories, action.category],
       };
     case "SET_PRICE":
-      return { ...state, page: 1, priceMin: action.min, priceMax: action.max };
+      return { ...state, priceMin: action.min, priceMax: action.max };
     case "SET_RATING":
-      return { ...state, page: 1, minRating: action.rating };
+      return { ...state, minRating: action.rating };
     case "TOGGLE_TAG":
       return {
         ...state,
-        page: 1,
         tags: state.tags.includes(action.tag)
           ? state.tags.filter((t) => t !== action.tag)
           : [...state.tags, action.tag],
       };
     case "SET_SORT":
-      return { ...state, page: 1, sortBy: action.sort };
+      return { ...state, sortBy: action.sort };
     case "SET_VIEW":
       return { ...state, viewMode: action.view };
     case "TOGGLE_MOBILE_FILTERS":
       return { ...state, showMobileFilters: !state.showMobileFilters };
     case "CLOSE_MOBILE_FILTERS":
       return { ...state, showMobileFilters: false };
-    case "LOAD_MORE":
-      return { ...state, page: state.page + 1 };
     case "CLEAR_ALL":
       return {
         ...initialState,
@@ -90,19 +84,17 @@ function reducer(state: FilterState, action: Action): FilterState {
     case "REMOVE_CATEGORY":
       return {
         ...state,
-        page: 1,
         categories: state.categories.filter((c) => c !== action.category),
       };
     case "REMOVE_TAG":
       return {
         ...state,
-        page: 1,
         tags: state.tags.filter((t) => t !== action.tag),
       };
     case "REMOVE_RATING":
-      return { ...state, page: 1, minRating: 0 };
+      return { ...state, minRating: 0 };
     case "REMOVE_PRICE":
-      return { ...state, page: 1, priceMin: 0, priceMax: 1000 };
+      return { ...state, priceMin: 0, priceMax: 1000 };
     default:
       return state;
   }
@@ -111,14 +103,37 @@ function reducer(state: FilterState, action: Action): FilterState {
 export function CatalogView({
   tenant,
   search = "",
+  initialProducts,
+  initialNextToken,
 }: {
   tenant: string;
   search?: string;
+  initialProducts: DisplayProduct[];
+  initialNextToken?: string;
 }) {
   const [filters, dispatch] = useReducer(reducer, initialState);
+  const [products, setProducts] = useState(initialProducts);
+  const [nextToken, setNextToken] = useState(initialNextToken);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const handleLoadMore = useCallback(async () => {
+    if (!nextToken || isLoadingMore) return;
+    setIsLoadingMore(true);
+    try {
+      const params = new URLSearchParams({ tenant, nextToken });
+      const res = await fetch(`/api/products?${params.toString()}`);
+      if (res.ok) {
+        const page: ProductsPage = await res.json();
+        setProducts((prev) => [...prev, ...page.products]);
+        setNextToken(page.nextToken);
+      }
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [tenant, nextToken, isLoadingMore]);
 
   const filteredProducts = useMemo(() => {
-    let result = [...mockProducts];
+    let result = [...products];
 
     // Search filter
     const q = search.trim().toLowerCase();
@@ -168,7 +183,7 @@ export function CatalogView({
     }
 
     return result;
-  }, [filters, search]);
+  }, [products, filters, search]);
 
   const handleCategoryChange = useCallback(
     (cat: string) => dispatch({ type: "TOGGLE_CATEGORY", category: cat }),
@@ -233,7 +248,7 @@ export function CatalogView({
             {/* Sort bar */}
             <SortBar
               count={filteredProducts.length}
-              totalCount={mockProducts.length}
+              totalCount={products.length}
               filters={filters}
               onRemoveCategory={(cat) =>
                 dispatch({ type: "REMOVE_CATEGORY", category: cat })
@@ -253,9 +268,10 @@ export function CatalogView({
             <ProductGrid
               products={filteredProducts}
               viewMode={filters.viewMode}
-              page={filters.page}
               tenant={tenant}
-              onLoadMore={() => dispatch({ type: "LOAD_MORE" })}
+              hasMore={Boolean(nextToken)}
+              isLoadingMore={isLoadingMore}
+              onLoadMore={handleLoadMore}
               onClearFilters={handleClearAll}
             />
           </div>
