@@ -1,9 +1,6 @@
 import { mockProducts } from "@/lib/mocks/mock-products";
 import type { ApiProduct, ApiProductImage } from "@/lib/api/products";
-import {
-  fetchPresignedViewUrl,
-  type PresignedViewResponse,
-} from "@/lib/api/storage";
+import { resolveImageUrl } from "@/lib/api/storage";
 
 export type DisplayProduct = {
   id: string;
@@ -24,21 +21,6 @@ function getPrimaryImageKey(images: ApiProductImage[]): string | undefined {
   const primary = images.find((img) => img.isPrimary);
   if (primary) return primary.s3Key;
   return [...images].sort((a, b) => a.sortOrder - b.sortOrder)[0].s3Key;
-}
-
-// Resolved server-side (this module only runs in Server Components) so the
-// client never needs to fetch a presigned URL itself. Presigned URLs expire
-// after 1h server-side, which is fine for a single page render.
-async function resolveImageUrl(key: string | undefined): Promise<string | undefined> {
-  if (!key) return undefined;
-  try {
-    const res = await fetchPresignedViewUrl(key);
-    if (!res.ok) return undefined;
-    const json: PresignedViewResponse = await res.json();
-    return json.data.viewUrl;
-  } catch {
-    return undefined;
-  }
 }
 
 // Fields the API doesn't return yet (rating, badge, discount, originalPrice)

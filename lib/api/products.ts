@@ -47,6 +47,12 @@ export type ApiProductsResponse = {
   };
 };
 
+export type ApiProductResponse = {
+  code: number;
+  message: string;
+  data: ApiProduct;
+};
+
 const DEFAULT_PRODUCTS_LIMIT = 20;
 
 export type FetchProductsOptions = {
@@ -96,4 +102,34 @@ export async function getTenantProducts(
     console.error(`Failed to fetch products for tenant: ${tenant}`);
     return { products: [] };
   }
+}
+
+export async function fetchProductById(
+  tenantId: string,
+  productId: string,
+): Promise<Response> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const params = new URLSearchParams({ tenantId });
+  return fetch(`${baseUrl}/products/${productId}?${params.toString()}`, {
+    next: { revalidate: 20 },
+  });
+}
+
+// No batch-by-ids endpoint exists, so a collection's products are resolved
+// with one request per id — fine since collections are expected to hold a
+// handful of products, not a whole catalog.
+export async function getProductsByIds(
+  tenantId: string,
+  productIds: string[],
+): Promise<DisplayProduct[]> {
+  const results = await Promise.all(
+    productIds.map(async (productId) => {
+      const res = await fetchProductById(tenantId, productId);
+      if (!res.ok) return null;
+      const { data }: ApiProductResponse = await res.json();
+      return data;
+    }),
+  );
+  const products = results.filter((p): p is ApiProduct => p !== null);
+  return toDisplayProducts(products);
 }
