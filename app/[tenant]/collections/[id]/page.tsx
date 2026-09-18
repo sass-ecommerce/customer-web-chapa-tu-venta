@@ -18,10 +18,25 @@ export async function generateMetadata({
   const config = getTenantConfig(tenant);
   const storeName = config ? config.name : "Chapa Tu Venta";
   const collection = await getTenantCollection(tenant, id);
+
+  const title = collection
+    ? `${collection.name} | ${storeName}`
+    : `Colección | ${storeName}`;
+  const description = collection
+    ? `Descubre "${collection.name}" en ${storeName}.`
+    : `Explora esta colección en ${storeName}.`;
+
   return {
-    title: collection
-      ? `${collection.name} | ${storeName}`
-      : `Colección | ${storeName}`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: collection?.coverImageUrl
+        ? [{ url: collection.coverImageUrl }]
+        : undefined,
+    },
   };
 }
 
