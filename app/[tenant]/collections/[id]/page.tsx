@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTenantConfig } from "@/lib/config/tenants";
+import { tenantPublicUrl } from "@/lib/utils/public-url";
 import {
   getTenantCollection,
   getTenantCollectionProducts,
@@ -15,27 +16,46 @@ export async function generateMetadata({
   params: Promise<{ tenant: string; id: string }>;
 }): Promise<Metadata> {
   const { tenant, id } = await params;
-  const config = getTenantConfig(tenant);
-  const storeName = config ? config.name : "Chapa Tu Venta";
+  const storeName = getTenantConfig(tenant)?.name;
   const collection = await getTenantCollection(tenant, id);
+  if (!collection) return { title: storeName ?? "Colección" };
 
-  const title = collection
+  const count = collection.productCount;
+  const title = storeName
     ? `${collection.name} | ${storeName}`
-    : `Colección | ${storeName}`;
-  const description = collection
-    ? `Descubre "${collection.name}" en ${storeName}.`
-    : `Explora esta colección en ${storeName}.`;
+    : collection.name;
+  const description = count
+    ? `${count} ${count === 1 ? "producto" : "productos"} en ${collection.name}${storeName ? ` · ${storeName}` : ""}`
+    : `Descubre la colección ${collection.name}${storeName ? ` en ${storeName}` : ""}.`;
+  const url = await tenantPublicUrl(tenant, `/collections/${id}`);
+  const image = {
+    url: await tenantPublicUrl(tenant, `/collections/${id}/og-image`),
+    width: 1200,
+    height: 630,
+    alt: collection.name,
+  };
+  const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
 
   return {
     title,
     description,
+    alternates: { canonical: url },
+    facebook: facebookAppId ? { appId: facebookAppId } : undefined,
     openGraph: {
-      title,
+      // og:site_name ya lleva la tienda; el título queda solo con la colección.
+      title: collection.name,
       description,
+      url,
+      siteName: storeName,
+      locale: "es_PE",
       type: "website",
-      images: collection?.coverImageUrl
-        ? [{ url: collection.coverImageUrl }]
-        : undefined,
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: collection.name,
+      description,
+      images: [image],
     },
   };
 }

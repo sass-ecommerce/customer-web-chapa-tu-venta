@@ -25,8 +25,17 @@ function SummaryContent({ shippingCost, deliveryMethod }: Props) {
         {items.map((item) => (
           <div key={item.product.id} className="flex items-center gap-3">
             <div className="relative shrink-0">
-              <div className="flex size-12 items-center justify-center rounded-xl bg-gray-100 text-xl select-none">
-                {item.product.image}
+              <div className="flex size-12 items-center justify-center overflow-hidden rounded-xl bg-gray-100">
+                {item.product.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.product.image}
+                    alt={item.product.name}
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  <ShoppingBag className="size-5 text-gray-300" />
+                )}
               </div>
               <span className="bg-brand-accent absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full text-[10px] font-bold text-white">
                 {item.quantity}

@@ -36,6 +36,12 @@ export default function ConfirmationPage() {
   const tenant = params?.tenant as string;
   const order = useCheckoutStore((s) => s.order);
   const reset = useCheckoutStore((s) => s.reset);
+  const resetDraft = useCheckoutStore((s) => s.resetDraft);
+
+  // The order was placed: start the next checkout from step 1
+  useEffect(() => {
+    resetDraft();
+  }, [resetDraft]);
 
   useEffect(() => {
     if (!order) router.replace(tenantHref(tenant, "/"));
@@ -86,8 +92,17 @@ export default function ConfirmationPage() {
           <div className="space-y-3">
             {order.items.map((item) => (
               <div key={item.product.id} className="flex items-center gap-3">
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-lg select-none">
-                  {item.product.image}
+                <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gray-100">
+                  {item.product.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.product.image}
+                      alt={item.product.name}
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    <Package className="size-5 text-gray-300" />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-brand-dark line-clamp-1 text-sm font-medium">
@@ -209,10 +224,12 @@ export default function ConfirmationPage() {
               <span className="block text-xs text-gray-400">Teléfono</span>
               {order.buyer.phone}
             </div>
-            <div>
-              <span className="block text-xs text-gray-400">Email</span>
-              {order.buyer.email}
-            </div>
+            {order.buyer.email && (
+              <div>
+                <span className="block text-xs text-gray-400">Email</span>
+                {order.buyer.email}
+              </div>
+            )}
             {order.buyer.dni && (
               <div>
                 <span className="block text-xs text-gray-400">DNI</span>
