@@ -27,6 +27,8 @@ import {
 // Sin marca del tenant la foto ocupa todo el ancho para no dejar un panel vacío.
 
 const SQUARE_PHOTO = OG_SIZE.height;
+// Mismo margen izquierdo que StoreBrand.
+const PHOTO_TAG_LEFT = 56;
 
 function nameFontSize(name: string): number {
   if (name.length <= 18) return 56;
@@ -58,13 +60,13 @@ export async function GET(
   const fonts = [playfair, dmSansMedium, dmSansBold].filter((f) => f !== null);
 
   const photoWidth = storeName ? SQUARE_PHOTO : OG_SIZE.width;
-  // Con foto la etiqueta cuelga sobre su borde; sin marca, sobre la foto
-  // dentro de la zona central que sobrevive al recorte cuadrado de WhatsApp.
+  // Con foto la etiqueta cuelga sobre su borde; sin marca, cuelga pegada al
+  // margen izquierdo para dejar libre el producto.
   const tagLeft = !photo
     ? (OG_SIZE.width - TAG_WIDTH) / 2
     : storeName
       ? OG_SIZE.width - SQUARE_PHOTO - TAG_WIDTH / 2 + TAG_HANG_OFFSET
-      : 340;
+      : PHOTO_TAG_LEFT;
 
   return new ImageResponse(
     (
