@@ -42,6 +42,14 @@ API Gateway + lambda `get-dynamodb-collections` (repo `lambda-users-products-v1`
 | GET | `/collections?tenantId&limit&nextToken` | Listado de colecciones (trae `productCount`, no `productIds`) | `lib/api/collections.ts` → `fetchCollections` | 20 s |
 | GET | `/collections/{collectionId}?tenantId` | Detalle de colección (trae `productIds`; cada producto se pide aparte con `/products/{productId}`) | `lib/api/collections.ts` → `fetchCollectionById` | 20 s |
 
+### API de categorías — `NEXT_PUBLIC_CATEGORIES_API_URL`
+
+API Gateway + lambda `get-dynamodb-categories` (repo `lambda-users-products-v1`), que lee la tabla `ctv-tbl-categories-{env}`. Esa tabla se llena desde el backend con eventos de EventBridge (`ctv.categories`).
+
+| Método | Endpoint | Para qué | Dónde | Caché |
+|---|---|---|---|---|
+| GET | `/categories?tenantId` | Categorías con productos activos (lista plana con `parentId`, ordenada por nombre): selector del header y filtro del catálogo | `lib/api/categories.ts` → `getTenantCategories` | 5 min |
+
 ### Backend principal — `NEXT_PUBLIC_STORAGE_API_URL`
 
 `backend-chapa-tu-venta` (NestJS). A pesar del nombre de la variable, solo se usa para tenants.
@@ -81,6 +89,7 @@ Las llama el navegador para paginar; por dentro usan las APIs de arriba.
 |---|---|
 | `NEXT_PUBLIC_API_URL` | API de productos |
 | `NEXT_PUBLIC_COLLECTIONS_API_URL` | API de colecciones |
+| `NEXT_PUBLIC_CATEGORIES_API_URL` | API de categorías |
 | `NEXT_PUBLIC_STORAGE_API_URL` | Backend principal (tenants) |
 | `NEXT_PUBLIC_COGNITO_USER_POOL_ID`, `NEXT_PUBLIC_COGNITO_CLIENT_ID` | Cognito |
 | `NEXT_PUBLIC_FACEBOOK_APP_ID` | Opcional: `fb:app_id` en la metadata |

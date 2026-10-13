@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils/utils";
 import type { FilterState } from "./catalog-view";
+import type { ApiCategory } from "@/lib/api/categories";
 import type { SortOption } from "@/lib/mocks/mock-products";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -25,6 +26,7 @@ type SortBarProps = {
   count: number;
   totalCount: number;
   filters: FilterState;
+  categories: ApiCategory[];
   onRemoveCategory: (cat: string) => void;
   onRemoveTag: (tag: string) => void;
   onRemoveRating: () => void;
@@ -60,6 +62,7 @@ export function SortBar({
   count,
   totalCount,
   filters,
+  categories,
   onRemoveCategory,
   onRemoveTag,
   onRemoveRating,
@@ -174,7 +177,7 @@ export function SortBar({
           {filters.categories.map((cat) => (
             <ActiveChip
               key={cat}
-              label={cat}
+              label={categories.find((c) => c.categoryId === cat)?.name ?? cat}
               onRemove={() => onRemoveCategory(cat)}
             />
           ))}

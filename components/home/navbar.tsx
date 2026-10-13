@@ -21,6 +21,9 @@ import { useCartStore } from "@/lib/stores/cart-store";
 import { tenantHref } from "@/lib/utils/tenant-href";
 import { mockProducts } from "@/lib/mocks/mock-products";
 import type { TenantBranding } from "@/lib/api/tenants";
+import type { ApiCategory } from "@/lib/api/categories";
+import { toIndentedCategories } from "@/lib/adapters/category-adapter";
+import { cn } from "@/lib/utils/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,15 +63,23 @@ function StoreLogo({
 export function Navbar({
   tenant,
   branding,
+  categories,
   showLogin = true,
   showCart = true,
 }: {
   tenant: string;
   branding: TenantBranding;
+  categories: ApiCategory[];
   showLogin?: boolean;
   showCart?: boolean;
 }) {
   const storeName = branding.name || tenant;
+  const indentedCategories = useMemo(
+    () => toIndentedCategories(categories),
+    [categories],
+  );
+  const [categoryId, setCategoryId] = useState<string | null>(null);
+  const selectedCategory = categories.find((c) => c.categoryId === categoryId);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -98,12 +109,20 @@ export function Navbar({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  function catalogHref(q: string) {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (categoryId) params.set("category", categoryId);
+    return tenantHref(tenant, `/catalog?${params.toString()}`);
+  }
+
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
     const q = query.trim();
-    if (!q) return;
+    // A chosen category alone is a valid search: it opens the filtered catalog.
+    if (!q && !categoryId) return;
     setIsSearchOpen(false);
-    router.push(tenantHref(tenant, `/catalog?q=${encodeURIComponent(q)}`));
+    router.push(catalogHref(q));
   }
 
   return (
@@ -229,13 +248,47 @@ export function Navbar({
                 onSubmit={handleSearchSubmit}
                 className="flex flex-1 items-center overflow-hidden rounded-lg border border-gray-200"
               >
-                <button
-                  type="button"
-                  className="flex shrink-0 items-center gap-1.5 border-r border-gray-200 bg-gray-50 px-4 py-2.5 text-xs font-medium whitespace-nowrap transition-colors hover:bg-gray-100"
-                >
-                  Todas las Categorías
-                  <ChevronDown className="size-3.5" />
-                </button>
+                {/* Hidden when the store has no categories with products. */}
+                {indentedCategories.length > 0 && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex max-w-[200px] shrink-0 items-center gap-1.5 border-r border-gray-200 bg-gray-50 px-4 py-2.5 text-xs font-medium whitespace-nowrap transition-colors hover:bg-gray-100 focus:outline-none"
+                      >
+                        <span className="truncate">
+                          {selectedCategory?.name ?? "Todas las Categorías"}
+                        </span>
+                        <ChevronDown className="size-3.5 shrink-0" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="start"
+                      className="max-h-80 w-56 overflow-y-auto"
+                    >
+                      <DropdownMenuItem
+                        onSelect={() => setCategoryId(null)}
+                        className={cn(!categoryId && "font-semibold")}
+                      >
+                        Todas las Categorías
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      {indentedCategories.map(({ category, depth }) => (
+                        <DropdownMenuItem
+                          key={category.categoryId}
+                          onSelect={() => setCategoryId(category.categoryId)}
+                          className={cn(
+                            category.categoryId === categoryId &&
+                              "font-semibold",
+                          )}
+                          style={{ paddingLeft: `${0.5 + depth * 0.875}rem` }}
+                        >
+                          {category.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
                 <input
                   value={query}
                   onChange={(e) => {
@@ -282,10 +335,7 @@ export function Navbar({
                     </Link>
                   ))}
                   <Link
-                    href={tenantHref(
-                      tenant,
-                      `/catalog?q=${encodeURIComponent(query.trim())}`,
-                    )}
+                    href={catalogHref(query.trim())}
                     onClick={() => setIsSearchOpen(false)}
                     className="text-brand-accent block w-full border-t border-gray-100 px-4 py-2.5 text-center text-xs transition-colors hover:bg-gray-50"
                   >

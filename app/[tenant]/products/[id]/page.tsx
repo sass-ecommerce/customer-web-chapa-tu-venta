@@ -6,6 +6,17 @@ import { tenantPublicUrl } from "@/lib/utils/public-url";
 import { formatPrice } from "@/lib/og/assets";
 import { productImageUrls } from "@/lib/adapters/product-adapter";
 
+// Los buscadores y previews sociales cortan alrededor de 160 caracteres.
+const DESCRIPTION_EXCERPT_LENGTH = 140;
+
+function descriptionExcerpt(text?: string | null): string | undefined {
+  const clean = text?.replace(/\s+/g, " ").trim();
+  if (!clean) return undefined;
+  if (clean.length <= DESCRIPTION_EXCERPT_LENGTH) return clean;
+  const cut = clean.slice(0, DESCRIPTION_EXCERPT_LENGTH);
+  return `${cut.slice(0, cut.lastIndexOf(" ")) || cut}…`;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -17,10 +28,11 @@ export async function generateMetadata({
   if (!product) return { title: storeName ?? "Producto" };
 
   const title = storeName ? `${product.name} | ${storeName}` : product.name;
+  // Con descripción: precio + extracto; sin ella, precio · categoría · tienda.
+  const excerpt = descriptionExcerpt(product.description);
   const description = [
     formatPrice(product.basePrice),
-    product.category?.[0]?.name,
-    storeName,
+    ...(excerpt ? [excerpt] : [product.category?.[0]?.name, storeName]),
   ]
     .filter(Boolean)
     .join(" · ");

@@ -6,11 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils/utils";
-import { CATEGORIES, TAGS } from "@/lib/mocks/mock-products";
+import { TAGS } from "@/lib/mocks/mock-products";
+import type { ApiCategory } from "@/lib/api/categories";
+import { toIndentedCategories } from "@/lib/adapters/category-adapter";
 import type { FilterState } from "./catalog-view";
 
 type FilterSidebarProps = {
   filters: FilterState;
+  categories: ApiCategory[];
+  // Receives a categoryId.
   onCategoryChange: (cat: string) => void;
   onPriceChange: (min: number, max: number) => void;
   onRatingChange: (rating: number) => void;
@@ -73,6 +77,7 @@ const SHOW_TAG_FILTER = false;
 
 export function FilterSidebar({
   filters,
+  categories,
   onCategoryChange,
   onPriceChange,
   onRatingChange,
@@ -104,65 +109,69 @@ export function FilterSidebar({
       </div>
 
       <div className="space-y-1">
-        {/* Categoría */}
-        <AccordionSection title="Categoría">
-          <div className="space-y-2">
-            {CATEGORIES.map((cat) => {
-              const active = filters.categories.includes(cat);
-              return (
-                <label
-                  key={cat}
-                  className="group flex cursor-pointer items-center gap-2.5"
-                >
-                  <div
-                    className={cn(
-                      "flex h-4 w-4 items-center justify-center rounded border transition-all",
-                      active
-                        ? "bg-brand-accent border-brand-accent"
-                        : "group-hover:border-brand-accent border-gray-300",
-                    )}
-                    onClick={() => onCategoryChange(cat)}
+        {/* Categoría — hidden when the store has no categories with products */}
+        {categories.length > 0 && (
+          <AccordionSection title="Categoría">
+            <div className="space-y-2">
+              {toIndentedCategories(categories).map(({ category, depth }) => {
+                const cat = category.categoryId;
+                const active = filters.categories.includes(cat);
+                return (
+                  <label
+                    key={cat}
+                    className="group flex cursor-pointer items-center gap-2.5"
+                    style={{ paddingLeft: `${depth * 1.25}rem` }}
                   >
-                    {active && (
-                      <svg
-                        className="h-2.5 w-2.5 text-white"
-                        viewBox="0 0 10 10"
-                        fill="none"
-                      >
-                        <path
-                          d="M2 5l2.5 2.5L8 3"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={active}
-                    onChange={() => onCategoryChange(cat)}
-                  />
-                  <span
-                    className={cn(
-                      "text-sm transition-colors",
-                      active
-                        ? "text-brand-dark font-medium"
-                        : "group-hover:text-brand-dark text-gray-600",
-                    )}
-                    onClick={() => onCategoryChange(cat)}
-                  >
-                    {cat}
-                  </span>
-                </label>
-              );
-            })}
-          </div>
-        </AccordionSection>
+                    <div
+                      className={cn(
+                        "flex h-4 w-4 items-center justify-center rounded border transition-all",
+                        active
+                          ? "bg-brand-accent border-brand-accent"
+                          : "group-hover:border-brand-accent border-gray-300",
+                      )}
+                      onClick={() => onCategoryChange(cat)}
+                    >
+                      {active && (
+                        <svg
+                          className="h-2.5 w-2.5 text-white"
+                          viewBox="0 0 10 10"
+                          fill="none"
+                        >
+                          <path
+                            d="M2 5l2.5 2.5L8 3"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={active}
+                      onChange={() => onCategoryChange(cat)}
+                    />
+                    <span
+                      className={cn(
+                        "text-sm transition-colors",
+                        active
+                          ? "text-brand-dark font-medium"
+                          : "group-hover:text-brand-dark text-gray-600",
+                      )}
+                      onClick={() => onCategoryChange(cat)}
+                    >
+                      {category.name}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </AccordionSection>
+        )}
 
-        <Separator />
+        {categories.length > 0 && <Separator />}
 
         {/* Precio */}
         <AccordionSection title="Precio">
@@ -306,6 +315,7 @@ export function FilterSidebar({
 // Mobile drawer version
 export function FilterDrawer({
   filters,
+  categories,
   onCategoryChange,
   onPriceChange,
   onRatingChange,
@@ -348,6 +358,7 @@ export function FilterDrawer({
         <div className="flex-1 overflow-y-auto px-5 py-2">
           <FilterSidebar
             filters={filters}
+            categories={categories}
             onCategoryChange={onCategoryChange}
             onPriceChange={onPriceChange}
             onRatingChange={onRatingChange}

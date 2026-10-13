@@ -15,6 +15,9 @@ export type DisplayProduct = {
   price: number;
   originalPrice?: number;
   category: string;
+  // Every category in the product's chain (root → leaf), so filtering by a
+  // parent category also matches products in its subcategories.
+  categoryIds: string[];
   badge?: "NUEVO" | "OFERTA" | "TOP";
   discount?: number;
   rating: number;
@@ -56,6 +59,7 @@ export function toDisplayProducts(products: ApiProduct[]): DisplayProduct[] {
         })),
       price: product.basePrice,
       category: product.category?.[0]?.name ?? mock.category,
+      categoryIds: (product.category ?? []).map((c) => c.id),
       rating: mock.rating,
       reviewCount: mock.reviewCount,
       createdAt: product.createdAt ?? mock.createdAt,

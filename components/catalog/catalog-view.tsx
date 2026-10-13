@@ -6,6 +6,7 @@ import { tenantHref } from "@/lib/utils/tenant-href";
 import type { SortOption } from "@/lib/mocks/mock-products";
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import type { ProductsPage } from "@/lib/api/products";
+import type { ApiCategory } from "@/lib/api/categories";
 import { FilterSidebar, FilterDrawer } from "./filter-sidebar";
 import { SortBar } from "./sort-bar";
 import { ProductGrid } from "./product-grid";
@@ -103,15 +104,22 @@ function reducer(state: FilterState, action: Action): FilterState {
 export function CatalogView({
   tenant,
   search = "",
+  categories,
+  initialCategoryId,
   initialProducts,
   initialNextToken,
 }: {
   tenant: string;
   search?: string;
+  categories: ApiCategory[];
+  initialCategoryId?: string;
   initialProducts: DisplayProduct[];
   initialNextToken?: string;
 }) {
-  const [filters, dispatch] = useReducer(reducer, initialState);
+  const [filters, dispatch] = useReducer(reducer, initialState, (state) => ({
+    ...state,
+    categories: initialCategoryId ? [initialCategoryId] : [],
+  }));
   const [products, setProducts] = useState(initialProducts);
   const [nextToken, setNextToken] = useState(initialNextToken);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -141,9 +149,11 @@ export function CatalogView({
       result = result.filter((p) => p.name.toLowerCase().includes(q));
     }
 
-    // Category filter
+    // Category filter (ids; a parent also matches its subcategories' products)
     if (filters.categories.length > 0) {
-      result = result.filter((p) => filters.categories.includes(p.category));
+      result = result.filter((p) =>
+        p.categoryIds.some((id) => filters.categories.includes(id)),
+      );
     }
 
     // Price filter
@@ -234,6 +244,7 @@ export function CatalogView({
             <div className="sticky top-[108px]">
               <FilterSidebar
                 filters={filters}
+                categories={categories}
                 onCategoryChange={handleCategoryChange}
                 onPriceChange={handlePriceChange}
                 onRatingChange={handleRatingChange}
@@ -250,6 +261,7 @@ export function CatalogView({
               count={filteredProducts.length}
               totalCount={products.length}
               filters={filters}
+              categories={categories}
               onRemoveCategory={(cat) =>
                 dispatch({ type: "REMOVE_CATEGORY", category: cat })
               }
@@ -282,6 +294,7 @@ export function CatalogView({
       {filters.showMobileFilters && (
         <FilterDrawer
           filters={filters}
+          categories={categories}
           onCategoryChange={handleCategoryChange}
           onPriceChange={handlePriceChange}
           onRatingChange={handleRatingChange}
