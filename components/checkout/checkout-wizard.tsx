@@ -14,7 +14,10 @@ import { StepIndicator } from "./step-indicator";
 import { ContactStep } from "./steps/contact-step";
 import { DeliveryStep } from "./steps/delivery-step";
 import { PaymentStep } from "./steps/payment-step";
-import { DELIVERY_SHIPPING_COST } from "./checkout-config";
+import {
+  DELIVERY_SHIPPING_COST,
+  REQUIRE_DELIVERY_ADDRESS,
+} from "./checkout-config";
 
 export function CheckoutWizard() {
   const router = useRouter();
@@ -44,16 +47,17 @@ export function CheckoutWizard() {
   // Called by the last step once its data is saved in the store
   function placeOrder() {
     const { contact, delivery, payment } = useCheckoutStore.getState();
-    const isDelivery = delivery.deliveryMethod === "delivery";
+    const withAddress =
+      delivery.deliveryMethod === "delivery" && REQUIRE_DELIVERY_ADDRESS;
 
     submitOrder({
       orderId: `CTV-${Date.now().toString(36).toUpperCase()}`,
       buyer: contact,
       delivery: {
         method: delivery.deliveryMethod,
-        address: isDelivery ? delivery.address : undefined,
-        reference: isDelivery ? delivery.reference : undefined,
-        district: isDelivery ? delivery.district : undefined,
+        address: withAddress ? delivery.address : undefined,
+        reference: withAddress ? delivery.reference : undefined,
+        district: withAddress ? delivery.district : undefined,
         shippingCost,
       },
       payment: {

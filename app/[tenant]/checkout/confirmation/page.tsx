@@ -157,7 +157,15 @@ export default function ConfirmationPage() {
               )}
               <h3 className="text-brand-dark text-sm font-semibold">Entrega</h3>
             </div>
-            {order.delivery.method === "delivery" ? (
+            {order.delivery.method === "delivery" && !order.delivery.address ? (
+              <div className="text-sm text-gray-600">
+                <p>Delivery a domicilio</p>
+                <p className="mt-0.5 text-xs text-gray-400">
+                  Nos comunicaremos contigo para coordinar la dirección de
+                  entrega
+                </p>
+              </div>
+            ) : order.delivery.method === "delivery" ? (
               <div className="space-y-0.5 text-sm text-gray-600">
                 <p>{order.delivery.address}</p>
                 {order.delivery.reference && (
@@ -195,16 +203,16 @@ export default function ConfirmationPage() {
                   </p>
                 </div>
               )}
-              {order.payment.method === "transfer" && (
-                <p className="mt-1 text-xs text-gray-400">
-                  Pendiente de verificación
-                </p>
-              )}
-              {(order.payment.method === "yape" ||
-                order.payment.method === "plin") && (
+              {order.payment.proofFileName ? (
                 <p className="mt-1 text-xs font-medium text-amber-600">
                   Verificando comprobante...
                 </p>
+              ) : (
+                order.payment.method !== "cash" && (
+                  <p className="mt-1 text-xs text-gray-400">
+                    Nos comunicaremos contigo para coordinar el pago
+                  </p>
+                )
               )}
             </div>
           </div>

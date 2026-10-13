@@ -7,7 +7,11 @@ import { LIMA_DISTRICTS } from "@/lib/mocks/lima-districts";
 import { checkoutSchemas, zodField } from "@/lib/validations/checkout-schema";
 import { cn } from "@/lib/utils/utils";
 import { Field, RadioCard, StepActions, TextInput } from "../checkout-fields";
-import { DISTRICT_NAMES, stepValidationLogic } from "../checkout-config";
+import {
+  DISTRICT_NAMES,
+  REQUIRE_DELIVERY_ADDRESS,
+  stepValidationLogic,
+} from "../checkout-config";
 
 export function DeliveryStep({
   onNext,
@@ -94,7 +98,21 @@ export function DeliveryStep({
             )}
           </form.Field>
 
-          {deliveryMethod === "delivery" ? (
+          {deliveryMethod === "delivery" && !REQUIRE_DELIVERY_ADDRESS ? (
+            <div className="space-y-2 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="text-brand-accent size-4 shrink-0" />
+                <span className="text-brand-dark text-sm font-semibold">
+                  Dirección de entrega
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed text-gray-600">
+                No necesitas ingresar tu dirección ahora. Una vez confirmado el
+                pedido, nos comunicaremos contigo para coordinar la dirección y
+                el horario de entrega.
+              </p>
+            </div>
+          ) : deliveryMethod === "delivery" ? (
             <div className="space-y-4 pt-2">
               <form.Field
                 name="address"
