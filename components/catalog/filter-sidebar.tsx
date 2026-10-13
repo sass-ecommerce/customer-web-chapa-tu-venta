@@ -67,6 +67,10 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
+// The API doesn't return product tags (NUEVO / OFERTA / TOP) yet, so the tag
+// filter would always yield zero results. Re-enable once it does.
+const SHOW_TAG_FILTER = false;
+
 export function FilterSidebar({
   filters,
   onCategoryChange,
@@ -259,39 +263,41 @@ export function FilterSidebar({
           </div>
         </AccordionSection>
 
-        <Separator />
+        {SHOW_TAG_FILTER && <Separator />}
 
         {/* Etiquetas */}
-        <AccordionSection title="Etiquetas">
-          <div className="flex flex-wrap gap-2">
-            {TAGS.map((tag) => {
-              const active = filters.tags.includes(tag);
-              return (
-                <button
-                  key={tag}
-                  onClick={() => onTagChange(tag)}
-                  className={cn(
-                    "rounded-full border px-3 py-1 text-xs font-bold transition-all",
-                    tag === "NUEVO" &&
-                      (active
-                        ? "border-green-500 bg-green-500 text-white"
-                        : "border-green-300 text-green-600 hover:bg-green-50"),
-                    tag === "OFERTA" &&
-                      (active
-                        ? "bg-brand-accent border-brand-accent text-white"
-                        : "text-brand-accent border-orange-300 hover:bg-orange-50"),
-                    tag === "TOP" &&
-                      (active
-                        ? "bg-brand-dark border-brand-dark text-white"
-                        : "border-gray-300 text-gray-600 hover:bg-gray-50"),
-                  )}
-                >
-                  {tag}
-                </button>
-              );
-            })}
-          </div>
-        </AccordionSection>
+        {SHOW_TAG_FILTER && (
+          <AccordionSection title="Etiquetas">
+            <div className="flex flex-wrap gap-2">
+              {TAGS.map((tag) => {
+                const active = filters.tags.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => onTagChange(tag)}
+                    className={cn(
+                      "rounded-full border px-3 py-1 text-xs font-bold transition-all",
+                      tag === "NUEVO" &&
+                        (active
+                          ? "border-green-500 bg-green-500 text-white"
+                          : "border-green-300 text-green-600 hover:bg-green-50"),
+                      tag === "OFERTA" &&
+                        (active
+                          ? "bg-brand-accent border-brand-accent text-white"
+                          : "text-brand-accent border-orange-300 hover:bg-orange-50"),
+                      tag === "TOP" &&
+                        (active
+                          ? "bg-brand-dark border-brand-dark text-white"
+                          : "border-gray-300 text-gray-600 hover:bg-gray-50"),
+                    )}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          </AccordionSection>
+        )}
       </div>
     </aside>
   );

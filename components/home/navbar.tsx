@@ -20,6 +20,7 @@ import { useAuth } from "@/lib/auth/auth-context";
 import { useCartStore } from "@/lib/stores/cart-store";
 import { tenantHref } from "@/lib/utils/tenant-href";
 import { mockProducts } from "@/lib/mocks/mock-products";
+import type { TenantBranding } from "@/lib/api/tenants";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,15 +30,45 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+function StoreLogo({
+  branding,
+  storeName,
+}: {
+  branding: TenantBranding;
+  storeName: string;
+}) {
+  if (branding.logoUrl) {
+    return (
+      <img
+        src={branding.logoUrl}
+        alt=""
+        className="size-8 shrink-0 rounded-full border border-gray-100 object-cover"
+      />
+    );
+  }
+  if (branding.logoEmoji) {
+    return <span className="text-xl">{branding.logoEmoji}</span>;
+  }
+  // Monogram so a store without a logo still has a mark next to its name.
+  return (
+    <span className="bg-brand-accent flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white uppercase">
+      {storeName.charAt(0)}
+    </span>
+  );
+}
+
 export function Navbar({
   tenant,
+  branding,
   showLogin = true,
   showCart = true,
 }: {
   tenant: string;
+  branding: TenantBranding;
   showLogin?: boolean;
   showCart?: boolean;
 }) {
+  const storeName = branding.name || tenant;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -184,12 +215,11 @@ export function Navbar({
             {/* Logo */}
             <Link
               href={tenantHref(tenant, "/")}
-              className="flex shrink-0 items-center gap-1.5"
+              className="flex min-w-0 shrink-0 items-center gap-2"
             >
-              <span className="text-xl">🛍️</span>
-              <span className="text-sm font-bold tracking-tight text-gray-900">
-                ChapaTuVenta
-                <span className="text-brand-accent">.com</span>
+              <StoreLogo branding={branding} storeName={storeName} />
+              <span className="max-w-[160px] truncate text-sm font-bold tracking-tight text-gray-900 sm:max-w-[220px]">
+                {storeName}
               </span>
             </Link>
 

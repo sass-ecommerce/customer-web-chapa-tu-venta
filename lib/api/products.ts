@@ -7,6 +7,8 @@ import {
 export type ApiProductImage = {
   id: string;
   s3Key: string;
+  // Public CloudFront URL — always load images from here.
+  url: string;
   isPrimary: boolean;
   sortOrder: number;
 };
@@ -29,6 +31,7 @@ export type ApiProduct = {
   tenantId: string;
   categoryId: string;
   name: string;
+  description?: string | null;
   basePrice: number;
   isActive: boolean;
   images: ApiProductImage[];
@@ -86,7 +89,7 @@ export async function getProductsPage(
   if (!res.ok) return { products: [] };
   const { data }: ApiProductsResponse = await res.json();
   return {
-    products: await toDisplayProducts(data.items),
+    products: toDisplayProducts(data.items),
     nextToken: data.nextToken,
   };
 }

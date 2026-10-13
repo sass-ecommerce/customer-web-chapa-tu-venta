@@ -10,6 +10,8 @@ export type ApiCollection = {
   tenantId: string;
   name: string;
   coverImageKey?: string;
+  // Public CloudFront URL of the cover — always load the image from here.
+  coverImageUrl?: string | null;
   // The list endpoint (`/collections`) replaces `productIds` with a
   // precomputed `productCount` on every item; a single-collection fetch
   // (`/collections/{id}`) returns the raw `productIds` instead (no count).
@@ -44,7 +46,10 @@ export type FetchCollectionsOptions = {
 
 export async function fetchCollections(
   tenantId: string,
-  { limit = DEFAULT_COLLECTIONS_LIMIT, nextToken }: FetchCollectionsOptions = {},
+  {
+    limit = DEFAULT_COLLECTIONS_LIMIT,
+    nextToken,
+  }: FetchCollectionsOptions = {},
 ): Promise<Response> {
   const baseUrl = process.env.NEXT_PUBLIC_COLLECTIONS_API_URL;
   const params = new URLSearchParams({ tenantId, limit: String(limit) });
@@ -67,7 +72,7 @@ export async function getCollectionsPage(
   if (!res.ok) return { collections: [] };
   const { data }: ApiCollectionsResponse = await res.json();
   return {
-    collections: await toDisplayCollections(data.items),
+    collections: toDisplayCollections(data.items),
     nextToken: data.nextToken ?? undefined,
   };
 }
@@ -91,10 +96,9 @@ export async function fetchCollectionById(
 ): Promise<Response> {
   const baseUrl = process.env.NEXT_PUBLIC_COLLECTIONS_API_URL;
   const params = new URLSearchParams({ tenantId });
-  return fetch(
-    `${baseUrl}/collections/${collectionId}?${params.toString()}`,
-    { next: { revalidate: 20 } },
-  );
+  return fetch(`${baseUrl}/collections/${collectionId}?${params.toString()}`, {
+    next: { revalidate: 20 },
+  });
 }
 
 async function fetchRawCollection(
@@ -113,7 +117,7 @@ export async function getCollection(
 ): Promise<DisplayCollection | null> {
   const raw = await fetchRawCollection(tenantId, collectionId);
   if (!raw) return null;
-  const [collection] = await toDisplayCollections([raw]);
+  const [collection] = toDisplayCollections([raw]);
   return collection ?? null;
 }
 

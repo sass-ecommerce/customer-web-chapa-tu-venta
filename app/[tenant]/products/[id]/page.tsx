@@ -4,6 +4,7 @@ import { ProductDetail } from "@/components/product/product-detail";
 import { getTenantProducts, getTenantRawProduct } from "@/lib/api/products";
 import { tenantPublicUrl } from "@/lib/utils/public-url";
 import { formatPrice } from "@/lib/og/assets";
+import { productImageUrls } from "@/lib/adapters/product-adapter";
 
 export async function generateMetadata({
   params,
@@ -62,11 +63,20 @@ export default async function ProductPage({
   params: Promise<{ tenant: string; id: string }>;
 }) {
   const { tenant, id } = await params;
-  const { products } = await getTenantProducts(tenant);
+  const [{ products }, rawProduct] = await Promise.all([
+    getTenantProducts(tenant),
+    getTenantRawProduct(tenant, id),
+  ]);
+  const images = rawProduct ? productImageUrls(rawProduct.images) : [];
 
   return (
     <main className="pt-[100px]">
-      <ProductDetail tenant={tenant} productId={id} products={products} />
+      <ProductDetail
+        tenant={tenant}
+        productId={id}
+        products={products}
+        images={images}
+      />
     </main>
   );
 }

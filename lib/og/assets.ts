@@ -37,8 +37,8 @@ export async function loadGoogleFont(
 
 const SATORI_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif"];
 
-// Descarga la imagen y la incrusta como data URI: así la preview no depende de
-// que la URL prefirmada siga vigente. webp/avif no los soporta Satori → null.
+// Descarga la imagen y la incrusta como data URI, validando antes el formato:
+// webp/avif no los soporta Satori → null (layout sin imagen).
 export async function toImageDataUri(
   url: string | undefined,
 ): Promise<string | null> {

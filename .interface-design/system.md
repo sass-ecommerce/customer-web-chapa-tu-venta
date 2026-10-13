@@ -38,7 +38,7 @@ Comprador en Perú que recibe el link por WhatsApp, en el celular, a ~300px de a
 
 ### Reglas técnicas
 - Generar con route handler `<segmento>/og-image/route.tsx` y URL absoluta vía `tenantPublicUrl()` — **no** con `opengraph-image.tsx` (en prod con subdominio la URL interna `/{tenant}/...` da 404).
-- Incrustar imágenes como data URI (`toImageDataUri`): las URLs prefirmadas de S3 vencen en 1h. webp/avif no soportados → layout sin imagen.
+- Imágenes desde CloudFront (`images[].url`, `coverImageUrl`), incrustadas como data URI (`toImageDataUri`) para validar el formato: webp/avif no soportados → layout sin imagen.
 - Fuentes: `loadGoogleFont` con subset `text`; `emoji: "twemoji"` para logos emoji.
 - Metadata: `og:title` = nombre del ítem; tienda en `og:site_name`; `locale es_PE`; `twitter.card summary_large_image`; imagen con `width/height/alt`.
 - Cache: `public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800`.

@@ -1,8 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getTenantBranding } from "@/lib/api/tenants";
 import { getTenantRawProduct } from "@/lib/api/products";
-import { getPrimaryImageKey } from "@/lib/adapters/product-adapter";
-import { resolveImageUrl } from "@/lib/api/storage";
+import { productImageUrls } from "@/lib/adapters/product-adapter";
 import { formatPrice, loadGoogleFont, toImageDataUri } from "@/lib/og/assets";
 import {
   HangingTag,
@@ -42,7 +41,7 @@ export async function GET(
   const price = formatPrice(product.basePrice);
 
   const [photo, logo, playfair, dmSansMedium, dmSansBold] = await Promise.all([
-    resolveImageUrl(getPrimaryImageKey(product.images)).then(toImageDataUri),
+    toImageDataUri(productImageUrls(product.images)[0]),
     toImageDataUri(branding.logoUrl),
     loadGoogleFont("Playfair Display", 700, name),
     loadGoogleFont("DM Sans", 500, category),

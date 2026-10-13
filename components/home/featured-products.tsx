@@ -121,12 +121,15 @@ export function FeaturedProducts({
   tenant: string;
   products: DisplayProduct[];
 }) {
-  const [activeTab, setActiveTab] = useState("best");
+  // Tabs with no matching products (e.g. "Descuento" while the API has no
+  // discounts) are hidden instead of rendering an empty grid.
+  const visibleTabs = tabs.filter((tab) => products.some(tab.filter));
+  const [activeTab, setActiveTab] = useState(visibleTabs[0]?.id);
 
   if (products.length === 0) return null;
 
   const activeFilter =
-    tabs.find((t) => t.id === activeTab)?.filter ?? (() => true);
+    visibleTabs.find((t) => t.id === activeTab)?.filter ?? (() => true);
   const activeProducts = products.filter(activeFilter);
 
   return (
@@ -136,7 +139,7 @@ export function FeaturedProducts({
         <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <h2 className="text-xl font-bold text-gray-900">Para Ti Hoy</h2>
           <div className="flex flex-wrap items-center gap-2">
-            {tabs.map((tab) => (
+            {visibleTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}

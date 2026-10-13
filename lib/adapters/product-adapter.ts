@@ -1,10 +1,17 @@
 import { mockProducts } from "@/lib/mocks/mock-products";
 import type { ApiProduct, ApiProductImage } from "@/lib/api/products";
-import { resolveImageUrl } from "@/lib/api/storage";
+
+export type DisplayProductAttribute = {
+  key: string;
+  label: string;
+  value: string;
+};
 
 export type DisplayProduct = {
   id: string;
   name: string;
+  description?: string;
+  attributes: DisplayProductAttribute[];
   price: number;
   originalPrice?: number;
   category: string;
@@ -16,35 +23,43 @@ export type DisplayProduct = {
   imageUrl?: string;
 };
 
-export function getPrimaryImageKey(images: ApiProductImage[]): string | undefined {
-  if (images.length === 0) return undefined;
-  const primary = images.find((img) => img.isPrimary);
-  if (primary) return primary.s3Key;
-  return [...images].sort((a, b) => a.sortOrder - b.sortOrder)[0].s3Key;
+// CloudFront URLs of a product's images: primary first, then by sortOrder.
+// The first entry is the product's main image.
+export function productImageUrls(images: ApiProductImage[] = []): string[] {
+  return [...images]
+    .sort(
+      (a, b) =>
+        Number(b.isPrimary) - Number(a.isPrimary) || a.sortOrder - b.sortOrder,
+    )
+    .map((img) => img.url)
+    .filter(Boolean);
 }
 
-// Fields the API doesn't return yet (rating, badge, discount, originalPrice)
-// are filled from the mock catalog, cycled by index, to keep the existing
-// designs (stars, badges, flash-sale progress) working until the API adds them.
-export async function toDisplayProducts(
-  products: ApiProduct[],
-): Promise<DisplayProduct[]> {
-  return Promise.all(
-    products.map(async (product, index) => {
-      const mock = mockProducts[index % mockProducts.length];
-      return {
-        id: product.productId,
-        name: product.name,
-        price: product.basePrice,
-        originalPrice: mock.originalPrice,
-        category: product.category?.[0]?.name ?? mock.category,
-        badge: mock.badge,
-        discount: mock.discount,
-        rating: mock.rating,
-        reviewCount: mock.reviewCount,
-        createdAt: product.createdAt ?? mock.createdAt,
-        imageUrl: await resolveImageUrl(getPrimaryImageKey(product.images)),
-      };
-    }),
-  );
+// Pricing fields the API doesn't provide (originalPrice, discount, badge) stay
+// undefined: inventing a struck-through price or "OFERTA" tag would mislead the
+// shopper. Only rating/reviewCount are still filled from the mock catalog,
+// cycled by index, until the API adds them.
+export function toDisplayProducts(products: ApiProduct[]): DisplayProduct[] {
+  return products.map((product, index) => {
+    const mock = mockProducts[index % mockProducts.length];
+    return {
+      id: product.productId,
+      name: product.name,
+      // Blank descriptions are treated as missing so the detail page hides the tab.
+      description: product.description?.trim() || undefined,
+      attributes: (product.attributes ?? [])
+        .filter((attr) => attr.value?.trim())
+        .map((attr) => ({
+          key: attr.attributeKey,
+          label: attr.attributeLabel,
+          value: attr.value.trim(),
+        })),
+      price: product.basePrice,
+      category: product.category?.[0]?.name ?? mock.category,
+      rating: mock.rating,
+      reviewCount: mock.reviewCount,
+      createdAt: product.createdAt ?? mock.createdAt,
+      imageUrl: productImageUrls(product.images)[0],
+    };
+  });
 }

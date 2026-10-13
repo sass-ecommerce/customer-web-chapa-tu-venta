@@ -14,6 +14,7 @@ import {
 import type { DisplayProduct } from "@/lib/adapters/product-adapter";
 import { useCartStore } from "@/lib/stores/cart-store";
 import { ProductImage } from "@/components/home/product-image";
+import { ProductGallery } from "@/components/product/product-gallery";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -26,53 +27,9 @@ const BADGE_STYLES: Record<string, string> = {
   TOP: "bg-amber-400 text-white border-transparent",
 };
 
-const TABS = ["Descripción", "Especificaciones", "Reseñas"] as const;
+// Reviews are not enabled yet, so there is no "Reseñas" tab.
+const TABS = ["Descripción", "Especificaciones"] as const;
 type Tab = (typeof TABS)[number];
-
-const MOCK_REVIEWS = [
-  {
-    id: 1,
-    name: "Ana G.",
-    avatar: "👩",
-    rating: 5,
-    text: "Excelente producto, muy buena calidad y llegó rápido.",
-  },
-  {
-    id: 2,
-    name: "Carlos M.",
-    avatar: "👨",
-    rating: 4,
-    text: "Muy satisfecho con la compra. El material es resistente.",
-  },
-  {
-    id: 3,
-    name: "Sofía R.",
-    avatar: "👩‍🦱",
-    rating: 5,
-    text: "Lo recomiendo totalmente. Cumple con todas las expectativas.",
-  },
-];
-
-function StarRating({
-  rating,
-  size = "sm",
-}: {
-  rating: number;
-  size?: "sm" | "md";
-}) {
-  const full = Math.floor(rating);
-  const half = rating % 1 >= 0.5;
-  const empty = 5 - full - (half ? 1 : 0);
-  return (
-    <span
-      className={cn("text-yellow-400", size === "md" ? "text-base" : "text-xs")}
-    >
-      {"★".repeat(full)}
-      {half ? "½" : ""}
-      <span className="text-gray-300">{"★".repeat(empty)}</span>
-    </span>
-  );
-}
 
 function RelatedCard({
   product,
@@ -136,19 +93,27 @@ export function ProductDetail({
   tenant,
   productId,
   products,
+  images,
 }: {
   tenant: string;
   productId: string;
   products: DisplayProduct[];
+  images: string[];
 }) {
+  const product = products.find((p) => p.id === productId);
+  // Each tab is hidden when the product has no data for it.
+  const tabs = TABS.filter((tab) =>
+    tab === "Descripción"
+      ? Boolean(product?.description)
+      : Boolean(product?.attributes.length),
+  );
+
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
-  const [activeTab, setActiveTab] = useState<Tab>("Descripción");
+  const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
   const [added, setAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const openSheet = useCartStore((s) => s.openSheet);
-
-  const product = products.find((p) => p.id === productId);
 
   if (!product) {
     return <NotFoundState tenant={tenant} />;
@@ -203,10 +168,17 @@ export function ProductDetail({
 
       {/* Hero */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
-        {/* Image */}
-        <div className="aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
-          <ProductImage imageUrl={product.imageUrl} alt={product.name} />
-        </div>
+        {/* Images */}
+        <ProductGallery
+          images={
+            images.length > 0
+              ? images
+              : product.imageUrl
+                ? [product.imageUrl]
+                : []
+          }
+          alt={product.name}
+        />
 
         {/* Info */}
         <div className="flex flex-col gap-4">
@@ -224,13 +196,6 @@ export function ProductDetail({
           <h1 className="font-display text-brand-dark text-2xl leading-tight font-bold sm:text-3xl">
             {product.name}
           </h1>
-
-          <div className="flex items-center gap-2">
-            <StarRating rating={product.rating} size="md" />
-            <span className="text-sm text-gray-500">
-              {product.rating} · {product.reviewCount} reseñas
-            </span>
-          </div>
 
           <div className="flex items-baseline gap-3">
             <span className="text-brand-dark text-3xl font-bold">
@@ -333,89 +298,46 @@ export function ProductDetail({
       </div>
 
       {/* Tabs */}
-      <div className="mt-12">
-        <div className="flex gap-6 border-b border-gray-200">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={cn(
-                "pb-3 text-sm font-medium transition-colors",
-                activeTab === tab
-                  ? "border-brand-accent text-brand-accent -mb-px border-b-2"
-                  : "text-gray-500 hover:text-gray-800",
-              )}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+      {tabs.length > 0 && (
+        <div className="mt-12">
+          <div className="flex gap-6 border-b border-gray-200">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={cn(
+                  "pb-3 text-sm font-medium transition-colors",
+                  activeTab === tab
+                    ? "border-brand-accent text-brand-accent -mb-px border-b-2"
+                    : "text-gray-500 hover:text-gray-800",
+                )}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
 
-        <div className="font-body py-6 text-sm leading-relaxed text-gray-600">
-          {activeTab === "Descripción" && (
-            <p>
-              {product.name} es un producto de alta calidad en la categoría{" "}
-              {product.category}. Diseñado para ofrecer el mejor rendimiento y
-              durabilidad, este producto ha sido seleccionado cuidadosamente
-              para satisfacer las necesidades de nuestros clientes. Con
-              materiales premium y acabados de primera, es una excelente opción
-              para quienes buscan calidad y estilo.
-            </p>
-          )}
-          {activeTab === "Especificaciones" && (
-            <table className="w-full border-collapse text-sm">
-              <tbody>
-                {[
-                  ["Categoría", product.category],
-                  ["Precio", `S/ ${product.price.toFixed(2)}`],
-                  ...(product.originalPrice
-                    ? [
-                        [
-                          "Precio original",
-                          `S/ ${product.originalPrice.toFixed(2)}`,
-                        ],
-                      ]
-                    : []),
-                  ["Valoración", `${product.rating} / 5`],
-                  ["Reseñas", product.reviewCount.toString()],
-                  ["Disponibilidad", "En stock"],
-                  ["Envío", "Envío estándar gratuito"],
-                ].map(([label, value]) => (
-                  <tr key={label} className="border-b border-gray-100">
-                    <td className="w-40 py-2.5 pr-4 font-medium text-gray-700">
-                      {label}
-                    </td>
-                    <td className="py-2.5 text-gray-600">{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-          {activeTab === "Reseñas" && (
-            <div className="space-y-4">
-              {MOCK_REVIEWS.map((review) => (
-                <div
-                  key={review.id}
-                  className="flex gap-3 rounded-xl bg-gray-50 p-4"
-                >
-                  <span className="text-2xl">{review.avatar}</span>
-                  <div className="flex-1">
-                    <div className="mb-1 flex items-center gap-2">
-                      <span className="text-xs font-semibold text-gray-800">
-                        {review.name}
-                      </span>
-                      <StarRating rating={review.rating} />
-                    </div>
-                    <p className="text-xs leading-relaxed text-gray-600">
-                      {review.text}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="font-body py-6 text-sm leading-relaxed text-gray-600">
+            {activeTab === "Descripción" && product.description && (
+              <p className="whitespace-pre-line">{product.description}</p>
+            )}
+            {activeTab === "Especificaciones" && (
+              <table className="w-full border-collapse text-sm">
+                <tbody>
+                  {product.attributes.map(({ key, label, value }) => (
+                    <tr key={key} className="border-b border-gray-100">
+                      <td className="w-40 py-2.5 pr-4 font-medium text-gray-700">
+                        {label}
+                      </td>
+                      <td className="py-2.5 text-gray-600">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Related Products */}
       {related.length > 0 && (
