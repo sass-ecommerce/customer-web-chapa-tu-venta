@@ -115,6 +115,24 @@ export async function fetchProductById(
   });
 }
 
+// Producto crudo de la API (sin los campos mock del adapter), para metadata e
+// imágenes Open Graph donde solo deben mostrarse datos reales.
+export async function getTenantRawProduct(
+  tenant: string,
+  productId: string,
+): Promise<ApiProduct | null> {
+  try {
+    const tenantId = await getTenantId(tenant);
+    const res = await fetchProductById(tenantId, productId);
+    if (!res.ok) return null;
+    const { data }: ApiProductResponse = await res.json();
+    return data;
+  } catch {
+    console.error(`Failed to fetch product ${productId} for tenant: ${tenant}`);
+    return null;
+  }
+}
+
 // No batch-by-ids endpoint exists, so a collection's products are resolved
 // with one request per id — fine since collections are expected to hold a
 // handful of products, not a whole catalog.

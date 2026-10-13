@@ -16,7 +16,7 @@ export type DisplayProduct = {
   imageUrl?: string;
 };
 
-function getPrimaryImageKey(images: ApiProductImage[]): string | undefined {
+export function getPrimaryImageKey(images: ApiProductImage[]): string | undefined {
   if (images.length === 0) return undefined;
   const primary = images.find((img) => img.isPrimary);
   if (primary) return primary.s3Key;
