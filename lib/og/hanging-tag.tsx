@@ -3,12 +3,17 @@
 
 import type { ReactNode } from "react";
 import { readableTextOn } from "@/lib/og/assets";
-import type { TenantConfig } from "@/lib/config/tenants";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 export const TAG_WIDTH = 380;
-// El cordel cuelga dentro de la foto, no sobre su borde (ahí se pierde).
-export const TAG_HANG_OFFSET = 60;
+// Margen izquierdo compartido por la etiqueta y la marca. Con foto, la
+// etiqueta cuelga aquí para dejar libre el resto de la imagen.
+export const EDGE = 56;
+
+// Con foto la etiqueta cuelga del margen; sin foto se centra en la vitrina.
+export function tagLeft(hasPhoto: boolean): number {
+  return hasPhoto ? EDGE : (OG_SIZE.width - TAG_WIDTH) / 2;
+}
 
 export const VITRINA = "#f5f6f7"; // --brand-bg
 export const INK = "#1a1a1a"; // --brand-dark
@@ -24,11 +29,9 @@ export function truncate(text: string, max: number): string {
   return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
 }
 
-export function tagColors(config: TenantConfig | null) {
+export function tagColors(primaryColor?: string) {
   const background =
-    config?.primaryColor && HEX_COLOR.test(config.primaryColor)
-      ? config.primaryColor
-      : INK;
+    primaryColor && HEX_COLOR.test(primaryColor) ? primaryColor : INK;
   return { background, text: readableTextOn(background) };
 }
 
@@ -50,19 +53,20 @@ export function OgCanvas({ children }: { children: ReactNode }) {
   );
 }
 
-export function OgPhoto({ src, width }: { src: string; width: number }) {
+// La foto siempre ocupa todo el lienzo: es lo que el comprador quiere ver.
+export function OgPhoto({ src }: { src: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt=""
-      width={width}
+      width={OG_SIZE.width}
       height={OG_SIZE.height}
       style={{
         position: "absolute",
         top: 0,
-        right: 0,
-        width,
+        left: 0,
+        width: OG_SIZE.width,
         height: OG_SIZE.height,
         objectFit: "cover",
       }}
@@ -70,23 +74,55 @@ export function OgPhoto({ src, width }: { src: string; width: number }) {
   );
 }
 
-export function StoreBrand({ name, logo }: { name: string; logo?: string }) {
+// Píldora blanca con la marca del tenant, abajo a la izquierda bajo la
+// etiqueta: se lee sobre cualquier foto. Logo como imagen (subido desde la
+// app) o, como respaldo, el emoji del TenantConfig.
+export function StoreBrand({
+  name,
+  logoSrc,
+  logoEmoji,
+}: {
+  name: string;
+  logoSrc?: string | null;
+  logoEmoji?: string;
+}) {
   return (
     <div
       style={{
         position: "absolute",
-        top: 48,
-        left: 56,
+        bottom: 44,
+        left: EDGE,
         display: "flex",
         alignItems: "center",
-        gap: 14,
-        fontSize: 28,
+        gap: 12,
+        padding: logoSrc || logoEmoji ? "8px 22px 8px 8px" : "14px 22px",
+        borderRadius: 999,
+        backgroundColor: "#ffffff",
+        boxShadow: "0 6px 18px rgba(0, 0, 0, 0.16)",
+        fontSize: 24,
         fontWeight: 700,
-        letterSpacing: -0.5,
+        letterSpacing: -0.3,
       }}
     >
-      {logo && !logo.startsWith("http") && (
-        <span style={{ fontSize: 34 }}>{logo}</span>
+      {logoSrc ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={logoSrc}
+          alt=""
+          width={44}
+          height={44}
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 22,
+            objectFit: "cover",
+            border: "1px solid rgba(26, 26, 26, 0.08)",
+          }}
+        />
+      ) : (
+        logoEmoji && (
+          <span style={{ fontSize: 30, paddingLeft: 6 }}>{logoEmoji}</span>
+        )
       )}
       <span>{name}</span>
     </div>

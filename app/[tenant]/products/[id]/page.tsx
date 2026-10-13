@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTenantConfig } from "@/lib/config/tenants";
+import { getTenantBranding } from "@/lib/api/tenants";
 import { ProductDetail } from "@/components/product/product-detail";
 import { getTenantProducts, getTenantRawProduct } from "@/lib/api/products";
 import { tenantPublicUrl } from "@/lib/utils/public-url";
@@ -11,7 +11,7 @@ export async function generateMetadata({
   params: Promise<{ tenant: string; id: string }>;
 }): Promise<Metadata> {
   const { tenant, id } = await params;
-  const storeName = getTenantConfig(tenant)?.name;
+  const storeName = (await getTenantBranding(tenant)).name;
   const product = await getTenantRawProduct(tenant, id);
   if (!product) return { title: storeName ?? "Producto" };
 

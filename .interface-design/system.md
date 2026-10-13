@@ -23,10 +23,10 @@ Comprador en Perú que recibe el link por WhatsApp, en el celular, a ~300px de a
 | Color de etiqueta | `TenantConfig.primaryColor` (hex) o `INK` | texto vía `readableTextOn()` |
 
 ### Layout (1200×630)
-- Con imagen: imagen a la derecha, `objectFit: cover`. La etiqueta (380px) cuelga sobre el borde izquierdo de la imagen, desplazada `TAG_HANG_OFFSET` (60px) hacia adentro: si el cordel cae justo en el borde se confunde con él y desaparece.
-- Sin imagen: etiqueta centrada sobre `VITRINA`.
-- Marca del tenant arriba a la izquierda (`top 48, left 56`): logo + nombre, DM Sans 700 28px.
-- Regla: el contenido clave debe caer dentro del centro de 630px (x 285–915) — es lo que queda tras el recorte cuadrado de WhatsApp.
+- Con imagen: la foto ocupa **todo el lienzo** (`objectFit: cover`). La etiqueta (380px) cuelga del margen izquierdo (`EDGE` = 56px) para dejar libre el producto. Se descartó el panel gris + foto parcial: con marca quedaba un panel vacío y la etiqueta tapaba el producto.
+- Sin imagen: etiqueta centrada sobre `VITRINA` (`tagLeft(false)`).
+- Marca del tenant: píldora blanca abajo a la izquierda (`bottom 44, left EDGE`), logo circular 44px + nombre DM Sans 700 24px, sombra `0 6px 18px rgba(0,0,0,0.16)`. Se lee sobre cualquier foto.
+- Trade-off aceptado: la miniatura cuadrada pequeña de WhatsApp (centro de 630px) recorta parte de la etiqueta; la preview grande (Facebook, WhatsApp) la muestra completa.
 
 ### Etiqueta
 - Solo la tarjeta gira (`rotate(-4deg)`, origen `50% 0`); el cordel queda vertical. Borde `1px rgba(255,255,255,0.12)` para separarla de fotos oscuras.
@@ -46,11 +46,12 @@ Comprador en Perú que recibe el link por WhatsApp, en el celular, a ~300px de a
 ### Variantes
 | | Colección | Producto |
 |---|---|---|
-| Imagen | portada, 760px de ancho | foto principal, cuadrado 630×630 (no recortar el producto) |
+| Imagen | portada, a todo el ancho | foto principal, a todo el ancho |
 | Label | `COLECCIÓN` | categoría real en mayúsculas, o `PRODUCTO` |
 | Título | 64 / 52 / 42px, trunca a 48 | 56 / 46 / 40px, trunca a 56 |
 | Dato secundario | `N productos`, DM Sans 500 26px | precio `S/ 1,500.00`, DM Sans 700 44px |
-| Sin marca del tenant | (pendiente: hoy deja el panel gris vacío) | foto a todo el ancho, etiqueta pegada al margen (`left 56`) para no tapar el producto |
+| Sin marca del tenant | sin píldora; mismo layout | sin píldora; mismo layout |
 
+- Marca: `getTenantBranding(tenant)` (`lib/api/tenants.ts`) — `name`/`logoUrl` de `GET /tenants/by-domain` (lo que el dueño sube desde la app), con `TenantConfig` como respaldo (emoji, `primaryColor`).
 - Producto: solo datos reales de la API (`getTenantRawProduct`). Nunca `originalPrice`, `discount` ni `badge` del adapter: hoy salen de mocks.
 - Pendiente: catálogo / home del tenant — etiqueta con nombre de la tienda; imagen = `hero.image` de `TenantConfig`.

@@ -24,7 +24,12 @@ export async function loadGoogleFont(
 
     const res = await fetch(src[1], { cache: "force-cache" });
     if (!res.ok) return null;
-    return { name: family, data: await res.arrayBuffer(), weight, style: "normal" };
+    return {
+      name: family,
+      data: await res.arrayBuffer(),
+      weight,
+      style: "normal",
+    };
   } catch {
     return null;
   }
